@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Trash, History, Activity, Database } from "lucide-react";
+import { Play, Pause, Trash, History, Activity, Database, Target, Clock, Cpu } from "lucide-react";
 
 export default function MissionDetailPage() {
   const { id } = useParams();
@@ -33,69 +33,83 @@ export default function MissionDetailPage() {
     fetchMission();
   }, [id]);
 
-  if (isLoading) return <div>Loading mission...</div>;
-  if (!mission) return <div>Mission not found</div>;
+  if (isLoading) return <div className="flex h-screen items-center justify-center font-black animate-pulse uppercase tracking-[10px] text-[#00FF6A]">INITIALIZING DATASTREAM...</div>;
+  if (!mission) return <div className="flex h-screen items-center justify-center font-black uppercase text-[#FF4444]">MISSION NOT IDENTIFIED</div>;
+
+  const isRunning = mission.status === "running";
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12 pb-20 p-6">
       {/* Mission Header */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-6 bg-[#111118] border border-[#1E1E2E] rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.05)]">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-lg bg-[#0A0A0F] border border-[#1E1E2E] flex items-center justify-center text-2xl">
-            {mission.category === 'prices' ? '💰' : 
-             mission.category === 'news' ? '📰' : 
-             mission.category === 'jobs' ? '💼' : 
-             mission.category === 'stock' ? '📦' : '🔍'}
+      <div className="cyber-card flex flex-col md:flex-row items-center justify-between gap-8 p-10 bg-[#0D130D]/80 border-[#1A2E1A] shadow-[0_0_50px_rgba(0,0,0,0.4)] relative">
+        <div className="scan-top absolute top-0 left-0 right-0 h-1"></div>
+        <div className="flex items-center gap-6">
+          <div className="w-16 h-16 rounded-xl bg-[#111A11] border border-[#1A2E1A] flex items-center justify-center text-4xl shadow-inner group">
+            <span className="group-hover:scale-110 transition-transform">
+              {mission.category === 'prices' ? '💰' : 
+               mission.category === 'news' ? '📰' : 
+               mission.category === 'jobs' ? '💼' : '🔍'}
+            </span>
           </div>
-          <div className="flex flex-col">
-            <h2 className="text-2xl font-heading font-bold flex items-center gap-2">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3">
               {mission.name}
-              <Badge className="bg-[#6366F1] uppercase text-[10px] items-center h-5">
+              <Badge className={`uppercase text-[9px] tracking-[2px] font-black border-none px-3 py-1 ml-2 
+                ${isRunning ? "bg-[#00FF6A] text-[#060A06] animate-pulse" : 
+                  mission.status === "paused" ? "bg-[#F59E0B] text-[#060A06]" : 
+                  "bg-[#111A11] text-[#00FF6A] border border-[#00FF6A]/30"}`}>
                 {mission.status}
               </Badge>
             </h2>
-            <div className="flex items-center gap-3 text-sm text-[#94A3B8]">
-              <span className="flex items-center gap-1"><History className="w-4 h-4" /> Last run: {mission.last_run || 'Never'}</span>
-              <span className="flex items-center gap-1"><Activity className="w-4 h-4" /> Goal: {mission.goal_nl.substring(0, 50)}...</span>
+            <div className="flex items-center gap-6 text-[11px] font-black text-[#6B9E6B] uppercase tracking-widest">
+              <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#00FF6A]" /> LAST SYNC: {mission.last_run || 'NONE'}</span>
+              <span className="flex items-center gap-2 max-w-sm truncate"><Cpu className="w-4 h-4 text-[#00FF6A]" /> GOAL: {mission.goal_nl}</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="border-[#1E1E2E] gap-2">
-            <Pause className="w-4 h-4" /> Pause
+        <div className="flex items-center gap-4">
+          <Button variant="outline" className="h-12 border-[#1A2E1A] gap-3 px-6 bg-transparent hover:bg-[#111118] text-[#E8FFE8] font-bold uppercase tracking-widest text-[10px]">
+             {mission.status === "paused" ? <Play className="w-4 h-4 text-[#00FF6A]" /> : <Pause className="w-4 h-4 text-[#F59E0B]" />} 
+             {mission.status === "paused" ? "RESUME" : "PAUSE"}
           </Button>
-          <Button className="bg-[#6366F1] hover:bg-[#5254E0] gap-2">
-            <Play className="w-4 h-4" /> Run Now
+          <Button className="h-12 bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] gap-3 px-8 font-black uppercase tracking-widest shadow-[0_0_20px_#00FF6A33]">
+            <Play className="w-4 h-4" /> TRIGGER NOW
           </Button>
-          <Button variant="ghost" className="text-[#EF4444] hover:bg-[#EF4444]/10">
-            <Trash className="w-4 h-4" />
+          <Button variant="ghost" className="h-12 w-12 text-[#FF4444] hover:bg-[#FF4444]/10 rounded-xl p-0">
+            <Trash className="w-5 h-5" />
           </Button>
         </div>
       </div>
 
-      <Tabs defaultValue="live" className="space-y-6">
-        <TabsList className="bg-[#111118] border-[#1E1E2E]">
-          <TabsTrigger value="live" className="gap-2 data-[state=active]:bg-[#6366F1]"><Activity className="w-4 h-4" /> Live View</TabsTrigger>
-          <TabsTrigger value="results" className="gap-2 data-[state=active]:bg-[#6366F1]"><Database className="w-4 h-4" /> Latest Results</TabsTrigger>
-          <TabsTrigger value="history" className="gap-2 data-[state=active]:bg-[#6366F1]"><History className="w-4 h-4" /> Run History</TabsTrigger>
+      <Tabs defaultValue="live" className="space-y-10">
+        <TabsList className="bg-[#111A11]/50 border border-[#1A2E1A] p-2 h-14 rounded-2xl">
+          <TabsTrigger value="live" className="gap-3 data-[state=active]:bg-[#00FF6A] data-[state=active]:text-[#060A06] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Activity className="w-4 h-4" /> TACTICAL HUB</TabsTrigger>
+          <TabsTrigger value="results" className="gap-3 data-[state=active]:bg-[#00FF6A] data-[state=active]:text-[#060A06] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Database className="w-4 h-4" /> SIGNAL BANK</TabsTrigger>
+          <TabsTrigger value="history" className="gap-3 data-[state=active]:bg-[#00FF6A] data-[state=active]:text-[#060A06] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><History className="w-4 h-4" /> ARCHIVES</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="live" className="space-y-6">
+        <TabsContent value="live" className="space-y-10 animate-in fade-in zoom-in-95 duration-500">
           <LiveAgentViewer missionId={mission.mission_id} tasks={mission.agent_tasks} />
         </TabsContent>
 
-        <TabsContent value="results">
-          <div className="bg-[#111118] border border-[#1E1E2E] rounded-xl p-10 text-center text-[#94A3B8]">
-            <Database className="w-12 h-12 mx-auto mb-4 opacity-20" />
-            <p>Wait for agent run to complete</p>
+        <TabsContent value="results" className="animate-in fade-in zoom-in-95 duration-500">
+          <div className="cyber-card bg-[#0D130D] border-[#1A2E1A] rounded-2xl p-20 text-center space-y-6">
+            <Database className="w-16 h-16 mx-auto opacity-20 text-[#00FF6A]" />
+            <div className="space-y-2">
+               <h5 className="text-2xl font-black uppercase text-[#E8FFE8] tracking-tighter">Standby for Signal</h5>
+               <p className="text-[#6B9E6B] font-bold uppercase tracking-widest text-xs">Awaiting completion of the current autonomous swarm run.</p>
+            </div>
           </div>
         </TabsContent>
 
-        <TabsContent value="history">
-          <div className="bg-[#111118] border border-[#1E1E2E] rounded-xl p-10 text-center text-[#94A3B8]">
-            <History className="w-12 h-12 mx-auto mb-4 opacity-20" />
-            <p>No runs registered yet</p>
+        <TabsContent value="history" className="animate-in fade-in zoom-in-95 duration-500">
+          <div className="cyber-card bg-[#0D130D] border-[#1A2E1A] rounded-2xl p-20 text-center space-y-6">
+            <History className="w-16 h-16 mx-auto opacity-20 text-[#00FF6A]" />
+            <div className="space-y-2">
+               <h5 className="text-2xl font-black uppercase text-[#E8FFE8] tracking-tighter">Archival Logs</h5>
+               <p className="text-[#6B9E6B] font-bold uppercase tracking-widest text-xs">Historical run data is restricted until first sequence is complete.</p>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

@@ -18,7 +18,7 @@ const NAV_LINKS = [
 
 export const Sidebar = () => {
   return (
-    <aside className="w-[240px] flex flex-col border-r border-[#1E1E2E] h-screen bg-[#111118]">
+    <aside className="w-[220px] flex flex-col border-r border-[#1A2E1A] h-screen bg-[#0D130D]">
       <div className="h-16 flex items-center px-6 border-b border-[#1E1E2E]">
         <Link href="/dashboard" className="text-xl font-heading font-bold text-[#6366F1]">
           OMNIX
@@ -30,17 +30,21 @@ export const Sidebar = () => {
           <Link
             key={link.name}
             href={link.href}
-            className="flex items-center gap-3 px-3 py-2 rounded-md transition-colors 
-                     hover:bg-[#1E1E2E] text-[#94A3B8] hover:text-[#F1F5F9] group font-medium"
+            className="flex items-center justify-between px-3 py-2 rounded-md transition-colors 
+                     hover:bg-[#1E1E2E] text-[#6B9E6B] hover:text-[#00FF6A] group font-medium"
           >
-            <link.icon className="w-5 h-5" />
-            <span>{link.name}</span>
+            <div className="flex items-center gap-3">
+              <link.icon className="w-5 h-5" />
+              <span>{link.name}</span>
+            </div>
+            {/* Active Dot */}
+            <div className="w-[7px] h-[7px] rounded-full bg-[#00FF6A] opacity-0 group-hover:opacity-100 shadow-[0_0_8px_#00FF6A] transition-opacity"></div>
           </Link>
         ))}
       </nav>
 
-      <div className="p-4 border-t border-[#1E1E2E] flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-[#6366F1] flex items-center justify-center font-bold text-xs">
+      <div className="p-4 border-t border-[#1A2E1A] flex items-center gap-3 bg-[#111A11]">
+        <div className="w-8 h-8 rounded-full bg-[#004D20] border border-[#00FF6A]/30 flex items-center justify-center font-bold text-xs text-[#00FF6A]">
           AG
         </div>
         <div className="flex flex-col overflow-hidden">

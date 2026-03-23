@@ -10,141 +10,124 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
-  CheckCircle2, 
-  AlertTriangle, 
-  Code, 
-  Copy, 
   ChevronDown, 
-  ChevronUp,
-  ExternalLink,
-  GitCompare
+  ChevronUp, 
+  Database, 
+  ExternalLink, 
+  AlertCircle, 
+  CheckCircle2, 
+  Clock, 
+  Layers,
+  Sparkles,
+  Cpu
 } from "lucide-react";
 
-export const ResultsCard = ({ result, previousResult }: { result: any; previousResult?: any }) => {
-  const [showRaw, setShowRaw] = useState(false);
-  const [showCompare, setShowCompare] = useState(false);
+export const ResultsCard = ({ result }: { result: any }) => {
+  const [showJson, setShowJson] = useState(false);
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity.toUpperCase()) {
-      case "CRITICAL": return "bg-[#EF4444] text-white";
-      case "HIGH": return "bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/50";
-      case "MEDIUM": return "bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/50";
-      case "LOW": return "bg-[#94A3B8]/20 text-[#94A3B8] border-[#94A3B8]/50";
-      default: return "bg-[#94A3B8]/20 text-[#94A3B8]";
-    }
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(result.raw_json, null, 2));
-  };
+  if (!result) return null;
 
   return (
-    <Card className="bg-[#111118] border-[#1E1E2E] shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-[#1E1E2E] p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex flex-col">
-            <h3 className="text-sm font-medium">Result ID: {result.result_id.substring(0, 8)}</h3>
-            <span className="text-xs text-[#94A3B8]">{new Date(result.timestamp).toLocaleString()}</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {result.changes_detected ? (
-            <Badge className="bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/30 gap-1 px-2">
-              <AlertTriangle className="w-3 h-3" /> Changes Detected
-            </Badge>
-          ) : (
-            <Badge className="bg-[#22C55E]/10 text-[#22C55E] border-[#22C55E]/30 gap-1 px-2">
-              <CheckCircle2 className="w-3 h-3" /> No Significant Changes
-            </Badge>
-          )}
+    <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] shadow-2xl transition-all duration-700 overflow-hidden">
+      <div className="scan-top absolute top-0 left-0 right-0 h-1"></div>
+      
+      <CardHeader className="p-8 pb-4 border-b border-[#1A2E1A] bg-[#111A11]">
+        <div className="flex items-center justify-between mb-4">
+           <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#060A06] border border-[#1A2E1A] flex items-center justify-center shadow-inner group">
+                <Database className="w-6 h-6 text-[#00FF6A] group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="flex flex-col">
+                 <CardTitle className="text-xl font-black text-[#E8FFE8] uppercase tracking-tighter">
+                   Signal Observation Cluster
+                 </CardTitle>
+                 <div className="flex items-center gap-4 mt-1 text-[10px] font-black uppercase tracking-widest text-[#6B9E6B]">
+                    <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {result.timestamp}</span>
+                    <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" /> REF://{result.result_id.substring(0,12)}</span>
+                 </div>
+              </div>
+           </div>
+           <Badge className="bg-[#0D130D] text-[#00FF6A] border border-[#00FF6A]/30 font-black text-[9px] uppercase tracking-widest px-4 py-1.5 holographic transition-all">
+              DATASET VALIDATED
+           </Badge>
         </div>
       </CardHeader>
-      
-      <CardContent className="p-4 space-y-4">
-        {/* LLM Brief Callout */}
-        <div className="bg-[#6366F1]/10 border-l-2 border-[#6366F1] p-3 rounded-r-md">
-          <p className="text-sm text-[#F1F5F9] leading-relaxed italic">
-            "{result.brief}"
-          </p>
+
+      <CardContent className="p-8 space-y-10 group">
+        <div className="space-y-4">
+           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[3px] text-[#00FF6A]">
+              <Sparkles className="w-4 h-4" /> LLM ANALYSIS ENGINE
+           </div>
+           <div className="bg-[#060A06] border-l-4 border-[#00FF6A] p-8 rounded-r-2xl text-xl italic text-[#E8FFE8] leading-relaxed font-medium transition-all group-hover:shadow-[0_0_30px_rgba(0,255,106,0.05)]">
+             "{result.brief}"
+           </div>
         </div>
 
-        {/* Anomaly Badges */}
-        {result.anomalies && result.anomalies.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {result.anomalies.map((anno: any, i: number) => (
-              <div key={i} className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase border flex items-center gap-1.5 ${getSeverityColor(anno.severity)}`}>
-                <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
-                {anno.type}: {anno.description}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3 pt-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="border-[#1E1E2E] h-8 text-xs gap-1.5"
-            onClick={() => setShowRaw(!showRaw)}
-          >
-            <Code className="w-3.5 h-3.5" />
-            {showRaw ? "Hide Raw JSON" : "View Raw JSON"}
-          </Button>
-          {previousResult && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="border-[#1E1E2E] h-8 text-xs gap-1.5"
-              onClick={() => setShowCompare(!showCompare)}
-            >
-              <GitCompare className="w-3.5 h-3.5" />
-              Compare
-            </Button>
-          )}
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-8 w-8 text-[#94A3B8] hover:text-[#6366F1]"
-            onClick={copyToClipboard}
-          >
-            <Copy className="w-4 h-4" />
-          </Button>
+        <div className="space-y-6">
+           <div className="flex items-center justify-between">
+              <h4 className="text-[10px] font-black uppercase tracking-[4px] text-[#6B9E6B]">STRUCTURAL ANOMALIES</h4>
+              <Badge className="bg-[#0D130D] border border-[#FF4444]/30 text-[#FF4444] text-[9px] uppercase tracking-widest px-3">CRITICAL PRIORITY</Badge>
+           </div>
+           
+           <div className="grid grid-cols-1 gap-4">
+              {result.anomalies?.map((a: any, i: number) => (
+                <div key={i} className="flex flex-col gap-4 p-6 bg-[#111A11] border border-[#1A2E1A] rounded-2xl group hover:border-[#00FF6A]/30 transition-all hover:translate-x-1">
+                   <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                         <Badge className={`${a.severity === 'CRITICAL' ? 'bg-[#FF4444] text-[#0D130D]' : a.severity === 'HIGH' ? 'bg-[#F59E0B] text-[#0D130D]' : 'bg-[#00FF6A] text-[#0D130D]'} font-black text-[9px] tracking-widest px-3 py-1`}>
+                            {a.severity}
+                         </Badge>
+                         <span className="text-[10px] font-black text-[#6B9E6B] bg-[#060A06] px-3 py-1 rounded-lg border border-[#1A2E1A] uppercase tracking-widest">{a.type}</span>
+                      </div>
+                      <AlertCircle className="w-4 h-4 text-[#FF4444]/50" />
+                   </div>
+                   
+                   <p className="text-sm font-bold text-[#E8FFE8] group-hover:text-[#00FF6A] transition-colors">{a.description}</p>
+                   
+                   {a.old_value && (
+                      <div className="flex flex-col gap-2 pt-2 border-t border-[#1A2E1A] opacity-80 group-hover:opacity-100 transition-opacity">
+                         <div className="flex items-center gap-8 text-[11px] font-mono leading-none py-2">
+                            <div className="flex flex-col gap-1">
+                               <span className="text-[9px] uppercase tracking-widest text-[#6B9E6B]">PREVIOUS SIGNAL</span>
+                               <span className="line-through text-[#6B9E6B] bg-[#060A06] px-4 py-1.5 rounded-lg border border-[#1A2E1A]">{a.old_value}</span>
+                            </div>
+                            <div className="w-8 h-8 flex items-center justify-center text-[#00FF6A]/40 group-hover:text-[#00FF6A] transition-colors">
+                               <ChevronRight className="w-5 h-5 translate-y-2" />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                               <span className="text-[9px] uppercase tracking-widest font-black text-[#00FF6A]">ACTIVE SIGNAL</span>
+                               <span className="text-[#00FF6A] bg-[#00FF6A]/10 px-4 py-1.5 rounded-lg border border-[#00FF6A]/40">{a.new_value}</span>
+                            </div>
+                         </div>
+                      </div>
+                   )}
+                </div>
+              ))}
+           </div>
         </div>
-
-        {/* Raw JSON Viewer */}
-        {showRaw && (
-          <div className="bg-[#05050A] rounded-md border border-[#1E1E2E] p-3 overflow-hidden">
-            <pre className="text-[10px] font-mono text-[#F1F5F9] overflow-x-auto max-h-[300px]">
-              {JSON.stringify(result.raw_json, null, 2)}
-            </pre>
-          </div>
-        )}
-
-        {/* Compare Logic Placeholder */}
-        {showCompare && previousResult && (
-          <div className="grid grid-cols-2 gap-4 bg-[#05050A] rounded-md border border-[#1E1E2E] p-3">
-             <div className="space-y-2">
-               <span className="text-[10px] font-bold text-[#94A3B8] uppercase">Previous Run</span>
-               <pre className="text-[10px] font-mono text-zinc-500 overflow-x-auto max-h-[200px]">
-                 {JSON.stringify(previousResult.raw_json, null, 2)}
-               </pre>
-             </div>
-             <div className="space-y-2 border-l border-[#1E1E2E] pl-4">
-               <span className="text-[10px] font-bold text-[#6366F1] uppercase">Current Run</span>
-               <pre className="text-[10px] font-mono text-[#F1F5F9] overflow-x-auto max-h-[200px]">
-                 {JSON.stringify(result.raw_json, null, 2)}
-               </pre>
-             </div>
-          </div>
-        )}
       </CardContent>
-      
-      <CardFooter className="p-4 pt-0 border-t border-[#1E1E2E] flex justify-end">
-        <Button variant="link" className="text-[#6366F1] text-xs h-8 p-0 gap-1">
-          View Full Agent Run <ExternalLink className="w-3 h-3" />
-        </Button>
+
+      <CardFooter className="p-0 border-t border-[#1A2E1A]">
+        <button 
+          onClick={() => setShowJson(!showJson)}
+          className="w-full h-14 bg-[#111A11]/30 hover:bg-[#111A11] transition-colors flex items-center justify-between px-8 text-[10px] font-black uppercase tracking-widest text-[#6B9E6B] hover:text-[#00FF6A]"
+        >
+          <div className="flex items-center gap-2">
+            <Cpu className="w-4 h-4" />
+            {showJson ? "CONTRACT RAW DATABANK" : "EXPAND RAW DATABANK"}
+          </div>
+          {showJson ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </button>
+        {showJson && (
+          <div className="bg-[#060A06] p-8 max-h-[600px] overflow-auto font-mono text-xs leading-relaxed border-t border-[#1A2E1A] text-[#6B9E6B] scrollbar-thin scrollbar-thumb-[#1A2E1A]">
+            <pre>{JSON.stringify(result.raw_json, null, 2)}</pre>
+          </div>
+        )}
       </CardFooter>
     </Card>
   );
 };
+
+const ChevronRight = ({ className }: { className?: string }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+);

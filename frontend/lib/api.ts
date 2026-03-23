@@ -45,6 +45,9 @@ export const getResults = (missionId: string, page: number) =>
 export const getTrend = (missionId: string, range: string) => 
   request(`/api/results/${missionId}/trend?range=${range}`);
 
+export const getLatestResult = (missionId: string) => 
+  request(`/api/results/${missionId}/latest`);
+
 // Settings
 export const getSettings = () => 
   request("/api/settings/");

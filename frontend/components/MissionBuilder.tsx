@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { 
   Card, 
   CardHeader, 
@@ -12,12 +11,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { createMission } from "@/lib/api";
-import { Loader2, Rocket, Sparkles } from "lucide-react";
+import { 
+  Sparkles, 
+  BrainCircuit, 
+  Rocket, 
+  Play, 
+  Zap, 
+  Clock, 
+  Globe,
+  Plus,
+  ArrowRight,
+  Cpu
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-const EXAMPLES = [
+const PRESETS = [
   "Monitor Nike, Adidas, Zara for price changes on running shoes under ₹5000",
   "Check TechCrunch, ProductHunt, HackerNews daily for AI startup funding news",
   "Track my 5 competitors' landing pages for copy or pricing changes",
@@ -25,144 +33,90 @@ const EXAMPLES = [
   "Monitor Amazon and Flipkart for RTX 5090 stock availability"
 ];
 
-const SCHEDULES = [
-  { label: "Every Hour", value: "0 * * * *" },
-  { label: "Every 6 Hours", value: "0 */6 * * *" },
-  { label: "Daily at 9 AM", value: "0 9 * * *" },
-  { label: "Weekly on Monday", value: "0 9 * * 1" },
-  { label: "Custom", value: "custom" }
-];
-
-export const MissionBuilder = () => {
-  const router = useRouter();
+export const MissionBuilder = ({ onDeploy }: { onDeploy: (goal: string) => void }) => {
   const [goal, setGoal] = useState("");
-  const [schedule, setSchedule] = useState("0 9 * * *");
-  const [customSchedule, setCustomSchedule] = useState("");
-  const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState("Analyzing your goal...");
-
-  const handleSubmit = async () => {
-    if (!goal) return;
-    setIsLoading(true);
-    setLoadingText("Analyzing your goal...");
-    
-    try {
-      const payload = {
-        goal_nl: goal,
-        schedule: schedule === "custom" ? customSchedule : schedule,
-        name: name || undefined
-      };
-      
-      const res = await createMission(payload);
-      setLoadingText("Spinning up agents...");
-      
-      // Artificial delay to show progress and excitement
-      setTimeout(() => {
-        router.push(`/dashboard/missions/${res.mission_id}`);
-      }, 1500);
-      
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
-  };
-
+  
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <Card className="bg-[#111118] border-[#1E1E2E]">
-        <CardHeader>
-          <CardTitle className="text-2xl font-heading flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-[#6366F1]" />
-            Define Your Mission
-          </CardTitle>
-          <CardDescription>
-            Describe what you want to monitor in plain English. Omnix will architect the agents for you.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Goal Input */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium text-[#94A3B8]">Mission Goal</Label>
-            <Textarea
-              className="min-h-[120px] bg-[#0A0A0F] border-[#1E1E2E] focus:ring-[#6366F1] resize-none"
-              placeholder="e.g. Monitor Amazon and Flipkart for RTX 5090 availability and price drops daily..."
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-            />
-          </div>
+    <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] shadow-[0_0_100px_rgba(0,255,106,0.05)] overflow-hidden">
+      <div className="h-2 bg-[#00FF6A]/10 absolute top-0 left-0 right-0 overflow-hidden">
+         <div className="h-full bg-[#00FF6A] w-1/4 animate-[sweep_4s_linear_infinite] shadow-[0_0_20px_#00FF6A]"></div>
+      </div>
+      
+      <CardHeader className="p-10 pb-6 border-b border-[#1A2E1A] bg-[#111A11]">
+        <div className="flex items-center justify-between mb-4">
+           <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-[#060A06] border border-[#1A2E1A] flex items-center justify-center shadow-lg group">
+                <BrainCircuit className="w-7 h-7 text-[#00FF6A] group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="flex flex-col">
+                 <CardTitle className="text-3xl font-black text-[#E8FFE8] uppercase tracking-tighter">
+                   Neural HUD: Goal Acquisition
+                 </CardTitle>
+                 <div className="flex items-center gap-4 mt-1 text-[11px] font-black uppercase tracking-[3px] text-[#6B9E6B]">
+                    <span className="flex items-center gap-1.5"><Globe className="w-4 h-4 text-[#00FF6A]" /> ACTIVE SENSORS READY</span>
+                    <span className="flex items-center gap-1.5"><Cpu className="w-4 h-4 text-[#00FF6A]" /> LLM CORE PRIMED</span>
+                 </div>
+              </div>
+           </div>
+           <Badge className="bg-[#111A11] text-[#00FF6A] border border-[#00FF6A]/30 text-[9px] font-black tracking-widest px-4 py-1.5 shadow-[0_0_12px_#00FF6A33]">
+              PHASE 5 // STABLE
+           </Badge>
+        </div>
+      </CardHeader>
 
-          {/* Examples */}
-          <div className="flex flex-wrap gap-2">
-            {EXAMPLES.map((ex) => (
-              <button
-                key={ex}
-                onClick={() => setGoal(ex)}
-                className="text-xs px-3 py-1.5 rounded-full bg-[#1E1E2E] border border-[#1E1E2E] hover:border-[#6366F1] transition-colors text-[#94A3B8] hover:text-[#F1F5F9]"
+      <CardContent className="p-10 space-y-10 group">
+        <div className="space-y-4">
+          <label className="text-[11px] font-black uppercase tracking-[5px] text-[#6B9E6B] ml-1">OBJECTIVE PARAMETERS</label>
+          <Textarea 
+            placeholder="Type your monitoring goal in plain English..."
+            className="min-h-[220px] bg-[#060A06] border-[#1A2E1A] text-[#E8FFE8] text-xl p-8 rounded-2xl focus:border-[#00FF6A] transition-all font-bold placeholder:opacity-20 leading-relaxed shadow-inner"
+            value={goal}
+            onChange={(e) => setGoal(e.target.value)}
+          />
+        </div>
+
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+             <div className="h-px bg-gradient-to-r from-transparent via-[#00FF6A] to-transparent flex-1 opacity-20"></div>
+             <span className="text-[10px] font-black uppercase tracking-[4px] text-[#6B9E6B]">QUICK INJECTION PRESETS</span>
+             <div className="h-px bg-gradient-to-r from-transparent via-[#00FF6A] to-transparent flex-1 opacity-20"></div>
+          </div>
+          
+          <div className="flex flex-wrap gap-4 justify-center">
+            {PRESETS.map((p, i) => (
+              <button 
+                key={i} 
+                className="px-6 py-2.5 rounded-full bg-[#111A11] border border-[#1A2E1A] text-[10px] font-black text-[#6B9E6B] hover:text-[#00FF6A] hover:bg-[#00FF6A]/5 hover:border-[#00FF6A]/30 transition-all uppercase tracking-widest hover:-translate-y-0.5"
+                onClick={() => setGoal(p)}
               >
-                {ex}
+                {p.length > 50 ? p.substring(0, 50) + "..." : p}
               </button>
             ))}
           </div>
+        </div>
+      </CardContent>
 
-          {/* Schedule */}
-          <div className="space-y-4 pt-4 border-t border-[#1E1E2E]">
-            <Label className="text-sm font-medium text-[#94A3B8]">Execution Schedule</Label>
-            <RadioGroup
-              defaultValue="0 9 * * *"
-              onValueChange={setSchedule}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4"
-            >
-              {SCHEDULES.map((s) => (
-                <div key={s.value} className="flex items-center space-x-2 p-3 rounded-md bg-[#0A0A0F] border border-[#1E1E2E]">
-                  <RadioGroupItem value={s.value} id={`s-${s.value}`} />
-                  <Label htmlFor={`s-${s.value}`}>{s.label}</Label>
-                </div>
-              ))}
-            </RadioGroup>
-            
-            {schedule === "custom" && (
-              <Input
-                className="bg-[#0A0A0F] border-[#1E1E2E]"
-                placeholder="Enter cron expression (e.g. 0 0 * * *)"
-                value={customSchedule}
-                onChange={(e) => setCustomSchedule(e.target.value)}
-              />
-            )}
-          </div>
-
-          {/* Mission Name */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium text-[#94A3B8]">Mission Name (Optional)</Label>
-            <Input
-              className="bg-[#0A0A0F] border-[#1E1E2E]"
-              placeholder="Auto-generated if left blank"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-end p-6 bg-[#111118]/50 rounded-b-lg border-t border-[#1E1E2E]">
-          <Button
-            size="lg"
-            className="bg-[#6366F1] hover:bg-[#5254E0] px-8 py-6 text-lg h-auto shadow-[0_0_20px_rgba(99,102,241,0.15)] group"
-            onClick={handleSubmit}
-            disabled={isLoading || !goal}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                {loadingText}
-              </>
-            ) : (
-              <>
-                Launch Mission
-                <Rocket className="ml-2 h-5 w-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-              </>
-            )}
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+      <CardFooter className="p-10 pt-0 flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="flex items-center gap-8 text-[11px] font-black text-[#6B9E6B] uppercase tracking-[3px]">
+           <div className="flex items-center gap-2">
+              <Zap className="w-5 h-5 text-[#00FF6A]" />
+              <span className="opacity-80">PARALLEL CRAWL</span>
+           </div>
+           <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-[#F59E0B]" />
+              <span className="opacity-80">SMART RETRY</span>
+           </div>
+        </div>
+        
+        <Button 
+          size="lg" 
+          className="h-16 px-12 bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] font-black uppercase tracking-tighter text-xl rounded-full shadow-[0_0_30px_#00FF6A44] hover:shadow-[0_0_50px_#00FF6A88] transition-all group/btn"
+          disabled={!goal}
+          onClick={() => onDeploy(goal)}
+        >
+          LAUNCH SWARM <ArrowRight className="w-6 h-6 ml-3 group-hover/btn:translate-x-1.5 transition-transform" />
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };

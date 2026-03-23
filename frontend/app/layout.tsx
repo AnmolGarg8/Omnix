@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-const syne = Syne({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-syne",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -31,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans bg-[#0A0A0F] text-[#F1F5F9] antialiased`}
+        className={`${spaceGrotesk.variable} font-sans bg-[#060A06] text-[#E8FFE8] antialiased`}
       >
         <TooltipProvider>
           {children}

@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getResults, getMissions } from "@/lib/api";
-import { ResultsCard } from "@/components/ResultsCard";
-import { TrendChart } from "@/components/TrendChart";
+import { getMissions, getLatestResult } from "@/lib/api";
 import { 
   Select, 
   SelectContent, 
@@ -10,97 +8,158 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { LayoutList, Search, Activity } from "lucide-react";
+import { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardContent 
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { TrendingUp, Database, FileText, CheckCircle2, Search, BrainCircuit, Globe, Cpu } from "lucide-react";
 
 export default function ResultsPage() {
   const [missions, setMissions] = useState<any[]>([]);
-  const [selectedMissionId, setSelectedMissionId] = useState<string>("all");
-  const [results, setResults] = useState<any[]>([]);
+  const [selectedMission, setSelectedMission] = useState<string>("");
+  const [latestResult, setLatestResult] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMissions = async () => {
       try {
-        const [missionsData, resultsData] = await Promise.all([
-          getMissions(),
-          getResults("all", 1) // Assuming "all" is a valid backend query for dev
-        ]);
-        setMissions(missionsData);
-        setResults(resultsData);
+        const data = await getMissions();
+        setMissions(data);
+        if (data && data.length > 0) {
+          setSelectedMission(data[0].mission_id);
+        }
       } catch (err) {
         console.error(err);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchData();
+    fetchMissions();
   }, []);
 
-  const filteredResults = selectedMissionId === "all" 
-    ? results 
-    : results.filter(r => r.mission_id === selectedMissionId);
+  useEffect(() => {
+    const fetchResult = async () => {
+      if (!selectedMission) return;
+      try {
+        const result = await getLatestResult(selectedMission);
+        setLatestResult(result);
+      } catch (err) {
+        console.error(err);
+        setLatestResult(null);
+      }
+    };
+    fetchResult();
+  }, [selectedMission]);
+
+  if (isLoading) return <div className="flex h-screen items-center justify-center font-black animate-pulse uppercase tracking-[10px] text-[#00FF6A]">SYNCING SIGNAL BANK...</div>;
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-3xl font-heading font-bold">Mission Insights</h2>
-          <p className="text-[#94A3B8]">Review the findings across your automated web agents.</p>
+    <div className="space-y-12 pb-20 p-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+        <div className="space-y-3">
+          <h2 className="text-5xl font-black uppercase tracking-tighter flex items-center gap-4">
+             <Database className="w-12 h-12 text-[#00FF6A]" />
+             Intelligence Bank
+          </h2>
+          <p className="text-[#6B9E6B] font-bold text-sm tracking-[4px] uppercase opacity-80">Access distilled cross-node structural data.</p>
         </div>
-        
-        <div className="w-full md:w-64">
-           <Select onValueChange={(val) => val && setSelectedMissionId(val)} defaultValue="all">
-             <SelectTrigger className="bg-[#111118] border-[#1E1E2E]">
-               <SelectValue placeholder="Filter by Mission" />
-             </SelectTrigger>
-             <SelectContent className="bg-[#111118] border-[#1E1E2E]">
-               <SelectItem value="all">All Missions</SelectItem>
-               {missions.map(m => (
-                 <SelectItem key={m.mission_id} value={m.mission_id}>{m.name}</SelectItem>
-               ))}
-             </SelectContent>
-           </Select>
+        <div className="w-full md:w-80">
+          <label className="text-[10px] font-black uppercase tracking-[3px] text-[#6B9E6B] ml-1 mb-2 block">SELECT TARGET OBJECTIVE</label>
+          <Select value={selectedMission} onValueChange={(val) => val && setSelectedMission(val)}>
+            <SelectTrigger className="bg-[#0D130D] border-[#1A2E1A] h-14 rounded-xl text-xs font-black uppercase tracking-widest focus:border-[#00FF6A]">
+              <SelectValue placeholder="Identification Required" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#0D130D] border-[#1A2E1A] text-[#E8FFE8] font-bold text-xs uppercase tracking-widest">
+              {missions.map(m => (
+                <SelectItem key={m.mission_id} value={m.mission_id}>{m.name.toUpperCase()}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="space-y-6">
-          <Skeleton className="h-[300px] w-full bg-[#111118]" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Skeleton className="h-[400px] w-full bg-[#111118]" />
-            <Skeleton className="h-[400px] w-full bg-[#111118]" />
+      {!latestResult ? (
+        <div className="cyber-card p-32 text-center bg-[#0D130D]/50 border-dashed space-y-8 flex flex-col items-center">
+          <div className="w-24 h-24 rounded-full bg-[#111A11] border border-[#1A2E1A] flex items-center justify-center text-5xl">
+             📡
           </div>
-        </div>
-      ) : results.length === 0 ? (
-        <div className="bg-[#111118] border border-[#1E1E2E] rounded-xl p-20 text-center space-y-4">
-           <Activity className="w-16 h-16 mx-auto mb-4 opacity-10" />
-           <h3 className="text-xl font-bold">No missions executed yet</h3>
-           <p className="text-[#94A3B8] max-w-md mx-auto">Launch a mission to start collecting web intelligence and visualizing trends.</p>
+          <div className="space-y-3">
+            <h4 className="text-3xl font-black text-[#E8FFE8] uppercase tracking-tighter">Awaiting Initial Transmission</h4>
+            <p className="text-[#6B9E6B] max-w-md mx-auto font-medium">OMNIX is standby for signals. Run the mission to populate the intelligence bank.</p>
+          </div>
         </div>
       ) : (
-        <>
-          {/* Trend Chart across all/selected results */}
-          <TrendChart 
-            data={filteredResults.map(r => ({
-              timestamp: r.timestamp,
-              value: r.raw_json?.price || r.raw_json?.count || Math.random() * 100, // Placeholder mapping
-              anomalyDetected: r.changes_detected
-            }))}
-            missionName={selectedMissionId === "all" ? "Combined Trends" : missions.find(m => m.mission_id === selectedMissionId)?.name}
-          />
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 items-start animate-in fade-in slide-in-from-bottom duration-700">
+          {/* Analysis Card */}
+          <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] h-full shadow-[0_0_50px_rgba(0,0,0,0.4)] overflow-hidden">
+            <div className="scan-top absolute top-0 left-0 right-0 h-1"></div>
+            <CardHeader className="p-10 border-b border-[#1A2E1A] bg-[#111A11]">
+              <div className="flex items-center justify-between mb-4">
+                 <Badge className="bg-[#00FF6A] text-[#060A06] text-[9px] font-black px-4 py-1 tracking-widest holographic">SIGINT COMPLETE</Badge>
+                 <span className="text-[11px] font-mono text-[#6B9E6B] uppercase font-black">{latestResult.timestamp}</span>
+              </div>
+              <CardTitle className="text-4xl font-black uppercase tracking-tighter flex items-center gap-4">
+                <BrainCircuit className="w-10 h-10 text-[#00FF6A]" />
+                LLM Executive Brief
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-10 space-y-10">
+              <div className="bg-[#060A06] border-l-4 border-[#00FF6A] p-8 rounded-r-2xl italic text-[#E8FFE8] text-xl leading-relaxed font-medium">
+                "{latestResult.brief}"
+              </div>
+              
+              <div className="space-y-6">
+                 <h4 className="text-[10px] font-black uppercase tracking-[4px] text-[#6B9E6B]">STRUCTURAL ANOMALIES</h4>
+                 <div className="grid grid-cols-1 gap-4">
+                    {latestResult.anomalies?.map((a: any, i: number) => (
+                      <div key={i} className="flex flex-col gap-3 p-6 bg-[#111A11] border border-[#1A2E1A] rounded-2xl group hover:border-[#00FF6A]/30 transition-all">
+                        <div className="flex items-center justify-between">
+                           <Badge variant="outline" className={`${a.severity === 'CRITICAL' ? 'bg-[#FF4444]/10 text-[#FF4444] border-[#FF4444]/30' : 'bg-[#00FF6A]/10 text-[#00FF6A] border-[#00FF6A]/30'} font-black text-[9px] tracking-widest px-3 py-1`}>
+                              {a.severity}
+                           </Badge>
+                           <span className="text-[10px] font-black text-[#6B9E6B] bg-[#060A06] px-3 py-1 rounded-lg border border-[#1A2E1A] uppercase tracking-widest">{a.type}</span>
+                        </div>
+                        <p className="text-sm font-bold text-[#E8FFE8] group-hover:text-[#00FF6A] transition-colors">{a.description}</p>
+                        {a.old_value && (
+                           <div className="flex items-center gap-4 text-[10px] font-mono uppercase font-black mt-2">
+                              <span className="line-through text-[#6B9E6B] bg-[#060A06] px-3 py-1 rounded-lg mt-1">{a.old_value}</span>
+                              <ChevronRight className="w-3 h-3 text-[#00FF6A]" />
+                              <span className="text-[#00FF6A] bg-[#00FF6A]/10 px-3 py-1 rounded-lg mt-1">{a.new_value}</span>
+                           </div>
+                        )}
+                      </div>
+                    ))}
+                 </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredResults.map((result, i) => (
-              <ResultsCard 
-                key={result.result_id} 
-                result={result} 
-                previousResult={i < filteredResults.length - 1 ? filteredResults[i+1] : null}
-              />
-            ))}
+          {/* Raw Data View */}
+          <div className="space-y-10">
+             <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] overflow-hidden">
+                <CardHeader className="p-8 border-b border-[#1A2E1A] flex flex-row items-center justify-between bg-[#111A11]">
+                   <CardTitle className="text-xl font-black flex items-center gap-3 uppercase tracking-tighter">
+                      <FileText className="w-6 h-6 text-[#00FF6A]" />
+                      Data Structure Explorer
+                   </CardTitle>
+                   <Button variant="ghost" className="text-[10px] font-black uppercase tracking-widest text-[#6B9E6B] hover:text-[#00FF6A]">Export CSV</Button>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="max-h-[800px] overflow-auto bg-[#060A06] p-8 font-mono text-xs text-[#6B9E6B] leading-relaxed custom-scrollbar">
+                     <pre className="whitespace-pre-wrap">{JSON.stringify(latestResult.raw_json, null, 2)}</pre>
+                  </div>
+                </CardContent>
+             </Card>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
 }
+
+const ChevronRight = ({ className }: { className?: string }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+);

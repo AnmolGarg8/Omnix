@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -10,38 +11,61 @@ import {
   BrainCircuit, 
   ArrowRight,
   Monitor,
-  Bell
+  Bell,
+  Cpu
 } from "lucide-react";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-[#6366F1]/30">
-      {/* Dynamic Background Noise/Glow */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#6366F1]/10 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#A855F7]/10 blur-[120px] rounded-full"></div>
+    <div className="min-h-screen bg-[#060A06] text-[#E8FFE8] selection:bg-[#00FF6A]/30 overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Particles */}
+        {[...Array(5)].map((_, i) => (
+          <div 
+            key={i} 
+            className="particle" 
+            style={{ 
+              left: `${i * 20 + 10}%`, 
+              animationDelay: `${i * 2}s`,
+              animationDuration: `${7 + i}s`
+            }} 
+          />
+        ))}
+
+        {/* Floating 3D Cube Mockup */}
+        <div className="absolute top-1/4 right-[10%] opacity-20 hidden lg:block">
+           <div className="w-16 h-16 relative preserve-3d animate-[spin_10s_linear_infinite]">
+              <div className="absolute inset-0 border border-[#00FF6A] bg-[#00FF6A]/5 transform translate-z-8"></div>
+              <div className="absolute inset-0 border border-[#00FF6A] bg-[#00FF6A]/5 transform -translate-z-8"></div>
+              <div className="absolute inset-0 border border-[#00FF6A] bg-[#00FF6A]/5 transform rotate-y-90 translate-z-8"></div>
+              <div className="absolute inset-0 border border-[#00FF6A] bg-[#00FF6A]/5 transform -rotate-y-90 translate-z-8"></div>
+              <div className="absolute inset-0 border border-[#00FF6A] bg-[#00FF6A]/5 transform rotate-x-90 translate-z-8"></div>
+              <div className="absolute inset-0 border border-[#00FF6A] bg-[#00FF6A]/5 transform -rotate-x-90 translate-z-8"></div>
+           </div>
+        </div>
+
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#00FF6A]/5 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#00C44F]/5 blur-[120px] rounded-full"></div>
       </div>
 
       {/* Nav */}
       <nav className="relative z-50 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto backdrop-blur-sm">
-        <div className="flex items-center gap-2">
-           <div className="w-10 h-10 bg-[#6366F1] rounded-xl flex items-center justify-center shadow-lg shadow-[#6366F1]/30">
-              <BrainCircuit className="w-6 h-6 text-white" />
+        <div className="flex items-center gap-3">
+           <div className="w-10 h-10 bg-[#00FF6A] rounded-xl flex items-center justify-center shadow-lg shadow-[#00FF6A]/30">
+              <BrainCircuit className="w-6 h-6 text-[#060A06]" />
            </div>
-           <span className="text-2xl font-heading font-black tracking-tighter uppercase">Omnix</span>
+           <span className="text-2xl font-black tracking-tighter uppercase text-[#00FF6A] font-heading">Omnix</span>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#94A3B8]">
-           <a href="#features" className="hover:text-white transition-colors">Intelligence</a>
-           <a href="#pipeline" className="hover:text-white transition-colors">Pipeline</a>
-           <a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a>
+        <div className="hidden md:flex items-center gap-8 text-sm font-bold uppercase tracking-wider text-[#6B9E6B]">
+           <a href="#features" className="hover:text-[#00FF6A] transition-colors">Intelligence</a>
+           <a href="#pipeline" className="hover:text-[#00FF6A] transition-colors">Pipeline</a>
+           <a href="/dashboard" className="hover:text-[#00FF6A] transition-colors">Dashboard</a>
         </div>
         <div className="flex items-center gap-4">
-           <Link href="/sign-in">
-              <Button variant="ghost" className="text-[#94A3B8] hover:text-white">Sign In</Button>
-           </Link>
            <Link href="/dashboard">
-              <Button className="bg-white text-black hover:bg-gray-200 font-bold rounded-full px-6">
-                Connect Dashboard
+              <Button className="bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] font-bold rounded-full px-8 shadow-[0_0_20px_rgba(0,255,106,0.2)]">
+                Launch System
               </Button>
            </Link>
         </div>
@@ -49,43 +73,43 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative z-10 pt-32 pb-20 px-6 max-w-7xl mx-auto text-center space-y-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111118] border border-[#1E1E2E] text-xs font-medium text-[#6366F1] mb-4">
-           <Zap className="w-3 h-3 fill-current" />
-           <span>Phase 4: Automation Now Live</span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0D130D] border border-[#1A2E1A] text-[10px] font-bold text-[#00FF6A] mb-4 uppercase tracking-[2px] scan-top">
+           <Cpu className="w-3 h-3" />
+           <span>AUTONOMOUS AGENTS ACTIVE</span>
         </div>
         
-        <h1 className="text-6xl md:text-8xl font-heading font-black tracking-tight leading-[0.9] max-w-4xl mx-auto ">
-          Deploy AI Agents to <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] to-[#A855F7]">Watch the Web</span>
+        <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] max-w-4xl mx-auto uppercase">
+          Neural <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF6A] to-[#00C44F]">Web Surveillance</span>
         </h1>
         
-        <p className="text-lg md:text-xl text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
-          Omnix orchestrates parallel AI browser agents across any website.
-          Detect changes, generate embeddings, and get smart alerts — zero human involvement.
+        <p className="text-lg md:text-xl text-[#6B9E6B] max-w-2xl mx-auto leading-relaxed">
+          Omnix orchestrates parallel AI browser agents.
+          Describe any research goal — get structured intelligence on local or global schedules.
         </p>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-4">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 pt-6">
            <Link href="/dashboard">
-             <Button size="lg" className="h-14 px-10 text-lg bg-[#6366F1] hover:bg-[#5254E0] rounded-full shadow-2xl shadow-[#6366F1]/20 gap-2">
-               Get Started for Free <ArrowRight className="w-5 h-5" />
-             </Button>
-           </Link>
-           <Link href="#pipeline">
-             <Button variant="outline" size="lg" className="h-14 px-10 text-lg border-[#1E1E2E] bg-transparent hover:bg-[#111118] rounded-full">
-               View Pipeline Architecture
-             </Button>
+              <Button size="lg" className="h-14 px-10 text-lg bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] rounded-full shadow-2xl shadow-[#00FF6A]/20 gap-2 font-bold uppercase tracking-tight">
+                Connect Intelligence <ArrowRight className="w-5 h-5" />
+              </Button>
            </Link>
         </div>
 
         {/* Dashboard Preview Mockup */}
-        <div className="mt-20 relative group">
-           <div className="absolute -inset-1 bg-gradient-to-r from-[#6366F1] to-[#A855F7] rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
-           <div className="relative bg-[#0A0A0F] border border-[#1E1E2E] rounded-2xl overflow-hidden shadow-2xl">
+        <div className="mt-24 relative group max-w-5xl mx-auto">
+           <div className="absolute -inset-1 bg-[#00FF6A] rounded-2xl blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+           <div className="relative cyber-card overflow-hidden bg-[#0D130D]">
+              <div className="h-4 bg-[#111A11] border-b border-[#1A2E1A] flex items-center gap-1.5 px-4">
+                 <div className="w-2 h-2 rounded-full bg-[#1A2E1A]"></div>
+                 <div className="w-2 h-2 rounded-full bg-[#1A2E1A]"></div>
+                 <div className="w-2 h-2 rounded-full bg-[#1A2E1A]"></div>
+              </div>
               <img 
                 src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070" 
                 alt="Omnix Dashboard Preview" 
-                className="w-full h-auto opacity-80 grayscale group-hover:grayscale-0 transition-all duration-700"
+                className="w-full h-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-1000"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#060A06] via-transparent to-transparent"></div>
            </div>
         </div>
       </section>
@@ -93,51 +117,36 @@ export default function LandingPage() {
       {/* Features Grid */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-32 grid grid-cols-1 md:grid-cols-3 gap-8">
          <FeatureCard 
-            icon={<Search className="w-6 h-6 text-[#6366F1]" />}
-            title="Parallel Search"
-            description="Fires N agents simultaneously to crawl competitors, marketplaces, and news sources in seconds."
+            icon={<Search className="w-6 h-6 text-[#00FF6A]" />}
+            title="SWARM CRAWLING"
+            description="N agents fire simultaneously to monitor competitors and news at the speed of light."
          />
          <FeatureCard 
-            icon={<BrainCircuit className="w-6 h-6 text-[#A855F7]" />}
-            title="LLM Intelligence"
-            description="Llama-3.3-70b parses natural goals into tasks and analyzes results for meaningful anomalies."
+            icon={<BrainCircuit className="w-6 h-6 text-[#00FF6A]" />}
+            title="Llama-3.3 INTELLIGENCE"
+            description="Llama-3.3-70b parses complex instructions into perfect browser automation tasks."
          />
          <FeatureCard 
-            icon={<Globe className="w-6 h-6 text-[#22C55E]" />}
-            title="Stealth Native"
-            description="Integrated TinyFish stealth technology bypasses anti-bot detections on high-security targets."
-         />
-         <FeatureCard 
-            icon={<Zap className="w-6 h-6 text-[#F59E0B]" />}
-            title="Auto-Embeddings"
-            description="Voyage AI generates vector embeddings for every run, enabling deep semantic similarity tracking."
-         />
-         <FeatureCard 
-            icon={<Bell className="w-6 h-6 text-[#EF4444]" />}
-            title="Alert Orchestration"
-            description="Multi-channel alerts via Slack, Email, and Push with smart priority filtering."
-         />
-         <FeatureCard 
-            icon={<Monitor className="w-6 h-6 text-[#6366F1]" />}
-            title="Live Proxy"
-            description="Watch your agents work in real-time with live iframe feeds and log streaming."
+            icon={<ShieldCheck className="w-6 h-6 text-[#00FF6A]" />}
+            title="STEALTH PROTOCOL"
+            description="TinyFish native stealth bypasses high-security anti-bot systems automatically."
          />
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#1E1E2E] py-12 px-6">
+      <footer className="border-t border-[#1A2E1A] py-16 px-6 bg-[#0D130D]/50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-           <div className="flex items-center gap-2 grayscale opacity-50">
-              <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
-                 <BrainCircuit className="w-4 h-4 text-black" />
+           <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-[#00FF6A] rounded-md flex items-center justify-center">
+                 <BrainCircuit className="w-5 h-5 text-[#060A06]" />
               </div>
-              <span className="text-lg font-heading font-bold uppercase tracking-tighter">Omnix</span>
+              <span className="text-xl font-black uppercase tracking-tighter text-[#00FF6A]">Omnix</span>
            </div>
-           <p className="text-[#52525B] text-sm">© 2026 Omnix Intelligence Systems. Built for TinyFish $2M Hackathon.</p>
-           <div className="flex gap-6 text-[#52525B] text-sm">
-              <a href="#" className="hover:text-white">API Docs</a>
-              <a href="#" className="hover:text-white">Security</a>
-              <a href="#" className="hover:text-white">Status</a>
+           <p className="text-[#6B9E6B] text-xs font-mono">© 2026 OMNIX INTELLIGENCE SYSTEMS. ENCRYPTED DEPLOYMENT.</p>
+           <div className="flex gap-8 text-[#6B9E6B] text-[10px] font-bold uppercase tracking-[2px]">
+              <a href="#" className="hover:text-[#00FF6A]">API</a>
+              <a href="#" className="hover:text-[#00FF6A]">SECURITY</a>
+              <a href="#" className="hover:text-[#00FF6A]">STATUS</a>
            </div>
         </div>
       </footer>
@@ -146,11 +155,12 @@ export default function LandingPage() {
 }
 
 const FeatureCard = ({ icon, title, description }: any) => (
-  <div className="p-8 rounded-3xl bg-[#111118] border border-[#1E1E2E] hover:border-[#6366F1]/50 transition-all group lg:p-10">
-     <div className="w-12 h-12 rounded-2xl bg-[#0A0A0F] border border-[#1E1E2E] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+  <div className="cyber-card p-10 group bg-[#0D130D]">
+     <div className="w-14 h-14 rounded-2xl bg-[#111A11] border border-[#1A2E1A] flex items-center justify-center mb-8 group-hover:border-[#00FF6A]/50 transition-colors">
         {icon}
      </div>
-     <h3 className="text-xl font-heading font-bold mb-3">{title}</h3>
-     <p className="text-[#94A3B8] leading-relaxed text-sm">{description}</p>
+     <h3 className="text-xl font-bold mb-4 tracking-tight uppercase">{title}</h3>
+     <p className="text-[#6B9E6B] leading-relaxed text-sm font-medium">{description}</p>
+     <div className="mt-6 w-0 group-hover:w-full h-[1px] bg-[#00FF6A]/30 transition-all duration-500"></div>
   </div>
 );

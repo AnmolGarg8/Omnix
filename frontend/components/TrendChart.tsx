@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { 
   LineChart, 
   Line, 
@@ -7,114 +7,95 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  Legend, 
-  ResponsiveContainer, 
-  ReferenceDot 
+  ResponsiveContainer,
+  AreaChart,
+  Area
 } from "recharts";
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardContent 
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { TrendingUp, Activity, Database, Clock } from "lucide-react";
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-[#111118] border border-[#1E1E2E] p-3 rounded-lg shadow-xl text-xs space-y-2">
-        <p className="font-bold text-[#F1F5F9]">{new Date(label).toDateString()}</p>
-        {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }}></span>
-            <span className="text-[#94A3B8] capitalize">{entry.name}:</span>
-            <span className="font-bold text-[#F1F5F9]">{entry.value}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
-
-export const TrendChart = ({ data, missionName = "Mission History" }: { data: any[]; missionName?: string }) => {
-  const [range, setRange] = useState("30d");
-
-  if (!data || data.length === 0) {
-    return (
-      <Card className="bg-[#111118] border-[#1E1E2E]">
-        <CardContent className="h-[300px] flex items-center justify-center text-[#94A3B8]">
-          <p>No trend data available yet</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Find anomaly points for ReferenceDot
-  const anomalies = data.filter(d => d.anomalyDetected);
-
+export const TrendChart = ({ data }: { data: any[] }) => {
   return (
-    <Card className="bg-[#111118] border-[#1E1E2E] shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between pb-8">
-        <div>
-          <CardTitle className="text-xl font-heading">{missionName}</CardTitle>
-          <CardDescription>Visualizing data trends and detected anomalies</CardDescription>
-        </div>
-        <div className="flex bg-[#0A0A0F] border border-[#1E1E2E] rounded-md p-1">
-          {["7d", "30d", "All"].map((r) => (
-            <button
-              key={r}
-              onClick={() => setRange(r)}
-              className={`text-[10px] px-3 py-1.5 rounded transition-all ${
-                range === r 
-                  ? "bg-[#6366F1] text-white shadow-lg" 
-                  : "text-[#94A3B8] hover:text-[#F1F5F9]"
-              }`}
-            >
-              {r}
-            </button>
-          ))}
+    <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] shadow-2xl overflow-hidden group">
+      <CardHeader className="p-8 pb-4 border-b border-[#1A2E1A] bg-[#111A11]">
+        <div className="flex items-center justify-between mb-4">
+           <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#060A06] border border-[#1A2E1A] flex items-center justify-center shadow-inner group-hover:border-[#00FF6A]/30 transition-colors">
+                <TrendingUp className="w-6 h-6 text-[#00FF6A]" />
+              </div>
+              <div className="flex flex-col">
+                 <CardTitle className="text-xl font-black text-[#E8FFE8] uppercase tracking-tighter">
+                   TEMPORAL PRICE ANALYSIS
+                 </CardTitle>
+                 <div className="flex items-center gap-4 mt-1 text-[10px] font-black uppercase tracking-widest text-[#6B9E6B]">
+                    <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> AGGREGATED DEVIATIONS</span>
+                    <span className="flex items-center gap-1.5 text-[#00FF6A]/60"><Activity className="w-3.5 h-3.5" /> LIVE NODES ACTIVE</span>
+                 </div>
+              </div>
+           </div>
+           <div className="flex gap-2">
+              <span className="px-3 py-1 bg-[#111A11] border border-[#1A2E1A] rounded-full text-[9px] font-black tracking-widest text-[#6B9E6B] hover:text-[#00FF6A] transition-colors cursor-pointer">7D</span>
+              <span className="px-3 py-1 bg-[#00FF6A] border border-[#00FF6A] rounded-full text-[9px] font-black tracking-widest text-[#060A06] shadow-[0_0_12px_#00FF6A66] transition-colors cursor-pointer">30D</span>
+              <span className="px-3 py-1 bg-[#111A11] border border-[#1A2E1A] rounded-full text-[9px] font-black tracking-widest text-[#6B9E6B] hover:text-[#00FF6A] transition-colors cursor-pointer">ALL</span>
+           </div>
         </div>
       </CardHeader>
-      <CardContent className="h-[350px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1E1E2E" />
-            <XAxis 
-              dataKey="timestamp" 
-              stroke="#4B5563" 
-              fontSize={10}
-              tickFormatter={(t) => new Date(t).toLocaleDateString([], { month: 'short', day: 'numeric' })} 
-            />
-            <YAxis stroke="#4B5563" fontSize={10} />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ fontSize: 10, paddingTop: 20 }} />
-            
-            <Line 
-              type="monotone" 
-              dataKey="value" 
-              name="Primary Value" 
-              stroke="#6366F1" 
-              strokeWidth={3} 
-              dot={{ stroke: '#6366F1', strokeWidth: 2, r: 2, fill: '#0A0A0F' }}
-              activeDot={{ r: 6, stroke: '#6366F1', strokeWidth: 2, fill: '#F1F5F9' }} 
-            />
-
-            {/* Anomaly markers */}
-            {anomalies.map((point, index) => (
-              <ReferenceDot 
-                key={index} 
-                x={point.timestamp} 
-                y={point.value} 
-                r={6} 
-                fill="#EF4444" 
-                stroke="#0A0A0F" 
-                strokeWidth={2} 
+      
+      <CardContent className="p-10 pt-14">
+        <div className="h-[380px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#00FF6A" stopOpacity={0.15}/>
+                  <stop offset="95%" stopColor="#00FF6A" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid 
+                strokeDasharray="4 4" 
+                stroke="#1A2E1A" 
+                vertical={false} 
               />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
+              <XAxis 
+                dataKey="date" 
+                stroke="#6B9E6B" 
+                fontSize={10} 
+                tickLine={false} 
+                axisLine={false}
+                tick={{ fontStyle: 'uppercase', fontWeight: 'bold' }}
+              />
+              <YAxis 
+                stroke="#6B9E6B" 
+                fontSize={10} 
+                tickLine={false} 
+                axisLine={false}
+                tickFormatter={(value) => `₹${value}`}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: "#0D130D", 
+                  borderColor: "#1A2E1A", 
+                  color: "#E8FFE8",
+                  borderRadius: "12px",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.5)"
+                }}
+                itemStyle={{ color: "#00FF6A" }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="price" 
+                stroke="#00FF6A" 
+                strokeWidth={3}
+                fillOpacity={1} 
+                fill="url(#colorValue)" 
+                animationDuration={2000}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );
