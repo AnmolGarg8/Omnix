@@ -5,5 +5,8 @@
     "build": "npm install --prefix frontend && npm run build --prefix frontend",
     "install": "npm install --prefix frontend",
     "start": "npm run start --prefix frontend"
+  },
+  "devDependencies": {
+    "next": "15.x"
   }
 }
