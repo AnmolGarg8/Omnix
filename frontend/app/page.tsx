@@ -72,80 +72,126 @@ export default function LandingPage() {
 
       <main style={{ paddingTop: "140px", paddingBottom: "100px" }}>
         {/* Hero Section */}
-        <section style={{ textAlign: "center", maxWidth: "1200px", margin: "0 auto", padding: "0 20px" }}>
+        <section style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "120px 24px 60px",
+          textAlign: "center",
+          position: "relative"
+        }}>
+          {/* Badge */}
           <div style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
-            padding: "4px 14px", borderRadius: "20px",
+            padding: "5px 16px", borderRadius: "20px",
             border: "1px solid rgba(0, 255, 106, 0.25)",
             background: "rgba(0, 255, 106, 0.06)",
-            fontSize: "11px", fontWeight: "600", color: "#00FF6A",
-            letterSpacing: "1px", marginBottom: "32px",
-            animation: "fadeUp 0.6s ease forwards"
+            fontSize: "11px", fontWeight: "600",
+            color: "#00FF6A", letterSpacing: "1.5px",
+            marginBottom: "32px",
+            opacity: 0,
+            animation: "fadeUp 0.7s ease forwards"
           }}>
             <span style={{ 
               width: "6px", height: "6px", borderRadius: "50%", 
-              background: "#00FF6A", boxShadow: "0 0 6px #00FF6A", 
+              background: "#00FF6A", boxShadow: "0 0 8px #00FF6A", 
               animation: "pulse 1.5s ease-in-out infinite" 
             }}/>
             AUTONOMOUS AGENTS ACTIVE
           </div>
 
+          {/* Headline */}
           <h1 style={{
-            fontSize: "64px", fontWeight: 700, color: "#E8FFE8",
-            letterSpacing: "-2.5px", lineHeight: "1.05",
-            maxWidth: "900px", margin: "0 auto 24px",
-            animation: "fadeUp 0.6s ease forwards 0.1s",
-            opacity: 0
-          }} className="animate-fadeUp">
+            fontSize: "clamp(36px, 6vw, 64px)",
+            fontWeight: 700,
+            color: "#E8FFE8",
+            letterSpacing: "-2px",
+            lineHeight: "1.1",
+            maxWidth: "820px",
+            marginBottom: "24px",
+            fontFamily: "'Space Grotesk', sans-serif",
+            opacity: 0,
+            animation: "fadeUp 0.7s ease forwards 0.1s"
+          }}>
             Deploy AI <span style={{ color: "#00FF6A" }}>Agents</span> That<br />
             Watch The Web For You.
           </h1>
 
+          {/* Subheading */}
           <p style={{
-            fontSize: "19px", color: "#6B9E6B", lineHeight: "1.6",
-            maxWidth: "580px", margin: "0 auto 40px",
-            animation: "fadeUp 0.6s ease forwards 0.2s",
-            opacity: 0
-          }} className="animate-fadeUp">
-            Describe any goal in plain English. AgentForIt fires parallel browser agents, detects changes, and alerts you — fully automated.
+            fontSize: "18px",
+            color: "#6B9E6B",
+            maxWidth: "560px",
+            lineHeight: "1.7",
+            marginBottom: "40px",
+            fontFamily: "'Space Grotesk', sans-serif",
+            opacity: 0,
+            animation: "fadeUp 0.7s ease forwards 0.25s"
+          }}>
+            Describe any goal in plain English. AgentForIt fires parallel browser agents, detects changes, and alerts you — fully automated on a schedule.
           </p>
 
+          {/* CTA Buttons */}
           <div style={{ 
-            display: "flex", gap: "16px", justifyContent: "center",
-            animation: "fadeUp 0.6s ease forwards 0.3s",
-            opacity: 0
-          }} className="animate-fadeUp">
+            display: "flex", gap: "12px", alignItems: "center", marginBottom: "64px",
+            opacity: 0,
+            animation: "fadeUp 0.7s ease forwards 0.4s"
+          }}>
             <Link href="/dashboard" style={{ textDecoration: "none" }}>
               <button style={{
-                background: "#00FF6A", color: "#060A06",
-                fontWeight: 700, padding: "14px 32px", fontSize: "15px",
-                borderRadius: "10px", border: "none", cursor: "pointer",
-                boxShadow: "0 0 24px rgba(0,255,106,0.35)",
-                transition: "transform 0.2s"
+                padding: "13px 32px",
+                background: "#00FF6A",
+                color: "#060A06",
+                fontWeight: 700,
+                fontSize: "14px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "'Space Grotesk', sans-serif",
+                textDecoration: "none",
+                boxShadow: "0 0 24px rgba(0,255,106,0.4)",
+                transition: "all 0.2s"
               }} onMouseEnter={e => e.currentTarget.style.transform = "scale(1.02)"}
               onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
-                Launch Agent Swarm
+                Launch AgentForIt →
               </button>
             </Link>
-            <button style={{
-              background: "transparent", border: "1px solid #1A2E1A",
-              color: "#E8FFE8", padding: "14px 32px", fontSize: "15px",
-              borderRadius: "10px", cursor: "pointer", fontWeight: "600"
+            <a href="#features" style={{
+              padding: "13px 32px",
+              background: "transparent",
+              color: "#E8FFE8",
+              fontWeight: "600",
+              fontSize: "14px",
+              borderRadius: "8px",
+              border: "1px solid #1A2E1A",
+              cursor: "pointer",
+              fontFamily: "'Space Grotesk', sans-serif",
+              textDecoration: "none",
+              transition: "all 0.2s"
             }}>
-              View Documentation
-            </button>
+              See How It Works
+            </a>
           </div>
 
-          {/* Spline Embed */}
+          {/* Spline 3D Scene */}
           <div style={{ 
-            width: "100%", height: "480px", position: "relative", 
-            marginTop: "64px", borderRadius: "20px", overflow: "hidden", 
-            border: "1px solid #1A2E1A", background: "#060A06"
+            width: "100%", 
+            maxWidth: "960px", 
+            height: "400px", 
+            borderRadius: "16px", 
+            overflow: "hidden", 
+            border: "1px solid #1A2E1A", 
+            position: "relative"
           }}>
-            <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
+            <Spline 
+              scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" 
+              style={{ width: "100%", height: "100%" }}
+            />
             <div style={{ 
               position: "absolute", inset: 0, 
-              background: "linear-gradient(to bottom, transparent 60%, #060A06 100%)", 
+              background: "linear-gradient(to bottom, transparent 50%, #060A06 100%)", 
               pointerEvents: "none" 
             }}/>
           </div>

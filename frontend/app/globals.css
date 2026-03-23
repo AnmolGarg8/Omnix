@@ -95,9 +95,32 @@ body {
   }
 }
 
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px #00FF6A; }
+  50%       { opacity: 0.5; box-shadow: 0 0 3px #00FF6A; }
+}
+
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-5px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-fadeUp {
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards;
 }
 
 .float-0 { animation: float 4s ease-in-out infinite 0s; }
