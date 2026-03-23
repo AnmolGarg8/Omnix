@@ -55,7 +55,9 @@ export default function LandingPage() {
            <div className="w-10 h-10 bg-[#00FF6A] rounded-xl flex items-center justify-center shadow-lg shadow-[#00FF6A]/30">
               <BrainCircuit className="w-6 h-6 text-[#060A06]" />
            </div>
-           <span className="text-2xl font-black tracking-tighter uppercase text-[#00FF6A] font-heading">Omnix</span>
+           <Link href="/" className="flex items-center gap-2">
+           <span className="text-2xl font-black tracking-tighter uppercase text-[#00FF6A] font-heading">AgentForIt</span>
+        </Link>
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm font-bold uppercase tracking-wider text-[#6B9E6B]">
            <a href="#features" className="hover:text-[#00FF6A] transition-colors">Intelligence</a>
@@ -78,12 +80,11 @@ export default function LandingPage() {
            <span>AUTONOMOUS AGENTS ACTIVE</span>
         </div>
         
-        <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] max-w-4xl mx-auto uppercase">
-          Neural <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF6A] to-[#00C44F]">Web Surveillance</span>
+        <h1 className="text-7xl md:text-9xl font-black uppercase tracking-tighter text-[#E8FFE8] leading-[0.8] animate-in fade-in slide-in-from-bottom duration-700">
+          AgentForIt orchestrates parallel AI browser agents.
         </h1>
         
         <p className="text-lg md:text-xl text-[#6B9E6B] max-w-2xl mx-auto leading-relaxed">
-          Omnix orchestrates parallel AI browser agents.
           Describe any research goal — get structured intelligence on local or global schedules.
         </p>
 
@@ -105,9 +106,9 @@ export default function LandingPage() {
                  <div className="w-2 h-2 rounded-full bg-[#1A2E1A]"></div>
               </div>
               <img 
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070" 
-                alt="Omnix Dashboard Preview" 
-                className="w-full h-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-1000"
+                src="/dashboard-mockup.png" 
+                alt="AgentForIt Dashboard Preview" 
+                className="w-full h-auto opacity-80"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#060A06] via-transparent to-transparent"></div>
            </div>
@@ -140,9 +141,12 @@ export default function LandingPage() {
               <div className="w-8 h-8 bg-[#00FF6A] rounded-md flex items-center justify-center">
                  <BrainCircuit className="w-5 h-5 text-[#060A06]" />
               </div>
-              <span className="text-xl font-black uppercase tracking-tighter text-[#00FF6A]">Omnix</span>
+              <div className="flex flex-col gap-4">
+              <span className="text-xl font-black uppercase tracking-tighter text-[#00FF6A]">AgentForIt</span>
+              <p className="text-[#6B9E6B] text-xs font-mono uppercase">Next-Gen Autonomous Intelligence Swarms.</p>
            </div>
-           <p className="text-[#6B9E6B] text-xs font-mono">© 2026 OMNIX INTELLIGENCE SYSTEMS. ENCRYPTED DEPLOYMENT.</p>
+           </div>
+           <p className="text-[#6B9E6B] text-xs font-mono">© 2026 AgentForIt INTELLIGENCE SYSTEMS. ENCRYPTED DEPLOYMENT.</p>
            <div className="flex gap-8 text-[#6B9E6B] text-[10px] font-bold uppercase tracking-[2px]">
               <a href="#" className="hover:text-[#00FF6A]">API</a>
               <a href="#" className="hover:text-[#00FF6A]">SECURITY</a>

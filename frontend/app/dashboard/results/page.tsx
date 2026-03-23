@@ -14,6 +14,7 @@ import {
   CardTitle, 
   CardContent 
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Database, FileText, CheckCircle2, Search, BrainCircuit, Globe, Cpu } from "lucide-react";
 
@@ -88,7 +89,7 @@ export default function ResultsPage() {
           </div>
           <div className="space-y-3">
             <h4 className="text-3xl font-black text-[#E8FFE8] uppercase tracking-tighter">Awaiting Initial Transmission</h4>
-            <p className="text-[#6B9E6B] max-w-md mx-auto font-medium">OMNIX is standby for signals. Run the mission to populate the intelligence bank.</p>
+            <p className="text-[#6B9E6B] max-w-md mx-auto font-medium">AgentForIt is standby for signals. Run the mission to populate the intelligence bank.</p>
           </div>
         </div>
       ) : (

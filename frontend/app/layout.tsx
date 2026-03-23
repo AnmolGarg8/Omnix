@@ -9,8 +9,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Omnix | Deploy AI agents to watch the web",
-  description: "B2B SaaS — Multi-Agent Web Intelligence Platform",
+  title: "AgentForIt | Deploy AI agents to watch the web",
+  description: "Autonomous web intelligence swarms.",
 };
 
 export default function RootLayout({

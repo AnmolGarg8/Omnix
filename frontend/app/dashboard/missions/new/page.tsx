@@ -75,7 +75,7 @@ export default function NewMissionPage() {
           <Target className="w-12 h-12 text-[#00FF6A]" /> 
           Initialize Swarm
         </h2>
-        <p className="text-[#6B9E6B] text-lg font-bold tracking-tight max-w-2xl opacity-80 uppercase leading-relaxed">Describe the target objective in natural language. OMNIX will decompose the goal into autonomous browser tasks.</p>
+        <p className="text-[#6B9E6B] text-lg font-bold tracking-tight max-w-2xl opacity-80 uppercase leading-relaxed">Describe the target objective in natural language. AgentForIt will decompose the goal into autonomous browser tasks.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">

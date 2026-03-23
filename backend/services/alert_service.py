@@ -21,7 +21,7 @@ async def send_email_alert(to: str, brief: str, anomalies: list, priority: str, 
     
     html_content = f"""
     <div style="font-family: sans-serif; background-color: #0A0A0F; color: #F1F5F9; padding: 40px; border-radius: 8px;">
-        <h1 style="color: #6366F1; font-size: 24px;">{priority_emoji} Omnix Alert — {mission_name}</h1>
+        <h1 style="color: #6366F1; font-size: 24px;">{priority_emoji} AgentForIt Alert — {mission_name}</h1>
         <p style="font-size: 16px; line-height: 1.6;">{brief}</p>
         <div style="background-color: #111118; border: 1px solid #1E1E2E; padding: 20px; border-radius: 8px; margin: 30px 0;">
             <h2 style="font-size: 14px; text-transform: uppercase; color: #94A3B8;">Detected Anomalies</h2>
@@ -54,7 +54,7 @@ async def send_slack_alert(webhook_url: str, brief: str, anomalies: list, priori
     blocks = [
         {
             "type": "header",
-            "text": {"type": "plain_text", "text": f"{emoji} Omnix Alert: {mission_name}", "emoji": True}
+            "text": {"type": "plain_text", "text": f"{emoji} AgentForIt Alert: {mission_name}", "emoji": True}
         },
         {
             "type": "section",
@@ -112,7 +112,7 @@ async def send_ntfy_alert(topic: str, brief: str, priority: str):
                 f"https://ntfy.sh/{topic}",
                 content=brief,
                 headers={
-                    "Title": "Omnix Alert",
+                    "Title": "AgentForIt Alert",
                     "Priority": priority_map.get(priority.upper(), "default"),
                     "Tags": "mag,robot"
                 }

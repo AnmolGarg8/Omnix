@@ -15,7 +15,7 @@ async def parse_mission_to_tasks(goal_nl: str) -> dict:
     client = Groq(api_key=GROQ_API_KEY)
     
     system_prompt = """
-    You are the mission architect for Omnix. Your job is to parse a user's natural language goal into specific web intelligence tasks.
+    You are the mission architect for AgentForIt. Your job is to parse a user's natural language goal into specific web intelligence tasks.
     
     Rules for Task Generation:
     1. If the user names specific sites (e.g. 'Amazon'), use them as URLs.
@@ -62,7 +62,7 @@ async def analyze_results(current_result: Any, previous_result: Optional[Any], m
     client = Groq(api_key=GROQ_API_KEY)
     
     system_prompt = f"""
-    You are the central intelligence of Omnix. Your task is to compare the current scraping result with the previous one based on the user's mission goal: '{mission_goal}'.
+    You are the central intelligence of AgentForIt. Your task is to compare the current scraping result with the previous one based on the user's mission goal: '{mission_goal}'.
     
     Detect:
     - Price changes (drops/hikes)
