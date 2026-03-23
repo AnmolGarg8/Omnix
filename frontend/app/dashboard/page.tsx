@@ -78,15 +78,51 @@ export default function DashboardPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '40px', alignItems: 'start' }}>
         
         {/* Agent Swarm Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'between' }}>
-            <h3 style={{ fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', color: '#E8FFE8' }}>
-              <BrainCircuit size={14} style={{ color: '#00FF6A' }} /> Agent Swarm
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: '16px'
+          }}>
+            <h3 style={{ 
+              fontSize: '14px', 
+              fontWeight: '600', 
+              color: '#E8FFE8', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px' 
+            }}>
+              <BrainCircuit size={16} style={{ color: '#00FF6A' }} /> Agent Swarm
             </h3>
-            <Link href="/dashboard/missions/new">
-               <Button style={{ background: '#00FF6A', color: '#060A06', fontWeight: 600, borderRadius: '8px', boxShadow: '0 0 16px rgba(0,255,106,0.3)', height: '32px', fontSize: '11px', padding: '0 16px' }}>
-                 <Plus size={12} style={{ marginRight: '6px' }} /> NEW MISSION
-               </Button>
+            <Link href="/dashboard/missions/new" style={{ textDecoration: 'none' }}>
+               <button 
+                 style={{
+                   padding: '5px 12px',
+                   background: 'transparent',
+                   color: '#00FF6A',
+                   fontWeight: '600',
+                   fontSize: '12px',
+                   borderRadius: '6px',
+                   border: '1px solid rgba(0,255,106,0.3)',
+                   cursor: 'pointer',
+                   fontFamily: 'Space Grotesk, sans-serif',
+                   display: 'flex',
+                   alignItems: 'center',
+                   gap: '5px',
+                   transition: 'all 0.2s ease'
+                 }}
+                 onMouseEnter={e => {
+                   e.currentTarget.style.background = 'rgba(0,255,106,0.08)'
+                   e.currentTarget.style.borderColor = 'rgba(0,255,106,0.6)'
+                 }}
+                 onMouseLeave={e => {
+                   e.currentTarget.style.background = 'transparent'
+                   e.currentTarget.style.borderColor = 'rgba(0,255,106,0.3)'
+                 }}
+               >
+                 <Plus size={14} /> NEW MISSION
+               </button>
             </Link>
           </div>
 
