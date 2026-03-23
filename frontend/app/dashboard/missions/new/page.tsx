@@ -107,7 +107,7 @@ export default function NewMissionPage() {
                     </div>
                     <div className="space-y-2">
                        <label className="text-xs font-bold uppercase tracking-widest text-[#52525B]">Schedule Frequency</label>
-                       <Select value={schedule} onValueChange={setSchedule}>
+                       <Select value={schedule} onValueChange={(val) => val && setSchedule(val)}>
                           <SelectTrigger className="bg-[#0A0A0F] border-[#1E1E2E]">
                              <SelectValue />
                           </SelectTrigger>
