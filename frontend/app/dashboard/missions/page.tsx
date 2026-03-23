@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus, Play, Search, Filter, Rocket, Target, Cpu } from "lucide-react";
+import { Plus, Play, Search, Filter, Rocket, Target, Cpu, ArrowRight, BrainCircuit, Globe } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 
 export default function MissionsPage() {
   const [missions, setMissions] = useState<any[]>([]);
@@ -36,97 +37,124 @@ export default function MissionsPage() {
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
-      case "active": return "border-[#00FF6A]/30 text-[#00FF6A] bg-[#00FF6A]/5";
-      case "running": return "bg-[#00FF6A] text-[#060A06] animate-pulse";
-      case "paused": return "border-[#F59E0B]/30 text-[#F59E0B] bg-[#F59E0B]/5";
-      case "failed": return "border-[#FF4444]/30 text-[#FF4444] bg-[#FF4444]/5";
-      default: return "border-[#6B9E6B]/30 text-[#6B9E6B] bg-[#111A11]";
+      case "active": return "#00FF6A";
+      case "running": return "#00FF6A";
+      case "paused": return "#F59E0B";
+      case "failed": return "#FF4444";
+      default: return "#6B9E6B";
     }
   };
 
   return (
-    <div className="space-y-12 p-6 pb-20">
-      <div className="flex items-center justify-between">
-        <div className="space-y-2">
-          <h2 className="text-4xl font-black uppercase tracking-tighter flex items-center gap-3">
-             <Target className="w-10 h-10 text-[#00FF6A]" />
-             Target Clusters
+    <div className="max-w-[1400px] mx-auto p-8 space-y-10 pb-32">
+      {/* Header Section */}
+      <div className="flex items-end justify-between pb-6 border-b border-[#1A2E1A]">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 text-[10px] font-bold text-[#00FF6A] uppercase tracking-[3px] mb-2 opacity-70">
+            <Rocket size={12} /> AGENT_SWARM_ORCHESTRATOR
+          </div>
+          <h2 className="text-3xl font-bold uppercase tracking-tight flex items-center gap-3 text-[#E8FFE8]">
+            <div className="p-2 bg-[#00FF6A]/10 rounded-lg border border-[#00FF6A]/20">
+              <Target size={28} className="text-[#00FF6A]" />
+            </div>
+            Target Clusters
           </h2>
-          <p className="text-[#6B9E6B] font-bold text-sm tracking-widest uppercase opacity-80">Orchestrate your autonomous agent swarms.</p>
+          <p className="text-[#6B9E6B] text-xs font-medium uppercase tracking-[2px] ml-1">MANAGE & OPERATE YOUR AUTONOMOUS ASSETS</p>
         </div>
+        
         <Link href="/dashboard/missions/new">
-          <Button className="bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] font-bold gap-2 rounded-full px-8 shadow-[0_0_20px_rgba(0,255,106,0.3)] h-12">
-            <Plus className="w-5 h-5" /> Deploy Swarm
+          <Button className="bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] font-bold gap-2 rounded-lg px-8 shadow-[0_4px_20px_rgba(0,255,106,0.15)] h-11 text-xs uppercase tracking-tight transition-all">
+            <Plus size={16} strokeWidth={3} /> DEPLOY_NEW_SWARM
           </Button>
         </Link>
       </div>
 
-      <div className="cyber-card bg-[#0D130D]/80 border-[#1A2E1A] overflow-hidden shadow-2xl">
+      <Card className="cyber-card bg-[#0D130D]/80 border-[#1A2E1A] overflow-hidden shadow-2xl">
+        {/* Search & Filter Bar */}
         <div className="p-6 border-b border-[#1A2E1A] flex items-center justify-between gap-6 bg-[#111A11]/30">
-           <div className="relative flex-1 max-w-md">
-             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B9E6B]" />
+           <div className="relative flex-1 max-w-md group">
+             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B9E6B] group-focus-within:text-[#00FF6A] transition-colors" />
              <input 
                type="text" 
-               placeholder="IDENTIFY MISSION..." 
-               className="w-full pl-12 h-12 bg-[#060A06] border-[#1A2E1A] rounded-xl text-xs font-bold uppercase tracking-widest focus:border-[#00FF6A] transition-all"
+               placeholder="IDENTIFY MISSION_REF..." 
+               className="w-full pl-12 h-11 bg-[#060A06] border border-[#1A2E1A] rounded-xl text-[11px] font-bold uppercase tracking-widest focus:border-[#00FF6A] transition-all outline-none text-[#E8FFE8] placeholder:opacity-30"
              />
            </div>
+           
            <div className="flex items-center gap-3">
-              <Button variant="outline" className="h-12 bg-transparent border-[#1A2E1A] gap-2 px-6 hover:bg-[#111A11] text-[#6B9E6B] font-bold uppercase tracking-widest text-[10px]">
-                <Filter className="w-4 h-4" /> Filter SIGINT
+              <Button variant="outline" className="h-11 bg-transparent border-[#1A2E1A] gap-2 px-6 hover:bg-[#111A11] text-[#6B9E6B] font-bold uppercase tracking-widest text-[10px] hover:text-[#00FF6A]">
+                <Filter className="w-3.5 h-3.5" /> Filter Signals
               </Button>
+              <div className="w-[1px] h-6 bg-[#1A2E1A]"></div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#060A06] border border-[#1A2E1A]">
+                <div className="w-2 h-2 rounded-full bg-[#00FF6A] animate-pulse shadow-[0_0_8px_#00FF6A]"></div>
+                <span className="text-[10px] font-bold text-[#6B9E6B] uppercase tracking-widest">{missions.length} ACTIVE_NODES</span>
+              </div>
            </div>
         </div>
 
         {loading ? (
           <div className="p-8 space-y-4">
-            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20 w-full bg-[#111A11] rounded-xl" />)}
+            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20 w-full bg-[#111A11] rounded-xl outline-none" />)}
           </div>
         ) : (
           <Table>
-            <TableHeader className="bg-[#060A06]">
+            <TableHeader className="bg-[#060A06]/50">
               <TableRow className="border-[#1A2E1A] hover:bg-transparent">
-                <TableHead className="text-[#6B9E6B] font-black uppercase tracking-widest text-[10px] h-14 px-8">Nomenclature</TableHead>
-                <TableHead className="text-[#6B9E6B] font-black uppercase tracking-widest text-[10px] h-14">Status</TableHead>
-                <TableHead className="text-[#6B9E6B] font-black uppercase tracking-widest text-[10px] h-14">CRON</TableHead>
-                <TableHead className="text-[#6B9E6B] font-black uppercase tracking-widest text-[10px] h-14">Class</TableHead>
-                <TableHead className="text-[#6B9E6B] font-black uppercase tracking-widest text-[10px] h-14 px-8 text-right">Execution</TableHead>
+                <TableHead className="text-[#6B9E6B] font-bold uppercase tracking-widest text-[9px] h-12 px-8">Nomenclature</TableHead>
+                <TableHead className="text-[#6B9E6B] font-bold uppercase tracking-widest text-[9px] h-12">Status_Pulse</TableHead>
+                <TableHead className="text-[#6B9E6B] font-bold uppercase tracking-widest text-[9px] h-12">Sync_Schedule</TableHead>
+                <TableHead className="text-[#6B9E6B] font-bold uppercase tracking-widest text-[9px] h-12">Swarm_Class</TableHead>
+                <TableHead className="text-[#6B9E6B] font-bold uppercase tracking-widest text-[9px] h-12 px-8 text-right">Access</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {missions.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="h-40 text-center text-[#6B9E6B] font-bold uppercase tracking-widest opacity-40">
-                    No active mission clusters detected.
+                <TableRow className="border-none">
+                  <TableCell colSpan={5} className="h-60 text-center">
+                    <div className="flex flex-col items-center justify-center space-y-4 opacity-30 grayscale">
+                       <Target className="w-12 h-12 text-[#6B9E6B]" />
+                       <p className="font-black uppercase tracking-[4px] text-xs">NO_ACTIVE_CLUSTERS_DETECTED</p>
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : (
                 missions.map((mission) => (
-                  <TableRow key={mission.mission_id} className="border-[#1A2E1A] transition-colors hover:bg-[#00FF6A]/5 group animate-in fade-in slide-in-from-left duration-500">
-                    <TableCell className="font-black py-6 px-8 text-[#E8FFE8] group-hover:text-[#00FF6A] transition-colors">
-                      <Link href={`/dashboard/missions/${mission.mission_id}`} className="flex flex-col gap-1">
-                        <span className="text-lg uppercase tracking-tight">{mission.name}</span>
-                        <span className="text-[10px] font-mono text-[#6B9E6B]">REF://{mission.mission_id.substring(0,12)}</span>
+                  <TableRow key={mission.mission_id} className="border-[#1A2E1A] transition-colors hover:bg-[#00FF6A]/5 group relative h-24">
+                    {/* Status Strip */}
+                    <td className="absolute left-0 top-0 bottom-0 w-[2px]" style={{ background: getStatusColor(mission.status) }}></td>
+                    
+                    <TableCell className="px-8 py-0">
+                      <Link href={`/dashboard/missions/${mission.mission_id}`} className="flex flex-col gap-1 group/link">
+                        <span className="text-sm font-bold uppercase tracking-wide text-[#E8FFE8] group-hover/link:text-[#00FF6A] transition-colors">{mission.name}</span>
+                        <div className="flex items-center gap-2">
+                           <span className="text-[9px] font-mono text-[#6B9E6B] uppercase tracking-tighter opacity-60">ID://{mission.mission_id.substring(0,16)}</span>
+                        </div>
                       </Link>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className={`uppercase text-[9px] font-black tracking-widest border px-3 py-1 ${getStatusColor(mission.status)}`}>
-                        {mission.status || "IDLE"}
-                      </Badge>
+                      <div className="flex items-center gap-3">
+                         <div className={`w-1.5 h-1.5 rounded-full ${mission.status?.toLowerCase() === 'running' ? 'animate-ping' : ''}`} style={{ background: getStatusColor(mission.status) }}></div>
+                         <Badge variant="outline" className="uppercase text-[8px] font-black tracking-widest px-2 py-0.5" style={{ color: getStatusColor(mission.status), borderColor: `${getStatusColor(mission.status)}44`, background: `${getStatusColor(mission.status)}11` }}>
+                           {mission.status || "IDLE"}
+                         </Badge>
+                      </div>
                     </TableCell>
-                    <TableCell className="text-[11px] font-mono text-[#6B9E6B] uppercase font-bold tracking-widest">
+                    <TableCell className="text-[10px] font-mono text-[#6B9E6B] uppercase font-bold tracking-[1px]">
                       {mission.schedule}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                         <div className="w-2 h-2 rounded-full bg-[#00FF6A]"></div>
-                         <span className="text-[10px] font-black text-[#6B9E6B] uppercase tracking-widest">{mission.category || "GENERAL"}</span>
+                         <div className="p-1 rounded bg-[#111A11] border border-[#1A2E1A]">
+                           {mission.category === 'SOCIAL' ? <BrainCircuit size={10} className="text-[#00FF6A]" /> : <Globe size={10} className="text-[#00FF6A]" />}
+                         </div>
+                         <span className="text-[9px] font-bold text-[#6B9E6B] uppercase tracking-widest">{mission.category || "GENERAL"}</span>
                       </div>
                     </TableCell>
                     <TableCell className="px-8 text-right">
                        <Link href={`/dashboard/missions/${mission.mission_id}`}>
-                          <Button size="icon" className="h-10 w-10 bg-[#111A11] border border-[#1A2E1A] hover:bg-[#00FF6A] text-[#00FF6A] hover:text-[#060A06] transition-all rounded-lg group/btn">
-                             <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                          <Button size="icon" className="h-9 w-9 bg-[#111A11] border border-[#1A2E1A] hover:bg-[#00FF6A] text-[#00FF6A] hover:text-[#060A06] transition-all rounded-lg group/btn shadow-[0_0_15px_rgba(0,0,0,0.4)]">
+                             <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                           </Button>
                        </Link>
                     </TableCell>
@@ -136,11 +164,7 @@ export default function MissionsPage() {
             </TableBody>
           </Table>
         )}
-      </div>
+      </Card>
     </div>
   );
 }
-
-const ArrowRight = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-);
