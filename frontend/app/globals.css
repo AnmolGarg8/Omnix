@@ -105,11 +105,6 @@ body {
 .float-2 { animation: float 4s ease-in-out infinite 1s; }
 .float-3 { animation: float 4s ease-in-out infinite 1.5s; }
 
-@keyframes scanLine {
-  0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
-  50% { opacity: 1; transform: scaleX(1); }
-}
-
 @keyframes sweep {
   0% { left: -100%; }
   100% { left: 200%; }
