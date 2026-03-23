@@ -17,17 +17,18 @@ import {
   Rocket, 
   ArrowRight,
   Bell, 
-  TrendingUp 
+  TrendingUp,
+  BrainCircuit
 } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EXAMPLES = [
-  "Monitor Nike, Adidas, Zara for price changes on running shoes under ₹5000",
-  "Check TechCrunch, ProductHunt, HackerNews daily for AI startup funding news",
-  "Track my 5 competitors' landing pages for copy or pricing changes",
-  "Scrape top 20 LinkedIn job postings for React Developer in Bangalore",
-  "Monitor Amazon and Flipkart for RTX 5090 stock availability"
+  "Price tracking for Nike running shoes",
+  "TechCrunch AI startup funding news",
+  "Competitor landing page changes",
+  "LinkedIn job postings for React Dev",
+  "Amazon RTX 5090 stock availability"
 ];
 
 export default function DashboardPage() {
@@ -63,43 +64,43 @@ export default function DashboardPage() {
   if (isLoading) return <DashboardSkeleton />;
 
   return (
-    <div className="space-y-12 pb-20">
-      {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Active Missions" value={stats.activeMissions} icon={<Activity />} delta="+2 NEW" />
-        <StatCard label="Total Runs" value={stats.totalRuns} icon={<Zap />} delta="LIVE" />
-        <StatCard label="Alerts Dispatched" value={stats.alertsSent} icon={<Bell />} delta="PRIORITY" />
-        <StatCard label="Nodes Monitored" value={stats.sitesMonitored} icon={<Globe />} delta="GLOBAL" />
+    <div className="space-y-12 pb-20 max-w-[1600px] mx-auto">
+      {/* 4-Column Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard label="Active Missions" value={stats.activeMissions} icon={<Activity className="w-4 h-4" />} />
+        <StatCard label="Total Runs" value={stats.totalRuns} icon={<Zap className="w-4 h-4" />} />
+        <StatCard label="Alerts Sent" value={stats.alertsSent} icon={<Bell className="w-4 h-4" />} />
+        <StatCard label="Nodes Monitored" value={stats.sitesMonitored} icon={<Globe className="w-4 h-4" />} />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
-        {/* Missions Grid */}
+        {/* Agent Swarm Section */}
         <div className="xl:col-span-2 space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-black flex items-center gap-3 uppercase tracking-tighter">
-              <Rocket className="w-6 h-6 text-[#00FF6A]" />
-              Agent Swarm
+            <h3 className="text-sm font-semibold flex items-center gap-2 text-[#E8FFE8] tracking-tight">
+              <BrainCircuit className="w-4 h-4 text-[#00FF6A]" />
+              Agent swarm
             </h3>
             <Link href="/dashboard/missions/new">
-               <Button className="bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] font-bold gap-2 rounded-full px-6 shadow-[0_0_15px_rgba(0,255,106,0.3)]">
-                 <Plus className="w-4 h-4" /> New Mission
+               <Button className="bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] font-semibold gap-2 rounded-lg px-6 shadow-[0_0_15px_rgba(0,255,106,0.3)] h-9 text-xs">
+                 <Plus className="w-3.5 h-3.5" /> New mission
                </Button>
             </Link>
           </div>
 
           {missions.length === 0 ? (
-            <div className="cyber-card p-16 text-center space-y-8 flex flex-col items-center bg-[#0D130D]/50 border-dashed">
-              <div className="w-24 h-24 rounded-full bg-[#111A11] border border-[#1A2E1A] flex items-center justify-center text-5xl">
+            <div className="cyber-card p-20 text-center space-y-8 flex flex-col items-center bg-[#0D130D]/40 border-dashed border-[#1A2E1A]">
+              <div className="w-20 h-20 rounded-full bg-[#111A11] border border-[#1A2E1A] flex items-center justify-center text-3xl shadow-inner shadow-[#00FF6A]/5">
                  🤖
               </div>
-              <div className="space-y-3">
-                <h4 className="text-3xl font-black text-[#E8FFE8] uppercase tracking-tighter">Initialize Intelligence</h4>
-                <p className="text-[#6B9E6B] max-w-md mx-auto font-medium">No active missions detected. Deploy your first agent swarm to begin surveillance.</p>
+              <div className="space-y-2">
+                <h4 className="text-xl font-bold text-[#E8FFE8] tracking-tight">Initialize intelligence</h4>
+                <p className="text-xs text-[#6B9E6B] max-w-sm mx-auto leading-relaxed">No active missions detected. Deploy your first agent swarm to begin surveillance.</p>
               </div>
-              <div className="flex flex-wrap gap-3 justify-center max-w-2xl mt-4">
+              <div className="flex flex-wrap gap-2 justify-center max-w-lg">
                 {EXAMPLES.map((ex) => (
                   <Link key={ex} href={`/dashboard/missions/new?goal=${encodeURIComponent(ex)}`}>
-                    <button className="text-[10px] uppercase font-bold tracking-widest px-5 py-2.5 rounded-full bg-[#111A11] border border-[#1A2E1A] hover:border-[#00FF6A] transition-all text-[#6B9E6B] hover:text-[#00FF6A] hover:shadow-[0_0_15px_rgba(0,255,106,0.1)]">
+                    <button className="text-[11px] font-medium px-4 py-2 rounded-full bg-[#0D130D] border border-[#1A2E1A] hover:border-[#00FF6A]/30 transition-all text-[#6B9E6B] hover:text-[#00FF6A] hover:bg-[#00FF6A]/5">
                       {ex}
                     </button>
                   </Link>
@@ -108,73 +109,74 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               {missions.map(mission => (
+                {missions.map(mission => (
                   <MissionCard key={mission.mission_id} mission={mission} />
-               ))}
+                ))}
             </div>
           )}
         </div>
 
-        {/* Recent Alerts Feed */}
-        <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] shadow-2xl overflow-hidden">
-          <CardHeader className="border-b border-[#1A2E1A] p-6 bg-[#111A11]">
-             <CardTitle className="text-xl font-black flex items-center gap-3 uppercase tracking-tighter">
-                <Bell className="w-6 h-6 text-[#FF4444]" />
-                Signal Log
-             </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-             <div className="divide-y divide-[#1A2E1A]">
-                {[1, 2, 3, 4, 5].map(i => (
-                  <div key={i} className="p-5 hover:bg-[#111A11]/50 transition-colors cursor-pointer group">
-                     <div className="flex items-center justify-between mb-2">
-                        <Badge className="bg-[#FF4444]/10 text-[#FF4444] text-[9px] font-black border-none tracking-widest">CRITICAL</Badge>
-                        <span className="text-[10px] text-[#6B9E6B] font-mono">{i * 2}h ago</span>
-                     </div>
-                     <p className="text-sm font-bold text-[#E8FFE8] group-hover:text-[#00FF6A] transition-colors">Anomaly detected in target cluster...</p>
-                     <p className="text-xs text-[#6B9E6B] mt-1 line-clamp-1 font-medium">Significant structural change identified on monitored endpoint...</p>
+        {/* Signal Log Section */}
+        <div className="space-y-6">
+          <h3 className="text-sm font-semibold flex items-center gap-2 text-[#E8FFE8] tracking-tight">
+            <Bell className="w-4 h-4 text-[#00FF6A]" />
+            Signal log
+          </h3>
+          <div className="space-y-3">
+            {[
+              { id: 1, priority: 'CRITICAL', time: '2m ago', color: '#FF4444', text: 'Price drop detected on Target B-12' },
+              { id: 2, priority: 'HIGH', time: '14m ago', color: '#FF6B35', text: 'Structural change in Competitor Alpha' },
+              { id: 3, priority: 'MEDIUM', time: '1h ago', color: '#F59E0B', text: 'New job posting matched criteria' },
+              { id: 4, priority: 'MEDIUM', time: '2h ago', color: '#F59E0B', text: 'Routine sync complete for Swarm 04' },
+            ].map(log => (
+              <div key={log.id} className="cyber-card group bg-[#0D130D] border-[#1A2E1A] p-4 flex gap-4 items-start relative overflow-hidden h-auto">
+                {/* Left Edge Indicator */}
+                <div className="absolute left-0 top-0 bottom-0 w-[2.5px]" style={{ backgroundColor: log.color }}></div>
+                <div className="flex-1 space-y-1.5 pl-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-[4px] border border-opacity-20" 
+                          style={{ color: log.color, borderColor: log.color, backgroundColor: `${log.color}15` }}>
+                      {log.priority}
+                    </span>
+                    <span className="text-[10px] text-[#6B9E6B] font-mono">{log.time}</span>
                   </div>
-                ))}
-             </div>
-          </CardContent>
-          <CardContent className="p-5 border-t border-[#1A2E1A] bg-[#111A11]/30">
-            <Link href="/dashboard/alerts">
-              <Button variant="link" className="text-xs text-[#00FF6A] w-full font-bold uppercase tracking-widest">Access All Signals</Button>
+                  <h5 className="text-[13px] font-semibold text-[#E8FFE8] group-hover:text-[#00FF6A] transition-colors leading-tight">
+                    {log.text}
+                  </h5>
+                  <p className="text-[12px] text-[#6B9E6B] line-clamp-1">Anomaly detected in target cluster sequence...</p>
+                </div>
+              </div>
+            ))}
+            <Link href="/dashboard/alerts" className="block w-full">
+              <Button variant="outline" className="w-full bg-transparent border-[#1A2E1A] text-[#6B9E6B] hover:text-[#00FF6A] hover:border-[#00FF6A]/30 text-[11px] h-10 font-bold uppercase tracking-widest mt-4">
+                View all signals
+              </Button>
             </Link>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-const StatCard = ({ label, value, delta, icon }: any) => (
-  <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] overflow-hidden group">
-    <CardContent className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-[10px] font-black uppercase tracking-[2px] text-[#6B9E6B]">
+const StatCard = ({ label, value, icon }: any) => (
+  <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] p-6 group">
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-bold uppercase tracking-[1.5px] text-[#6B9E6B]">
           {label}
         </span>
-        <div className="w-9 h-9 rounded-lg bg-[#111A11] flex items-center justify-center text-[#00FF6A] border border-[#1A2E1A] group-hover:border-[#00FF6A]/30 transition-colors">
+        <div className="text-[#00FF6A] group-hover:scale-110 transition-transform opacity-70">
           {icon}
         </div>
       </div>
-      <div className="flex flex-col gap-1">
-        <span className="text-4xl font-black text-[#E8FFE8] tracking-tighter leading-none">
+      <div className="flex items-baseline gap-2">
+        <span className="text-[32px] font-bold text-[#E8FFE8] tracking-tight leading-none">
           {value}
         </span>
-        <div className="flex items-center gap-1.5 mt-2">
-           <TrendingUp className="w-3 h-3 text-[#00FF6A]" />
-           <span className="text-[10px] font-black text-[#00FF6A] uppercase tracking-tighter">
-             {delta}
-           </span>
-        </div>
+        <span className="text-[10px] font-bold text-[#00FF6A] font-mono">+12%</span>
       </div>
-      {/* 3px Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#111118]">
-         <div className="h-full bg-[#00FF6A] shadow-[0_0_8px_#00FF6A] w-[75%]"></div>
-      </div>
-    </CardContent>
+    </div>
   </Card>
 );
 
@@ -182,41 +184,39 @@ const MissionCard = ({ mission }: { mission: any }) => {
   const isRunning = mission.status === "running";
   
   return (
-    <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] group hover:border-[#00FF6A]/30">
-      <CardContent className="p-6 space-y-6">
-        <div className="flex items-start justify-between">
-           <div className="w-12 h-12 rounded-xl bg-[#111A11] border border-[#1A2E1A] flex items-center justify-center text-2xl grayscale group-hover:grayscale-0 transition-all">
-              {mission.category === 'prices' ? '💰' : 
-               mission.category === 'news' ? '📰' : 
-               mission.category === 'jobs' ? '💼' : '🔍'}
-           </div>
-           <Badge className={`uppercase text-[9px] tracking-[2px] font-black border-none px-3 py-1
-             ${isRunning ? "bg-[#00FF6A] text-[#060A06] animate-pulse" : 
-               mission.status === "paused" ? "bg-[#F59E0B] text-[#060A06]" : 
-               "bg-[#111A11] text-[#00FF6A] border border-[#00FF6A]/30"}`}>
-             {mission.status}
-           </Badge>
-        </div>
-        
-        <div>
-           <h4 className="text-xl font-black text-[#E8FFE8] group-hover:text-[#00FF6A] transition-colors uppercase tracking-tighter truncate">
-             {mission.name}
-           </h4>
-           <p className="text-[10px] text-[#6B9E6B] font-mono mt-1 uppercase tracking-widest opacity-60">ID://{mission.mission_id.substring(0,8)}</p>
-        </div>
+    <Card className="cyber-card bg-[#0D130D] border-[#1A2E1A] p-6 group">
+      <div className="flex items-start justify-between mb-6">
+         <div className="w-11 h-11 rounded-lg bg-[#111A11] border border-[#1A2E1A] flex items-center justify-center text-xl grayscale group-hover:grayscale-0 transition-all shadow-inner">
+            {mission.category === 'prices' ? '💰' : 
+             mission.category === 'news' ? '📰' : 
+             mission.category === 'jobs' ? '💼' : '🔍'}
+         </div>
+         <Badge className={`text-[10px] font-bold border-none px-3 py-0.5 rounded-full
+           ${isRunning ? "bg-[#00FF6A]/10 text-[#00FF6A]" : 
+             mission.status === "paused" ? "bg-[#F59E0B]/10 text-[#F59E0B]" : 
+             "bg-[#111A11] text-[#6B9E6B]"}`}>
+           {mission.status}
+         </Badge>
+      </div>
+      
+      <div className="space-y-1">
+         <h4 className="text-lg font-bold text-[#E8FFE8] group-hover:text-[#00FF6A] transition-colors tracking-tight truncate">
+           {mission.name}
+         </h4>
+         <p className="text-[11px] text-[#6B9E6B] font-mono lowercase opacity-50">ID://{mission.mission_id.substring(0,8)}</p>
+      </div>
 
-        <div className="pt-4 border-t border-[#1A2E1A] flex items-center justify-between">
-           <div className="flex flex-col">
-              <span className="text-[9px] uppercase tracking-widest font-bold text-[#6B9E6B]">Next Sync</span>
-              <span className="text-sm font-black text-[#E8FFE8] font-mono">{mission.next_run || "STANDBY"}</span>
-           </div>
-           <Link href={`/dashboard/missions/${mission.mission_id}`}>
-              <Button size="icon" className="h-10 w-10 rounded-lg bg-[#111A11] border border-[#1A2E1A] hover:bg-[#00FF6A] text-[#00FF6A] hover:text-[#060A06] transition-all group/btn">
-                 <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-              </Button>
-           </Link>
-        </div>
-      </CardContent>
+      <div className="mt-8 pt-4 border-t border-[#1A2E1A] flex items-center justify-between">
+         <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-widest font-bold text-[#6B9E6B]">Next Sync</span>
+            <span className="text-xs font-bold text-[#E8FFE8] font-mono">{mission.next_run || "STANDBY"}</span>
+         </div>
+         <Link href={`/dashboard/missions/${mission.mission_id}`}>
+            <Button size="icon" className="h-9 w-9 rounded-md bg-[#111A11] border border-[#1A2E1A] hover:bg-[#00FF6A] text-[#00FF6A] hover:text-[#060A06] transition-all group/btn">
+               <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+            </Button>
+         </Link>
+      </div>
     </Card>
   );
 };
@@ -224,7 +224,7 @@ const MissionCard = ({ mission }: { mission: any }) => {
 const DashboardSkeleton = () => (
   <div className="space-y-12">
      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[1,2,3,4].map(i => <Skeleton key={i} className="h-32 w-full bg-[#0D130D] border border-[#1A2E1A] rounded-xl" />)}
+        {[1,2,3,4].map(i => <Skeleton key={i} className="h-28 w-full bg-[#0D130D] border border-[#1A2E1A] rounded-xl" />)}
      </div>
      <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
         <div className="xl:col-span-2 space-y-8">

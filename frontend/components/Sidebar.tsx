@@ -7,6 +7,7 @@ import {
   Settings,
   Plus
 } from "lucide-react";
+ import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
   { name: "Dashboard", icon: Home, href: "/dashboard" },
@@ -17,6 +18,7 @@ const NAV_LINKS = [
 ];
 
 export const Sidebar = () => {
+  const pathname = usePathname();
   return (
     <aside className="w-[220px] flex flex-col border-r border-[#1A2E1A] h-screen bg-[#0D130D]">
       <div className="h-24 flex items-center px-6 border-b border-[#1A2E1A] bg-[#060A06]">
@@ -49,31 +51,33 @@ export const Sidebar = () => {
         </Link>
       </div>
       
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-4 space-y-1">
         {NAV_LINKS.map((link) => (
           <Link
             key={link.name}
             href={link.href}
-            className="flex items-center justify-between px-3 py-2 rounded-md transition-colors 
-                     hover:bg-[#1E1E2E] text-[#6B9E6B] hover:text-[#00FF6A] group font-medium"
+            className={`flex items-center justify-between px-4 py-2.5 rounded-lg transition-all 
+                      ${pathname === link.href ? 'bg-[#00FF6A]/[0.08] text-[#00FF6A]' : 'text-[#6B9E6B] hover:text-[#00FF6A] hover:bg-[#111A11]'} group font-bold text-xs uppercase tracking-wider`}
           >
             <div className="flex items-center gap-3">
-              <link.icon className="w-5 h-5" />
+              <link.icon className="w-4 h-4" />
               <span>{link.name}</span>
             </div>
-            {/* Active Dot */}
-            <div className="w-[7px] h-[7px] rounded-full bg-[#00FF6A] opacity-0 group-hover:opacity-100 shadow-[0_0_8px_#00FF6A] transition-opacity"></div>
+            {/* Active Dot indicator */}
+            {pathname === link.href && (
+              <div className="w-[6px] h-[6px] rounded-full bg-[#00FF6A] shadow-[0_0_8px_#00FF6A]"></div>
+            )}
           </Link>
         ))}
       </nav>
 
-      <div className="p-4 border-t border-[#1A2E1A] flex items-center gap-3 bg-[#111A11]">
-        <div className="w-8 h-8 rounded-full bg-[#004D20] border border-[#00FF6A]/30 flex items-center justify-center font-bold text-xs text-[#00FF6A]">
+      <div className="p-4 border-t border-[#1A2E1A] flex items-center gap-3 bg-[#060A06]">
+        <div className="w-9 h-9 rounded-full bg-[#004D20] border-1.5 border-[#00C44F] flex items-center justify-center font-bold text-xs text-[#00FF6A] shadow-[0_0_12px_rgba(0,196,79,0.2)]">
           AG
         </div>
         <div className="flex flex-col overflow-hidden">
-          <span className="text-sm font-medium truncate text-[#F1F5F9]">Anmol Garg</span>
-          <span className="text-xs text-[#94A3B8] truncate italic">Master Admin</span>
+          <span className="text-xs font-bold truncate text-[#E8FFE8]">Anmol Garg</span>
+          <span className="text-[10px] text-[#6B9E6B] truncate italic uppercase tracking-widest">Master Admin</span>
         </div>
       </div>
     </aside>
