@@ -4,6 +4,7 @@ from db.auth import get_user_id
 from models.mission import Mission, AgentTask
 from services.llm_service import parse_mission_to_tasks
 from services.scheduler_service import schedule_mission
+from typing import List, Optional
 from datetime import datetime
 import uuid
 
@@ -44,6 +45,10 @@ async def create_mission(request: Request, payload: dict, user_id: str = Depends
     if db is not None:
         await db.missions.insert_one(mission_data.dict())
         
+        # Invalidate cache
+        from services.redis_service import invalidate_cache
+        invalidate_cache(f"missions:{user_id}")
+        
         # 4. Schedule the job
         # await schedule_mission(mission_data.mission_id, schedule_expr) # Commented until implemented
         
@@ -53,9 +58,15 @@ async def create_mission(request: Request, payload: dict, user_id: str = Depends
 
 @router.get("/", response_model=List[Mission])
 async def list_missions(user_id: str = Depends(get_user_id)):
+    from services.redis_service import get_cache, set_cache
+    cache_key = f"missions:{user_id}"
+    cached = get_cache(cache_key)
+    if cached: return cached
+
     db = get_db()
     if db is not None:
         missions = await db.missions.find({"user_id": user_id}).to_list(100)
+        set_cache(cache_key, missions, ttl=300)
         return missions
     return []
 

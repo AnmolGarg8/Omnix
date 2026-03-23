@@ -50,7 +50,7 @@ export default function ResultsPage() {
         </div>
         
         <div className="w-full md:w-64">
-           <Select onValueChange={(val) => setSelectedMissionId(val)} defaultValue="all">
+           <Select onValueChange={(val) => val && setSelectedMissionId(val)} defaultValue="all">
              <SelectTrigger className="bg-[#111118] border-[#1E1E2E]">
                <SelectValue placeholder="Filter by Mission" />
              </SelectTrigger>

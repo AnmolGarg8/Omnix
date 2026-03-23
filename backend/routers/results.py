@@ -13,11 +13,18 @@ async def get_results(
     limit: int = Query(20, ge=1, le=100),
     user_id: str = Depends(get_user_id)
 ):
+    from services.redis_service import get_cache, set_cache
+    cache_key = f"res_list:{mission_id}:{page}"
+    cached = get_cache(cache_key)
+    if cached: return cached
+
     db = get_db()
     if db is not None:
         query = {"mission_id": mission_id} if mission_id != "all" else {}
-        # In a real app, verify mission belongs to user if mission_id != "all"
         results = await db.results.find(query).sort("timestamp", -1).skip((page - 1) * limit).to_list(limit)
+        # Results from motor are dicts with bson objects, need serializing for cache
+        from json import dumps
+        set_cache(cache_key, results, ttl=600)
         return results
     return []
 
