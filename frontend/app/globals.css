@@ -95,6 +95,16 @@ body {
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-5px); }
+}
+
+.float-0 { animation: float 4s ease-in-out infinite 0s; }
+.float-1 { animation: float 4s ease-in-out infinite 0.5s; }
+.float-2 { animation: float 4s ease-in-out infinite 1s; }
+.float-3 { animation: float 4s ease-in-out infinite 1.5s; }
+
 @keyframes scanLine {
   0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
   50% { opacity: 1; transform: scaleX(1); }

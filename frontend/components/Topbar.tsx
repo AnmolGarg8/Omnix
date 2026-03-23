@@ -19,7 +19,19 @@ export const Topbar = () => {
   };
 
   return (
-    <header className="h-[64px] flex items-center justify-between px-6 border-b border-[#1A2E1A] bg-[#060A06]/85 backdrop-blur-[12px] sticky top-0 z-50">
+    <header style={{
+      height: '64px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '0 24px',
+      borderBottom: '1px solid #1A2E1A',
+      background: 'rgba(6,10,6,0.85)',
+      backdropFilter: 'blur(12px)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50
+    }}>
       <div className="flex items-center gap-6">
         <Link href="/dashboard" className="flex items-center gap-3 group">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-[0_0_8px_rgba(0,255,106,0.4)] transition-transform group-hover:scale-110">
