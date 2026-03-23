@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { Plus, Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Plus } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export const Topbar = () => {
@@ -20,11 +18,11 @@ export const Topbar = () => {
 
   return (
     <header style={{
-      height: '64px',
+      height: '80px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '0 24px',
+      padding: '0 32px',
       borderBottom: '1px solid #1A2E1A',
       background: 'rgba(6,10,6,0.85)',
       backdropFilter: 'blur(12px)',
@@ -32,46 +30,67 @@ export const Topbar = () => {
       top: 0,
       zIndex: 50
     }}>
-      <div className="flex items-center gap-6">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-[0_0_8px_rgba(0,255,106,0.4)] transition-transform group-hover:scale-110">
-            <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#00FF6A" strokeWidth="1.5" strokeLinejoin="round" />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+        <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#00FF6A" strokeWidth="2" strokeLinejoin="round" />
             <circle cx="16" cy="16" r="3" fill="#00FF6A" />
-            <circle cx="16" cy="6" r="1.5" fill="#00FF6A" />
-            <circle cx="25" cy="11" r="1.5" fill="#00FF6A" />
-            <circle cx="25" cy="21" r="1.5" fill="#00FF6A" />
-            <circle cx="16" cy="26" r="1.5" fill="#00FF6A" />
-            <circle cx="7" cy="21" r="1.5" fill="#00FF6A" />
-            <circle cx="7" cy="11" r="1.5" fill="#00FF6A" />
-            <path d="M16 16L16 6M16 16L25 11M16 16L25 21M16 16L16 26M16 16L7 21M16 16L7 11" stroke="#00FF6A" strokeWidth="1" strokeOpacity="0.5" />
-            <path d="M25 11L29 7M29 7H26M29 7V10" stroke="#00FF6A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M16 6L16 1M16 1L13 3M16 1L19 3" stroke="#00FF6A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M16 6L16 1M25 11L29 7" stroke="#00FF6A" strokeWidth="2" strokeLinecap="round" />
           </svg>
-          <span className="text-[20px] font-bold tracking-tight flex items-baseline leading-none">
-            <span className="text-[#E8FFE8]">Agent</span>
-            <span className="text-[#00FF6A]">For</span>
-            <span className="text-[#E8FFE8]">It</span>
+          <span style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+            <span style={{ color: '#E8FFE8' }}>Agent</span><span style={{ color: '#00FF6A' }}>For</span><span style={{ color: '#E8FFE8' }}>It</span>
           </span>
         </Link>
-        <div className="h-6 w-px bg-[#1A2E1A]"></div>
-        <h1 className="text-[22px] font-bold text-[#E8FFE8] tracking-[-0.5px]">
+        <div style={{ height: '24px', width: '1px', background: '#1A2E1A' }}></div>
+        <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#E8FFE8', letterSpacing: '-0.5px' }}>
           {getPageTitle(pathname)}
         </h1>
       </div>
 
-      <div className="flex items-center gap-4">
-        <Link href="/dashboard/missions/new">
-          <Button className="bg-[#00FF6A] text-[#060A06] hover:bg-[#00D156] font-semibold flex items-center gap-2 shadow-[0_0_16px_rgba(0,255,106,0.35)] rounded-lg transition-all hover:-translate-y-0.5 px-6">
-            <Plus className="w-4 h-4" />
-            New Mission
-          </Button>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+        <Link href="/dashboard/missions/new" style={{ textDecoration: 'none' }}>
+          <button style={{
+            padding: '8px 18px',
+            background: '#00FF6A',
+            color: '#060A06',
+            fontWeight: '600',
+            fontSize: '13px',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'Space Grotesk, sans-serif',
+            textDecoration: 'none',
+            boxShadow: '0 0 16px rgba(0,255,106,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}>
+            <Plus size={16} /> NEW MISSION
+          </button>
         </Link>
-        <Button variant="ghost" size="icon" className="relative text-[#6B9E6B] hover:text-[#00FF6A] rounded-md h-10 w-10">
-          <Bell className="w-5 h-5" />
-          <Badge className="absolute top-1.5 right-1.5 px-1 min-w-[1rem] h-4 flex items-center justify-center bg-[#00FF6A] border-[#060A06] text-[#060A06] text-[9px] font-bold">
-            3
-          </Badge>
-        </Button>
+        
+        <div style={{ position: 'relative', cursor: 'pointer' }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B9E6B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span style={{
+            position: 'absolute',
+            top: '-6px',
+            right: '-6px',
+            width: '16px',
+            height: '16px',
+            borderRadius: '50%',
+            background: '#FF4444',
+            color: '#fff',
+            fontSize: '9px',
+            fontWeight: '700',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1.5px solid #060A06'
+          }}>3</span>
+        </div>
       </div>
     </header>
   );
