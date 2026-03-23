@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    # Restart policy
+    restart: always
+
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env.local
+    # In dev, we typically use npm run dev
+    command: npm run dev
+    restart: always
+
+# Note: MongoDB Atlas is the target database, so no mongo service here.
+# If using local Redis, it can be added here, but specification used Upstash Redis.

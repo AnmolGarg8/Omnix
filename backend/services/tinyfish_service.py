@@ -1,5 +1,6 @@
 from tinyfish import TinyFish, BrowserProfile, ProxyConfig, ProxyCountryCode
 import os
+import asyncio
 from dotenv import load_dotenv
 from datetime import datetime
 
@@ -15,10 +16,10 @@ async def run_agent(url: str, goal: str, stealth: bool = False) -> dict:
         "events": [],
         "final_result": None,
         "streaming_url": None,
-        "status": "running"
+        "status": "running",
+        "started_at": datetime.utcnow().isoformat()
     }
     try:
-        # Note: client.agent.stream is context manager in spec, might need to be used properly
         with client.agent.stream(
             url=url,
             goal=goal,
@@ -29,7 +30,6 @@ async def run_agent(url: str, goal: str, stealth: bool = False) -> dict:
             )
         ) as stream:
             for event in stream:
-                print(f"Event: {event.type}")
                 if event.type == "STREAMING_URL":
                     result_data["streaming_url"] = event.data
                 elif event.type == "COMPLETE":
@@ -43,5 +43,28 @@ async def run_agent(url: str, goal: str, stealth: bool = False) -> dict:
     except Exception as e:
         result_data["status"] = "failed"
         result_data["error"] = str(e)
-        print(f"Error: {e}")
     return result_data
+
+async def run_parallel_agents(agent_tasks: list[dict]) -> list[dict]:
+    tasks = [
+        run_agent(t["url"], t["goal"], t.get("stealth", False))
+        for t in agent_tasks
+    ]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    return [
+        r if not isinstance(r, Exception)
+        else {"status": "failed", "error": str(r), "final_result": None, "url": agent_tasks[i]["url"]}
+        for i, r in enumerate(results)
+    ]
+
+async def run_agent_with_retry(url: str, goal: str, max_retries: int = 3) -> dict:
+    for attempt in range(max_retries):
+        try:
+            result = await run_agent(url, goal, stealth=True)
+            if result.get("status") == "success" and result["final_result"]:
+                return result
+        except Exception as e:
+            if attempt == max_retries - 1:
+                return {"error": str(e), "final_result": None, "status": "failed", "url": url}
+            await asyncio.sleep(2 ** attempt)
+    return {"error": "Max retries exceeded", "final_result": None, "status": "failed", "url": url}

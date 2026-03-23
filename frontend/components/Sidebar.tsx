@@ -41,7 +41,7 @@ export const Sidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-[#1E1E2E] flex items-center gap-3">
-        <UserButton afterSignOutUrl="/" />
+        <UserButton />
         <div className="flex flex-col overflow-hidden">
           <span className="text-sm font-medium truncate">...</span>
           <span className="text-xs text-[#94A3B8] truncate">Account</span>
