@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { UserButton, useUser } from "@clerk/nextjs";
 import { 
   Home, 
   Target, 
@@ -41,10 +40,12 @@ export const Sidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-[#1E1E2E] flex items-center gap-3">
-        <UserButton />
+        <div className="w-8 h-8 rounded-full bg-[#6366F1] flex items-center justify-center font-bold text-xs">
+          AG
+        </div>
         <div className="flex flex-col overflow-hidden">
-          <span className="text-sm font-medium truncate">...</span>
-          <span className="text-xs text-[#94A3B8] truncate">Account</span>
+          <span className="text-sm font-medium truncate text-[#F1F5F9]">Anmol Garg</span>
+          <span className="text-xs text-[#94A3B8] truncate italic">Master Admin</span>
         </div>
       </div>
     </aside>

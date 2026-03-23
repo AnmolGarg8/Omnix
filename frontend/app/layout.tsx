@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const syne = Syne({
@@ -30,16 +29,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className="dark">
-        <body
-          className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans bg-[#0A0A0F] text-[#F1F5F9] antialiased`}
-        >
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className="dark">
+      <body
+        className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans bg-[#0A0A0F] text-[#F1F5F9] antialiased`}
+      >
+        <TooltipProvider>
+          {children}
+        </TooltipProvider>
+      </body>
+    </html>
   );
 }
