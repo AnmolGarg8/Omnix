@@ -6,7 +6,6 @@ import {
   BarChart2, 
   Bell, 
   Settings,
-  Plus
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -23,72 +22,62 @@ export const Sidebar = () => {
 
   return (
     <aside style={{
-      width: '240px',
+      width: '260px',
       display: 'flex',
       flexDirection: 'column',
-      borderRight: '1px solid #1A2E1A',
       height: '100vh',
-      background: 'rgba(6,10,6,0.6)',
-      backdropFilter: 'blur(10px)'
+      background: 'linear-gradient(to right, rgba(6,10,6,0.8), transparent)',
+      backdropFilter: 'blur(8px)',
+      padding: '40px 20px',
+      zIndex: 100
     }}>
-      <div style={{ height: '80px', display: 'flex', alignItems: 'center', padding: '0 24px', borderBottom: '1px solid #1A2E1A' }}>
-        <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#00FF6A" strokeWidth="2" strokeLinejoin="round" />
-            <circle cx="16" cy="16" r="3" fill="#00FF6A" />
-            <path d="M25 11L29 7M16 6L16 1" stroke="#00FF6A" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-          <span style={{ fontSize: '18px', fontWeight: 800, color: '#E8FFE8', letterSpacing: '-0.5px' }}>
-            <span style={{ color: '#E8FFE8' }}>Agent</span><span style={{ color: '#00FF6A' }}>For</span><span style={{ color: '#E8FFE8' }}>It</span>
+      <div style={{ marginBottom: '60px', padding: '0 20px' }}>
+        <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(0,255,106,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(0,255,106,0.2)' }}>
+            <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#00FF6A" strokeWidth="2.5" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span style={{ fontSize: '18px', fontWeight: 800, color: '#E8FFE8', letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
+            Omnix
           </span>
         </Link>
       </div>
       
-      <nav style={{ flex: 1, padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {NAV_LINKS.map((link) => {
           const isActive = pathname === link.href;
           return (
             <Link
               key={link.name}
               href={link.href}
-              onMouseEnter={e => {
-                if (!isActive) {
-                  e.currentTarget.style.color = '#E8FFE8';
-                  e.currentTarget.style.background = '#111A11';
-                }
-              }}
-              onMouseLeave={e => {
-                if (!isActive) {
-                  e.currentTarget.style.color = '#6B9E6B';
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
-                padding: '9px 12px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '500',
+                gap: '14px',
+                padding: '12px 20px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: '700',
                 color: isActive ? '#00FF6A' : '#6B9E6B',
                 background: isActive ? 'rgba(0,255,106,0.08)' : 'transparent',
                 cursor: 'pointer',
                 textDecoration: 'none',
-                transition: 'all 0.2s ease',
-                position: 'relative'
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
               }}
             >
-              <link.icon size={16} color="currentColor" />
-              <span style={{ flex: 1 }}>{link.name}</span>
+              <link.icon size={18} strokeWidth={isActive ? 2.5 : 2} color="currentColor" />
+              <span>{link.name}</span>
               {isActive && (
-                <span style={{
-                  width: '6px',
-                  height: '6px',
+                <div style={{
+                  marginLeft: 'auto',
+                  width: '4px',
+                  height: '4px',
                   borderRadius: '50%',
                   background: '#00FF6A',
-                  boxShadow: '0 0 8px #00FF6A',
-                  display: 'inline-block'
+                  boxShadow: '0 0 10px #00FF6A'
                 }}/>
               )}
             </Link>
@@ -96,18 +85,19 @@ export const Sidebar = () => {
         })}
       </nav>
 
-      <div style={{ padding: '20px', borderTop: '1px solid #1A2E1A', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(0,0,0,0.2)' }}>
+      <div style={{ marginTop: 'auto', padding: '20px', display: 'flex', alignItems: 'center', gap: '14px', opacity: 0.8 }}>
         <div style={{
-          width: '32px', height: '32px', borderRadius: '50%',
-          background: '#004D20', border: '1.5px solid #00C44F',
+          width: '36px', height: '36px', borderRadius: '12px',
+          background: '#004D20', border: '1.5px solid #00FF6A',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '10px', fontWeight: 700, color: '#00FF6A'
+          fontSize: '12px', fontWeight: 800, color: '#00FF6A',
+          boxShadow: '0 0 15px rgba(0,255,106,0.1)'
         }}>
           AG
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <span style={{ fontSize: '12px', fontWeight: 600, color: '#E8FFE8' }}>Anmol Garg</span>
-          <span style={{ fontSize: '10px', color: '#6B9E6B', opacity: 0.7 }}>Master Admin</span>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: '#E8FFE8', textTransform: 'uppercase' }}>Anmol Garg</span>
+          <span style={{ fontSize: '9px', color: '#6B9E6B', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6 }}>Secure ID // 0X8F</span>
         </div>
       </div>
     </aside>
