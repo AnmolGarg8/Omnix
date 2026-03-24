@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
     await shutdown_scheduler()
     await close_db()
 
-app = FastAPI(title="Omnix API", lifespan=lifespan)
+app = FastAPI(title="AgentForIt API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,7 +42,7 @@ app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "service": "omnix-backend"}
+    return {"status": "ok", "service": "agentforit-backend"}
 
 @app.websocket("/ws/missions/{mission_id}")
 async def mission_websocket(websocket: WebSocket, mission_id: str):

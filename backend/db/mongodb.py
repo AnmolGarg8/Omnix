@@ -4,14 +4,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/omnix")
+MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/agentforit")
 client = None
 db = None
 
 async def connect_db():
     global client, db
     client = AsyncIOMotorClient(MONGODB_URI)
-    db = client.get_database("omnix")
+    db = client.get_database("agentforit")
     print(f"Connected to MongoDB at {MONGODB_URI}")
 
 async def close_db():

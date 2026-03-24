@@ -11,6 +11,13 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "AgentForIt | Deploy AI agents to watch the web",
   description: "Autonomous web intelligence swarms.",
+  openGraph: {
+    title: "AgentForIt | Deploy AI agents to watch the web",
+    siteName: "AgentForIt",
+  },
+  twitter: {
+    title: "AgentForIt | Deploy AI agents to watch the web",
+  },
 };
 
 export default function RootLayout({

@@ -36,9 +36,9 @@ async def send_email_alert(to: str, brief: str, anomalies: list, priority: str, 
     
     try:
         await asyncio.to_thread(resend.Emails.send, {
-            "from": "Omnix <alerts@omnix.ai>",
+            "from": "AgentForIt <alerts@agentforit.ai>",
             "to": [to],
-            "subject": f"{priority_emoji} Omnix Alert — {mission_name}",
+            "subject": f"{priority_emoji} AgentForIt Alert — {mission_name}",
             "html": html_content
         })
     except Exception as e:

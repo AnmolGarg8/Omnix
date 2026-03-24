@@ -207,7 +207,7 @@ export default function SettingsPage() {
           <ArrowRight size={14} className="text-[#6B9E6B]" />
           <span style={{ fontSize: '13px', color: '#6B9E6B', fontWeight: '400' }}>System healthy</span>
         </div>
-        <span style={{ fontSize: '13px', color: '#6B9E6B', fontWeight: '400' }}>© 2026 Omnix Intel</span>
+        <span style={{ fontSize: '13px', color: '#6B9E6B', fontWeight: '400' }}>© 2026 AgentForIt Intel</span>
       </div>
     </div>
   );
