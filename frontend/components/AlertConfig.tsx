@@ -128,7 +128,7 @@ export const AlertConfig = ({ settings, onUpdate }: { settings: any; onUpdate: (
 
       <CardFooter className="bg-[#111927]/20 p-8 border-t border-[#1C2A3A]/40">
         <Button 
-          className="w-full bg-[#3B82F6] text-[#080C14] hover:bg-[#00D156] font-bold uppercase tracking-widest rounded-lg h-11 text-[10px] shadow-[0_4px_15px_rgba(59, 130, 246,0.1)] transition-all"
+          className="w-full bg-[#3B82F6] text-[#ffffff] hover:bg-[#2563EB] font-bold uppercase tracking-widest rounded-lg h-11 text-[10px] shadow-[0_4px_15px_rgba(59, 130, 246,0.1)] transition-all"
           onClick={handleSave}
           disabled={isSaving}
         >

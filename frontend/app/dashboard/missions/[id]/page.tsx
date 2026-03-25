@@ -62,8 +62,8 @@ export default function MissionDetailPage() {
             <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3">
               {mission.name}
               <Badge className={`uppercase text-[9px] tracking-[2px] font-black border-none px-3 py-1 ml-2 
-                ${isRunning ? "bg-[#3B82F6] text-[#080C14] animate-pulse" : 
-                  mission.status === "paused" ? "bg-[#F59E0B] text-[#080C14]" : 
+                ${isRunning ? "bg-[#3B82F6] text-[#ffffff] animate-pulse" : 
+                  mission.status === "paused" ? "bg-[#F59E0B] text-[#ffffff]" : 
                   "bg-[#111927] text-[#3B82F6] border border-[#3B82F6]/30"}`}>
                 {mission.status}
               </Badge>
@@ -80,7 +80,7 @@ export default function MissionDetailPage() {
              {mission.status === "paused" ? <Play className="w-4 h-4 text-[#3B82F6]" /> : <Pause className="w-4 h-4 text-[#F59E0B]" />} 
              {mission.status === "paused" ? "RESUME" : "PAUSE"}
           </Button>
-          <Button className="h-12 bg-[#3B82F6] text-[#080C14] hover:bg-[#00D156] gap-3 px-8 font-black uppercase tracking-widest shadow-[0_0_20px_#3B82F633]">
+          <Button className="h-12 bg-[#3B82F6] text-[#ffffff] hover:bg-[#2563EB] gap-3 px-8 font-black uppercase tracking-widest shadow-[0_0_20px_#3B82F633]">
             <Play className="w-4 h-4" /> TRIGGER NOW
           </Button>
           <Button variant="ghost" className="h-12 w-12 text-[#FF4444] hover:bg-[#FF4444]/10 rounded-xl p-0">
@@ -91,9 +91,9 @@ export default function MissionDetailPage() {
 
       <Tabs defaultValue="live" className="space-y-10">
         <TabsList className="bg-[#111927]/50 border border-[#1C2A3A] p-2 h-14 rounded-2xl">
-          <TabsTrigger value="live" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#080C14] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Activity className="w-4 h-4" /> TACTICAL HUB</TabsTrigger>
-          <TabsTrigger value="results" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#080C14] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Database className="w-4 h-4" /> SIGNAL BANK</TabsTrigger>
-          <TabsTrigger value="history" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#080C14] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><History className="w-4 h-4" /> ARCHIVES</TabsTrigger>
+          <TabsTrigger value="live" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#ffffff] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Activity className="w-4 h-4" /> TACTICAL HUB</TabsTrigger>
+          <TabsTrigger value="results" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#ffffff] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Database className="w-4 h-4" /> SIGNAL BANK</TabsTrigger>
+          <TabsTrigger value="history" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#ffffff] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><History className="w-4 h-4" /> ARCHIVES</TabsTrigger>
         </TabsList>
 
         <TabsContent value="live" className="space-y-10 animate-in fade-in zoom-in-95 duration-500">
