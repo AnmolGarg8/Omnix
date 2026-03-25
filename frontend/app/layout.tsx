@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -26,14 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${spaceGrotesk.variable} font-sans bg-[#060A06] text-[#E8FFE8] antialiased`}
-      >
-        <TooltipProvider>
-          {children}
-        </TooltipProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="dark">
+        <body
+          className={`${spaceGrotesk.variable} font-sans bg-[#060A06] text-[#E8FFE8] antialiased`}
+        >
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
+

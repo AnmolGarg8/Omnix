@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import { getMissions, getLatestResult } from "@/lib/api";
+
 import { 
   Select, 
   SelectContent, 
@@ -19,15 +21,20 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Database, FileText, CheckCircle2, Search, BrainCircuit, Globe, Cpu } from "lucide-react";
 
 export default function ResultsPage() {
+  const { getToken } = useAuth();
   const [missions, setMissions] = useState<any[]>([]);
   const [selectedMission, setSelectedMission] = useState<string>("");
   const [latestResult, setLatestResult] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [authToken, setAuthToken] = useState<string>("");
 
   useEffect(() => {
     const fetchMissions = async () => {
       try {
-        const data = await getMissions();
+        const token = await getToken();
+        if (!token) return;
+        setAuthToken(token);
+        const data = await getMissions(token);
         setMissions(data);
         if (data && data.length > 0) {
           setSelectedMission(data[0].mission_id);
@@ -39,13 +46,13 @@ export default function ResultsPage() {
       }
     };
     fetchMissions();
-  }, []);
+  }, [getToken]);
 
   useEffect(() => {
     const fetchResult = async () => {
-      if (!selectedMission) return;
+      if (!selectedMission || !authToken) return;
       try {
-        const result = await getLatestResult(selectedMission);
+        const result = await getLatestResult(selectedMission, authToken);
         setLatestResult(result);
       } catch (err) {
         console.error(err);
@@ -53,7 +60,8 @@ export default function ResultsPage() {
       }
     };
     fetchResult();
-  }, [selectedMission]);
+  }, [selectedMission, authToken]);
+
 
   if (isLoading) return <div className="flex h-screen items-center justify-center font-black animate-pulse uppercase tracking-[10px] text-[#00FF6A]">SYNCING SIGNAL BANK...</div>;
 

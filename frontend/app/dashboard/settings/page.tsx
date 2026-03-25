@@ -1,15 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
 import { getSettings, updateSettings } from "@/lib/api";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shield, Key, Database, Zap, Save, Loader2, ArrowRight } from "lucide-react";
 
 export default function SettingsPage() {
+  const { getToken } = useAuth();
   const [settings, setSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+
 
   useEffect(() => {
     fetchSettings();
@@ -17,7 +21,9 @@ export default function SettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const data = await getSettings();
+      const token = await getToken();
+      if (!token) return;
+      const data = await getSettings(token);
       setSettings(data);
     } catch (err) {
       console.error(err);
@@ -26,16 +32,20 @@ export default function SettingsPage() {
     }
   };
 
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      if (settings) await updateSettings(settings);
+      const token = await getToken();
+      if (!token || !settings) return;
+      await updateSettings(settings, token);
     } catch (err) {
       console.error(err);
     } finally {
       setIsSaving(false);
     }
   };
+
 
   if (loading) return (
     <div className="flex items-center justify-center h-64 opacity-20 animate-pulse">

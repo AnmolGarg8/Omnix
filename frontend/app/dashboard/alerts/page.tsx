@@ -1,13 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import { getAlerts, acknowledgeAlert, getSettings, updateSettings } from "@/lib/api";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check, Trash2, Bell, ShieldAlert, Filter, Search, ArrowRight, Activity } from "lucide-react";
 
 export default function AlertsPage() {
+  const { getToken } = useAuth();
   const [alerts, setAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     fetchAlerts();
@@ -15,7 +19,9 @@ export default function AlertsPage() {
 
   const fetchAlerts = async () => {
     try {
-      const data = await getAlerts();
+      const token = await getToken();
+      if (!token) return;
+      const data = await getAlerts(token);
       setAlerts(data || []);
     } catch (err) {
       console.error(err);
@@ -24,14 +30,18 @@ export default function AlertsPage() {
     }
   };
 
+
   const handleAcknowledge = async (id: string) => {
     try {
-      await acknowledgeAlert(id);
+      const token = await getToken();
+      if (!token) return;
+      await acknowledgeAlert(id, token);
       fetchAlerts();
     } catch (err) {
       console.error(err);
     }
   };
+
 
   const getPriorityColor = (priority: string) => {
     switch (priority?.toUpperCase()) {

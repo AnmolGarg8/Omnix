@@ -1,10 +1,14 @@
 "use client";
 import React, { useState } from "react";
+
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { createMission } from "@/lib/api";
+
 
 export default function NewMissionPage() {
   const router = useRouter();
+  const { getToken } = useAuth();
   const [goal, setGoal] = useState("");
   const [name, setName] = useState("");
   const [schedule, setSchedule] = useState("Daily 9AM");
@@ -14,7 +18,11 @@ export default function NewMissionPage() {
   const handleDeploy = async () => {
     setLoading(true);
     try {
+      const token = await getToken();
+      if (!token) return;
+
       let cron = "0 9 * * *";
+
       if (schedule === "Every hour") cron = "0 * * * *";
       else if (schedule === "Every 6h") cron = "0 */6 * * *";
       else if (schedule === "Daily 9AM") cron = "0 9 * * *";
@@ -26,7 +34,8 @@ export default function NewMissionPage() {
         name: name || "Untitled Mission",
         category 
       };
-      const data = await createMission(payload);
+      const data = await createMission(payload, token);
+
       if (data && data.mission_id) {
          router.push(`/dashboard/missions/${data.mission_id}`);
       }

@@ -17,3 +17,4 @@ python-jose[cryptography]
 passlib
 websockets
 python-multipart
+clerk-backend-sdk

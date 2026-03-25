@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import { getMissions } from "@/lib/api";
+
 import { 
   Table, 
   TableBody, 
@@ -16,6 +18,7 @@ import { Plus, Search, Filter, Target, ArrowRight, BrainCircuit, Activity } from
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MissionsPage() {
+  const { getToken } = useAuth();
   const [missions, setMissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +28,9 @@ export default function MissionsPage() {
 
   const fetchMissions = async () => {
     try {
-      const data = await getMissions();
+      const token = await getToken();
+      if (!token) return;
+      const data = await getMissions(token);
       setMissions(data || []);
     } catch (err) {
       console.error(err);
@@ -33,6 +38,7 @@ export default function MissionsPage() {
       setLoading(false);
     }
   };
+
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {

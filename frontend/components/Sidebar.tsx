@@ -1,5 +1,7 @@
 "use client";
 import Link from "next/link";
+import { UserButton } from "@clerk/nextjs";
+
 import { 
   Home, 
   Target, 
@@ -85,21 +87,21 @@ export const Sidebar = () => {
         })}
       </nav>
 
-      <div style={{ marginTop: 'auto', padding: '20px', display: 'flex', alignItems: 'center', gap: '14px', opacity: 0.8 }}>
-        <div style={{
-          width: '36px', height: '36px', borderRadius: '12px',
-          background: '#004D20', border: '1.5px solid #00FF6A',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '12px', fontWeight: 800, color: '#00FF6A',
-          boxShadow: '0 0 15px rgba(0,255,106,0.1)'
-        }}>
-          AG
-        </div>
+      <div style={{ marginTop: 'auto', padding: '20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <UserButton 
+          appearance={{
+            elements: {
+              avatarBox: "w-10 h-10 border border-[#00FF6A]/20 shadow-[0_0_15px_rgba(0,255,106,0.1)]"
+            }
+          }}
+        />
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#E8FFE8', textTransform: 'uppercase' }}>Anmol Garg</span>
-          <span style={{ fontSize: '9px', color: '#6B9E6B', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6 }}>Secure ID // 0X8F</span>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: '#E8FFE8', textTransform: 'uppercase' }}>Active Session</span>
+          <span style={{ fontSize: '9px', color: '#6B9E6B', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6 }}>Authenticated</span>
         </div>
       </div>
+
+
     </aside>
   );
 };

@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { getMission } from "@/lib/api";
+
 import { LiveAgentViewer } from "@/components/LiveAgentViewer";
 import { 
   Tabs, 
@@ -16,13 +18,17 @@ import { Play, Pause, Trash, History, Activity, Database, Target, Clock, Cpu } f
 export default function MissionDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { getToken } = useAuth();
   const [mission, setMission] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchMission = async () => {
       try {
-        const data = await getMission(id as string);
+        const token = await getToken();
+        if (!token) return;
+        const data = await getMission(id as string, token);
         setMission(data);
       } catch (err) {
         console.error(err);
@@ -31,7 +37,8 @@ export default function MissionDetailPage() {
       }
     };
     fetchMission();
-  }, [id]);
+  }, [id, getToken]);
+
 
   if (isLoading) return <div className="flex h-screen items-center justify-center font-black animate-pulse uppercase tracking-[10px] text-[#00FF6A]">INITIALIZING DATASTREAM...</div>;
   if (!mission) return <div className="flex h-screen items-center justify-center font-black uppercase text-[#FF4444]">MISSION NOT IDENTIFIED</div>;
