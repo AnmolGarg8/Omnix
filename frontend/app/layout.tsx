@@ -30,7 +30,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="dark">
         <body
-          className={`${spaceGrotesk.variable} font-sans bg-[#060A06] text-[#E8FFE8] antialiased`}
+          className={`${spaceGrotesk.variable} font-sans bg-[#080C14] text-[#F0F6FF] antialiased`}
         >
           <TooltipProvider>
             {children}

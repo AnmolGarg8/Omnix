@@ -47,8 +47,8 @@ export default function AlertsPage() {
     switch (priority?.toUpperCase()) {
       case "CRITICAL": return "#FF4444";
       case "HIGH": return "#F59E0B";
-      case "MEDIUM": return "#00FF6A";
-      default: return "#6B9E6B";
+      case "MEDIUM": return "#3B82F6";
+      default: return "#6B8EAE";
     }
   };
 
@@ -56,30 +56,30 @@ export default function AlertsPage() {
     <div className="space-y-12">
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#E8FFE8' }}>Alerts</h1>
-          <p style={{ fontSize: '13px', color: '#6B9E6B', fontWeight: '400' }}>Real-time detection and response feed</p>
+          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#F0F6FF' }}>Alerts</h1>
+          <p style={{ fontSize: '13px', color: '#6B8EAE', fontWeight: '400' }}>Real-time detection and response feed</p>
         </div>
         
         <div className="flex items-center gap-4">
            <div className="relative group">
-             <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B9E6B] opacity-50" />
+             <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B8EAE] opacity-50" />
              <input 
                type="text" 
                placeholder="Filter signals..." 
                style={{
                 width: '260px',
                 padding: '10px 14px 10px 40px',
-                background: '#111A11',
-                border: '1px solid #1A2E1A',
+                background: '#111927',
+                border: '1px solid #1C2A3A',
                 borderRadius: '8px',
-                color: '#E8FFE8',
+                color: '#F0F6FF',
                 fontSize: '13px',
                 fontFamily: 'Space Grotesk, sans-serif',
                 outline: 'none',
                 transition: 'border-color 0.2s'
               }}
-              onFocus={e => e.currentTarget.style.borderColor = 'rgba(0,255,106,0.4)'}
-              onBlur={e => e.currentTarget.style.borderColor = '#1A2E1A'}
+              onFocus={e => e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.4)'}
+              onBlur={e => e.currentTarget.style.borderColor = '#1C2A3A'}
              />
            </div>
         </div>
@@ -94,9 +94,9 @@ export default function AlertsPage() {
           </div>
         ) : alerts.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 24px' }}>
-             <ShieldAlert size={40} className="mx-auto mb-4 text-[#6B9E6B] opacity-40" />
-             <div style={{ fontSize: '18px', fontWeight: '600', color: '#E8FFE8', marginBottom: '8px' }}>No alerts detected</div>
-             <div style={{ fontSize: '13px', color: '#6B9E6B', fontWeight: '400' }}>Your system is currently monitoring for any anomalies</div>
+             <ShieldAlert size={40} className="mx-auto mb-4 text-[#6B8EAE] opacity-40" />
+             <div style={{ fontSize: '18px', fontWeight: '600', color: '#F0F6FF', marginBottom: '8px' }}>No alerts detected</div>
+             <div style={{ fontSize: '13px', color: '#6B8EAE', fontWeight: '400' }}>Your system is currently monitoring for any anomalies</div>
           </div>
         ) : (
           alerts.map((alert) => {
@@ -108,8 +108,8 @@ export default function AlertsPage() {
                 key={alert.alert_id} 
                 className="group"
                 style={{
-                  background: '#0D130D',
-                  border: '1px solid #1A2E1A',
+                  background: '#0D1117',
+                  border: '1px solid #1C2A3A',
                   borderLeft: `3px solid ${accentColor}`,
                   borderRadius: '10px',
                   padding: '16px 18px',
@@ -123,11 +123,11 @@ export default function AlertsPage() {
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateX(3px)'
-                  e.currentTarget.style.borderColor = 'rgba(0,255,106,0.3)'
+                  e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.3)'
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = 'none'
-                  e.currentTarget.style.borderColor = '#1A2E1A'
+                  e.currentTarget.style.borderColor = '#1C2A3A'
                 }}
                 onClick={() => !alert.acknowledged && handleAcknowledge(alert.alert_id)}
               >
@@ -140,16 +140,16 @@ export default function AlertsPage() {
                       color: accentColor,
                       border: `1px solid ${accentColor}30`
                     }}>{priority}</span>
-                    <span style={{ fontSize: '11px', color: '#6B9E6B', marginLeft: 'auto' }}>{alert.sent_at}</span>
+                    <span style={{ fontSize: '11px', color: '#6B8EAE', marginLeft: 'auto' }}>{alert.sent_at}</span>
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: '600', color: '#E8FFE8', marginBottom: '4px' }}>{alert.mission_name}</div>
-                  <div style={{ fontSize: '12px', color: '#6B9E6B', lineHeight: 1.5, fontWeight: '400' }}>{alert.brief}</div>
+                  <div style={{ fontSize: '14px', fontWeight: '600', color: '#F0F6FF', marginBottom: '4px' }}>{alert.mission_name}</div>
+                  <div style={{ fontSize: '12px', color: '#6B8EAE', lineHeight: 1.5, fontWeight: '400' }}>{alert.brief}</div>
                 </div>
                 {!alert.acknowledged && (
                   <Button 
                     variant="ghost" 
                     size="icon"
-                    className="h-8 w-8 text-[#6B9E6B] hover:text-[#00FF6A] hover:bg-[#00FF6A]/10"
+                    className="h-8 w-8 text-[#6B8EAE] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleAcknowledge(alert.alert_id);

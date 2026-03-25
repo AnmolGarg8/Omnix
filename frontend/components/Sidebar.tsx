@@ -28,19 +28,19 @@ export const Sidebar = () => {
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
-      background: 'linear-gradient(to right, rgba(6,10,6,0.8), transparent)',
+      background: 'linear-gradient(to right, rgba(8, 12, 20, 0.8), transparent)',
       backdropFilter: 'blur(8px)',
       padding: '40px 20px',
       zIndex: 100
     }}>
       <div style={{ marginBottom: '60px', padding: '0 20px' }}>
         <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(0,255,106,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(0,255,106,0.2)' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(59, 130, 246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(59, 130, 246,0.2)' }}>
             <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#00FF6A" strokeWidth="2.5" strokeLinejoin="round" />
+              <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#3B82F6" strokeWidth="2.5" strokeLinejoin="round" />
             </svg>
           </div>
-          <span style={{ fontSize: '18px', fontWeight: 800, color: '#E8FFE8', letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '18px', fontWeight: 800, color: '#F0F6FF', letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
             AgentForIt
           </span>
         </Link>
@@ -61,8 +61,8 @@ export const Sidebar = () => {
                 borderRadius: '12px',
                 fontSize: '12px',
                 fontWeight: '700',
-                color: isActive ? '#00FF6A' : '#6B9E6B',
-                background: isActive ? 'rgba(0,255,106,0.08)' : 'transparent',
+                color: isActive ? '#3B82F6' : '#6B8EAE',
+                background: isActive ? 'rgba(59, 130, 246,0.08)' : 'transparent',
                 cursor: 'pointer',
                 textDecoration: 'none',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -78,8 +78,8 @@ export const Sidebar = () => {
                   width: '4px',
                   height: '4px',
                   borderRadius: '50%',
-                  background: '#00FF6A',
-                  boxShadow: '0 0 10px #00FF6A'
+                  background: '#3B82F6',
+                  boxShadow: '0 0 10px #3B82F6'
                 }}/>
               )}
             </Link>
@@ -91,13 +91,13 @@ export const Sidebar = () => {
         <UserButton 
           appearance={{
             elements: {
-              avatarBox: "w-10 h-10 border border-[#00FF6A]/20 shadow-[0_0_15px_rgba(0,255,106,0.1)]"
+              avatarBox: "w-10 h-10 border border-[#3B82F6]/20 shadow-[0_0_15px_rgba(59, 130, 246,0.1)]"
             }
           }}
         />
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: '11px', fontWeight: 700, color: '#E8FFE8', textTransform: 'uppercase' }}>Active Session</span>
-          <span style={{ fontSize: '9px', color: '#6B9E6B', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6 }}>Authenticated</span>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: '#F0F6FF', textTransform: 'uppercase' }}>Active Session</span>
+          <span style={{ fontSize: '9px', color: '#6B8EAE', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6 }}>Authenticated</span>
         </div>
       </div>
 

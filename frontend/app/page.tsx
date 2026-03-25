@@ -25,8 +25,8 @@ function AgentNetworkCanvas() {
     // Central node — large glowing sphere
     const centerGeo = new THREE.SphereGeometry(1.2, 32, 32);
     const centerMat = new THREE.MeshStandardMaterial({
-      color: 0x00FF6A,
-      emissive: 0x00FF6A,
+      color: 0x3B82F6,
+      emissive: 0x3B82F6,
       emissiveIntensity: 0.6,
       roughness: 0.2,
       metalness: 0.8
@@ -36,12 +36,12 @@ function AgentNetworkCanvas() {
 
     // Outer ring glow
     const ringGeo = new THREE.TorusGeometry(1.8, 0.04, 16, 100);
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00FF6A, transparent: true, opacity: 0.3 });
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x3B82F6, transparent: true, opacity: 0.3 });
     const ring = new THREE.Mesh(ringGeo, ringMat);
     scene.add(ring);
 
     const ring2Geo = new THREE.TorusGeometry(2.4, 0.02, 16, 100);
-    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x00FF6A, transparent: true, opacity: 0.15 });
+    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x3B82F6, transparent: true, opacity: 0.15 });
     const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
     ring2.rotation.x = Math.PI / 3;
     scene.add(ring2);
@@ -58,8 +58,8 @@ function AgentNetworkCanvas() {
 
       const agentGeo = new THREE.SphereGeometry(0.35, 16, 16);
       const agentMat = new THREE.MeshStandardMaterial({
-        color: 0x00C44F,
-        emissive: 0x00C44F,
+        color: 0x2563EB,
+        emissive: 0x2563EB,
         emissiveIntensity: 0.4,
         roughness: 0.3,
         metalness: 0.6
@@ -82,7 +82,7 @@ function AgentNetworkCanvas() {
       const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
       const lineAttribute = lineGeo.attributes.position as THREE.BufferAttribute;
       const lineMat = new THREE.LineBasicMaterial({
-        color: 0x00FF6A,
+        color: 0x3B82F6,
         transparent: true,
         opacity: 0.2
       });
@@ -92,7 +92,7 @@ function AgentNetworkCanvas() {
 
       // Small outer node (target website being crawled)
       const targetGeo = new THREE.SphereGeometry(0.15, 8, 8);
-      const targetMat = new THREE.MeshBasicMaterial({ color: 0x004D20, transparent: true, opacity: 0.8 });
+      const targetMat = new THREE.MeshBasicMaterial({ color: 0x1E3A5F, transparent: true, opacity: 0.8 });
       const target = new THREE.Mesh(targetGeo, targetMat);
       target.position.set(
         Math.cos(angle) * (radius + 2.5),
@@ -104,13 +104,13 @@ function AgentNetworkCanvas() {
       // Line from agent to target
       const outerPoints = [agent.position.clone(), target.position.clone()];
       const outerLineGeo = new THREE.BufferGeometry().setFromPoints(outerPoints);
-      const outerLineMat = new THREE.LineBasicMaterial({ color: 0x00FF6A, transparent: true, opacity: 0.1 });
+      const outerLineMat = new THREE.LineBasicMaterial({ color: 0x3B82F6, transparent: true, opacity: 0.1 });
       scene.add(new THREE.Line(outerLineGeo, outerLineMat));
     }
 
     // Ambient + point lights
-    scene.add(new THREE.AmbientLight(0x004D20, 0.8));
-    const pointLight = new THREE.PointLight(0x00FF6A, 2, 30);
+    scene.add(new THREE.AmbientLight(0x1E3A5F, 0.8));
+    const pointLight = new THREE.PointLight(0x3B82F6, 2, 30);
     pointLight.position.set(0, 0, 5);
     scene.add(pointLight);
 
@@ -124,7 +124,7 @@ function AgentNetworkCanvas() {
       positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
     }
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const particleMat = new THREE.PointsMaterial({ color: 0x00FF6A, size: 0.06, transparent: true, opacity: 0.4 });
+    const particleMat = new THREE.PointsMaterial({ color: 0x3B82F6, size: 0.06, transparent: true, opacity: 0.4 });
     scene.add(new THREE.Points(particleGeo, particleMat));
 
     // Animation loop
@@ -199,15 +199,15 @@ export default function LandingPage() {
 
   return (
     <div style={{
-      backgroundColor: "#060A06",
+      backgroundColor: "#080C14",
       backgroundImage: `
-        radial-gradient(ellipse 70% 40% at 50% 0%, rgba(0, 255, 106, 0.07), transparent),
-        linear-gradient(rgba(0, 255, 106, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 106, 0.04) 1px, transparent 1px)
+        radial-gradient(ellipse 70% 40% at 50% 0%, rgba(59, 130, 246, 0.07), transparent),
+        linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px)
       `,
       backgroundSize: "100% 100%, 40px 40px, 40px 40px",
       minHeight: "100vh",
-      color: "#E8FFE8",
+      color: "#F0F6FF",
       fontFamily: "'Space Grotesk', sans-serif"
     }}>
       {/* Navbar */}
@@ -222,33 +222,33 @@ export default function LandingPage() {
         padding: "0 40px",
         zIndex: 1000,
         backdropFilter: "blur(12px)",
-        background: scrolled ? "rgba(6, 10, 6, 0.9)" : "rgba(6, 10, 6, 0.8)",
-        borderBottom: "1px solid #1A2E1A",
+        background: scrolled ? "rgba(8, 12, 20, 0.9)" : "rgba(8, 12, 20, 0.8)",
+        borderBottom: "1px solid #1C2A3A",
         transition: "all 0.3s ease"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-            <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#00FF6A" strokeWidth="2" strokeLinejoin="round" />
-            <circle cx="16" cy="16" r="3" fill="#00FF6A" />
-            <path d="M25 11L29 7M16 6L16 1" stroke="#00FF6A" strokeWidth="2" strokeLinecap="round" />
+            <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round" />
+            <circle cx="16" cy="16" r="3" fill="#3B82F6" />
+            <path d="M25 11L29 7M16 6L16 1" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" />
           </svg>
           <span style={{ fontSize: "20px", fontWeight: 800 }}>
-            Agent<span style={{ color: "#00FF6A" }}>For</span>It
+            Agent<span style={{ color: "#3B82F6" }}>For</span>It
           </span>
         </div>
         <Link href="/dashboard" style={{ textDecoration: "none" }}>
           <button style={{
             padding: "8px 20px",
             borderRadius: "8px",
-            border: "1px solid rgba(0, 255, 106, 0.4)",
-            color: "#00FF6A",
+            border: "1px solid rgba(59, 130, 246, 0.4)",
+            color: "#3B82F6",
             background: "transparent",
             fontSize: "13px",
             fontWeight: "600",
             cursor: "pointer",
             transition: "all 0.2s"
           }}
-          onMouseEnter={e => e.currentTarget.style.background = "rgba(0, 255, 106, 0.08)"}
+          onMouseEnter={e => e.currentTarget.style.background = "rgba(59, 130, 246, 0.08)"}
           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
             Launch App
           </button>
@@ -271,17 +271,17 @@ export default function LandingPage() {
           <div style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
             padding: "5px 16px", borderRadius: "20px",
-            border: "1px solid rgba(0, 255, 106, 0.25)",
-            background: "rgba(0, 255, 106, 0.06)",
+            border: "1px solid rgba(59, 130, 246, 0.25)",
+            background: "rgba(59, 130, 246, 0.06)",
             fontSize: "11px", fontWeight: "600",
-            color: "#00FF6A", letterSpacing: "1.5px",
+            color: "#3B82F6", letterSpacing: "1.5px",
             marginBottom: "32px",
             opacity: 0,
             animation: "fadeUp 0.7s ease forwards"
           }}>
             <span style={{ 
               width: "6px", height: "6px", borderRadius: "50%", 
-              background: "#00FF6A", boxShadow: "0 0 8px #00FF6A", 
+              background: "#3B82F6", boxShadow: "0 0 8px #3B82F6", 
               animation: "pulse 1.5s ease-in-out infinite" 
             }}/>
             AUTONOMOUS AGENTS ACTIVE
@@ -291,7 +291,7 @@ export default function LandingPage() {
           <h1 style={{
             fontSize: "clamp(36px, 6vw, 64px)",
             fontWeight: 700,
-            color: "#E8FFE8",
+            color: "#F0F6FF",
             letterSpacing: "-2px",
             lineHeight: "1.1",
             maxWidth: "820px",
@@ -300,14 +300,14 @@ export default function LandingPage() {
             opacity: 0,
             animation: "fadeUp 0.7s ease forwards 0.1s"
           }}>
-            Deploy AI <span style={{ color: "#00FF6A" }}>Agents</span> That<br />
+            Deploy AI <span style={{ color: "#3B82F6" }}>Agents</span> That<br />
             Watch The Web For You.
           </h1>
 
           {/* Subheading */}
           <p style={{
             fontSize: "18px",
-            color: "#6B9E6B",
+            color: "#6B8EAE",
             maxWidth: "560px",
             lineHeight: "1.7",
             marginBottom: "40px",
@@ -327,8 +327,8 @@ export default function LandingPage() {
             <Link href="/dashboard" style={{ textDecoration: "none" }}>
               <button style={{
                 padding: "13px 32px",
-                background: "#00FF6A",
-                color: "#060A06",
+                background: "#3B82F6",
+                color: "#ffffff",
                 fontWeight: 700,
                 fontSize: "14px",
                 borderRadius: "8px",
@@ -336,7 +336,7 @@ export default function LandingPage() {
                 cursor: "pointer",
                 fontFamily: "'Space Grotesk', sans-serif",
                 textDecoration: "none",
-                boxShadow: "0 0 24px rgba(0,255,106,0.4)",
+                boxShadow: "0 0 24px rgba(59, 130, 246,0.4)",
                 transition: "all 0.2s"
               }} onMouseEnter={e => e.currentTarget.style.transform = "scale(1.02)"}
               onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
@@ -346,11 +346,11 @@ export default function LandingPage() {
             <a href="#features" style={{
               padding: "13px 32px",
               background: "transparent",
-              color: "#E8FFE8",
+              color: "#F0F6FF",
               fontWeight: "600",
               fontSize: "14px",
               borderRadius: "8px",
-              border: "1px solid #1A2E1A",
+              border: "1px solid #1C2A3A",
               cursor: "pointer",
               fontFamily: "'Space Grotesk', sans-serif",
               textDecoration: "none",
@@ -367,15 +367,15 @@ export default function LandingPage() {
             height: "420px", 
             borderRadius: "16px", 
             overflow: "hidden", 
-            border: "1px solid #1A2E1A", 
+            border: "1px solid #1C2A3A", 
             position: "relative",
-            background: "#060A06"
+            background: "#080C14"
           }}>
             <AgentNetworkCanvas />
             <div style={{ 
               position: "absolute", bottom: 0, left: 0, right: 0,
               height: "120px",
-              background: "linear-gradient(to bottom, transparent, #060A06)",
+              background: "linear-gradient(to bottom, transparent, #080C14)",
               pointerEvents: "none"
             }}/>
           </div>
@@ -395,7 +395,7 @@ export default function LandingPage() {
         <section style={{ maxWidth: "1200px", margin: "140px auto 0", padding: "0 20px" }}>
           <div style={{ textAlign: "center", marginBottom: "64px" }}>
             <h2 style={{ fontSize: "36px", fontWeight: 700, marginBottom: "16px" }}>Autonomous Intelligence</h2>
-            <p style={{ color: "#6B9E6B", fontSize: "16px" }}>The future of web surveillance, powered by agentic AI swarms.</p>
+            <p style={{ color: "#6B8EAE", fontSize: "16px" }}>The future of web surveillance, powered by agentic AI swarms.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
             <FeatureCard icon="⬡" title="Swarm Crawling" desc="Parallel agents fire across any website simultaneously for rapid coverage." />
@@ -413,11 +413,11 @@ export default function LandingPage() {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
             {["Slack", "Gmail", "Google Calendar", "MongoDB", "Webhook", "Discord", "Teams"].map(name => (
               <div key={name} style={{
-                padding: "10px 22px", background: "#0D130D", border: "1px solid #1A2E1A",
+                padding: "10px 22px", background: "#0D1117", border: "1px solid #1C2A3A",
                 borderRadius: "30px", fontSize: "14px", fontWeight: "600",
-                color: "#6B9E6B", display: "flex", alignItems: "center", gap: "10px"
+                color: "#6B8EAE", display: "flex", alignItems: "center", gap: "10px"
               }}>
-                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#00FF6A", boxShadow: "0 0 6px #00FF6A" }}/>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#3B82F6", boxShadow: "0 0 6px #3B82F6" }}/>
                 {name}
               </div>
             ))}
@@ -427,17 +427,17 @@ export default function LandingPage() {
         {/* Bottom CTA Banner */}
         <section style={{ maxWidth: "1200px", margin: "140px auto 0", padding: "0 20px" }}>
           <div style={{
-            background: "#0D130D", border: "1px solid #1A2E1A", borderRadius: "24px",
+            background: "#0D1117", border: "1px solid #1C2A3A", borderRadius: "24px",
             padding: "80px 40px", textAlign: "center", position: "relative", overflow: "hidden"
           }}>
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(0,255,106,0.3), transparent)" }}/>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(59, 130, 246,0.3), transparent)" }}/>
             <h2 style={{ fontSize: "42px", fontWeight: 700, marginBottom: "16px", letterSpacing: "-1.5px" }}>Start Monitoring The Web Today</h2>
-            <p style={{ color: "#6B9E6B", fontSize: "18px", marginBottom: "40px" }}>Deploy your first agent swarm in under 60 seconds.</p>
+            <p style={{ color: "#6B8EAE", fontSize: "18px", marginBottom: "40px" }}>Deploy your first agent swarm in under 60 seconds.</p>
             <Link href="/dashboard" style={{ textDecoration: "none" }}>
               <button style={{
-                background: "#00FF6A", color: "#060A06", fontWeight: 700,
+                background: "#3B82F6", color: "#ffffff", fontWeight: 700,
                 padding: "16px 40px", fontSize: "16px", borderRadius: "10px",
-                border: "none", cursor: "pointer", boxShadow: "0 0 30px rgba(0,255,106,0.4)"
+                border: "none", cursor: "pointer", boxShadow: "0 0 30px rgba(59, 130, 246,0.4)"
               }}>
                 Launch App Now
               </button>
@@ -447,35 +447,35 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer style={{ borderTop: "1px solid #1A2E1A", padding: "60px 40px 40px", marginTop: "100px" }}>
+      <footer style={{ borderTop: "1px solid #1C2A3A", padding: "60px 40px 40px", marginTop: "100px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px" }}>
           <div style={{ maxWidth: "240px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
               <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-                <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#00FF6A" strokeWidth="2" strokeLinejoin="round" />
-                <circle cx="16" cy="16" r="3" fill="#00FF6A" />
+                <path d="M16 2L29.8564 10V22L16 30L2.14359 22V10L16 2Z" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round" />
+                <circle cx="16" cy="16" r="3" fill="#3B82F6" />
               </svg>
-              <span style={{ fontSize: "18px", fontWeight: 800 }}>Agent<span style={{ color: "#00FF6A" }}>For</span>It</span>
+              <span style={{ fontSize: "18px", fontWeight: 800 }}>Agent<span style={{ color: "#3B82F6" }}>For</span>It</span>
             </div>
-            <p style={{ fontSize: "13px", color: "#6B9E6B", lineHeight: 1.6 }}>Next-gen autonomous intelligence swarms for real-time web surveillance.</p>
+            <p style={{ fontSize: "13px", color: "#6B8EAE", lineHeight: 1.6 }}>Next-gen autonomous intelligence swarms for real-time web surveillance.</p>
           </div>
           <div style={{ display: "flex", gap: "60px" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               <span style={{ fontWeight: 700, fontSize: "14px" }}>Platform</span>
-              <Link href="/dashboard" style={{ fontSize: "13px", color: "#6B9E6B", textDecoration: "none" }}>Dashboard</Link>
-              <Link href="/dashboard/missions" style={{ fontSize: "13px", color: "#6B9E6B", textDecoration: "none" }}>Missions</Link>
-              <Link href="/dashboard/alerts" style={{ fontSize: "13px", color: "#6B9E6B", textDecoration: "none" }}>Alerts</Link>
+              <Link href="/dashboard" style={{ fontSize: "13px", color: "#6B8EAE", textDecoration: "none" }}>Dashboard</Link>
+              <Link href="/dashboard/missions" style={{ fontSize: "13px", color: "#6B8EAE", textDecoration: "none" }}>Missions</Link>
+              <Link href="/dashboard/alerts" style={{ fontSize: "13px", color: "#6B8EAE", textDecoration: "none" }}>Alerts</Link>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               <span style={{ fontWeight: 700, fontSize: "14px" }}>Company</span>
-              <span style={{ fontSize: "13px", color: "#6B9E6B" }}>About</span>
-              <span style={{ fontSize: "13px", color: "#6B9E6B" }}>Terms</span>
-              <span style={{ fontSize: "13px", color: "#6B9E6B" }}>Privacy</span>
+              <span style={{ fontSize: "13px", color: "#6B8EAE" }}>About</span>
+              <span style={{ fontSize: "13px", color: "#6B8EAE" }}>Terms</span>
+              <span style={{ fontSize: "13px", color: "#6B8EAE" }}>Privacy</span>
             </div>
           </div>
         </div>
-        <div style={{ maxWidth: "1200px", margin: "60px auto 0", borderTop: "1px solid #1A2E1A", paddingTop: "24px", textAlign: "center" }}>
-          <p style={{ fontSize: "12px", color: "#6B9E6B" }}>© 2026 AgentForIt. Built for the autonomous web era.</p>
+        <div style={{ maxWidth: "1200px", margin: "60px auto 0", borderTop: "1px solid #1C2A3A", paddingTop: "24px", textAlign: "center" }}>
+          <p style={{ fontSize: "12px", color: "#6B8EAE" }}>© 2026 AgentForIt. Built for the autonomous web era.</p>
         </div>
       </footer>
     </div>
@@ -485,22 +485,22 @@ export default function LandingPage() {
 function StepCard({ step, title, text }: any) {
   return (
     <div style={{
-      background: "#0D130D", border: "1px solid #1A2E1A", borderRadius: "14px",
+      background: "#0D1117", border: "1px solid #1C2A3A", borderRadius: "14px",
       padding: "32px 28px", position: "relative", overflow: "hidden",
       transition: "transform 0.3s, box-shadow 0.3s"
     }} onMouseEnter={e => {
       e.currentTarget.style.transform = "translateY(-6px) rotateX(3deg)";
-      e.currentTarget.style.boxShadow = "0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,106,0.08)";
-      e.currentTarget.style.borderColor = "rgba(0,255,106,0.25)";
+      e.currentTarget.style.boxShadow = "0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246,0.08)";
+      e.currentTarget.style.borderColor = "rgba(59, 130, 246,0.25)";
     }} onMouseLeave={e => {
       e.currentTarget.style.transform = "none";
       e.currentTarget.style.boxShadow = "none";
-      e.currentTarget.style.borderColor = "#1A2E1A";
+      e.currentTarget.style.borderColor = "#1C2A3A";
     }}>
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(0,255,106,0.4), transparent)" }}/>
-      <div style={{ fontSize: "28px", color: "#00FF6A", opacity: 0.3, fontWeight: 800, marginBottom: "20px" }}>{step}</div>
-      <div style={{ fontSize: "18px", fontWeight: 700, color: "#E8FFE8", marginBottom: "10px" }}>{title}</div>
-      <div style={{ fontSize: "14px", color: "#6B9E6B", lineHeight: 1.6 }}>{text}</div>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(59, 130, 246,0.4), transparent)" }}/>
+      <div style={{ fontSize: "28px", color: "#3B82F6", opacity: 0.3, fontWeight: 800, marginBottom: "20px" }}>{step}</div>
+      <div style={{ fontSize: "18px", fontWeight: 700, color: "#F0F6FF", marginBottom: "10px" }}>{title}</div>
+      <div style={{ fontSize: "14px", color: "#6B8EAE", lineHeight: 1.6 }}>{text}</div>
     </div>
   );
 }
@@ -508,26 +508,26 @@ function StepCard({ step, title, text }: any) {
 function FeatureCard({ icon, title, desc }: any) {
   return (
     <div style={{
-      background: "#0D130D", border: "1px solid #1A2E1A", borderRadius: "14px",
+      background: "#0D1117", border: "1px solid #1C2A3A", borderRadius: "14px",
       padding: "32px 28px", position: "relative", overflow: "hidden",
       transition: "transform 0.3s, box-shadow 0.3s"
     }} onMouseEnter={e => {
       e.currentTarget.style.transform = "translateY(-6px) rotateX(-2deg)";
-      e.currentTarget.style.boxShadow = "0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,106,0.08)";
-      e.currentTarget.style.borderColor = "rgba(0,255,106,0.25)";
+      e.currentTarget.style.boxShadow = "0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246,0.08)";
+      e.currentTarget.style.borderColor = "rgba(59, 130, 246,0.25)";
     }} onMouseLeave={e => {
       e.currentTarget.style.transform = "none";
       e.currentTarget.style.boxShadow = "none";
-      e.currentTarget.style.borderColor = "#1A2E1A";
+      e.currentTarget.style.borderColor = "#1C2A3A";
     }}>
       <div style={{
         width: "44px", height: "44px", borderRadius: "10px",
-        background: "rgba(0,255,106,0.08)", border: "1px solid rgba(0,255,106,0.15)",
+        background: "rgba(59, 130, 246,0.08)", border: "1px solid rgba(59, 130, 246,0.15)",
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: "20px", marginBottom: "24px", color: "#00FF6A"
+        fontSize: "20px", marginBottom: "24px", color: "#3B82F6"
       }}>{icon}</div>
-      <div style={{ fontSize: "18px", fontWeight: 700, color: "#E8FFE8", marginBottom: "10px" }}>{title}</div>
-      <div style={{ fontSize: "14px", color: "#6B9E6B", lineHeight: 1.6 }}>{desc}</div>
+      <div style={{ fontSize: "18px", fontWeight: 700, color: "#F0F6FF", marginBottom: "10px" }}>{title}</div>
+      <div style={{ fontSize: "14px", color: "#6B8EAE", lineHeight: 1.6 }}>{desc}</div>
     </div>
   );
 }

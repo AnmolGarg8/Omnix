@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --bg: #060A06;
-  --surface: #0D130D;
-  --surface2: #111A11;
-  --border: #1A2E1A;
-  --green: #00FF6A;
-  --green-dim: #00C44F;
-  --green-dark: #004D20;
-  --green-glow: rgba(0, 255, 106, 0.15);
-  --green-glow2: rgba(0, 255, 106, 0.08);
-  --text: #E8FFE8;
-  --text-muted: #6B9E6B;
+  --bg: #080C14;
+  --surface: #0D1117;
+  --surface2: #111927;
+  --border: #1C2A3A;
+  --blue: #3B82F6;
+  --blue-dim: #2563EB;
+  --blue-dark: #1E3A5F;
+  --blue-glow: rgba(59, 130, 246, 0.15);
+  --blue-glow2: rgba(59, 130, 246, 0.08);
+  --text: #F0F6FF;
+  --text-muted: #6B8EAE;
   --red: #FF4444;
   --amber: #F59E0B;
 }
@@ -21,9 +21,9 @@
 body {
   background-color: var(--bg);
   background-image: 
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 255, 106, 0.05), transparent),
-    linear-gradient(rgba(0, 255, 106, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 106, 0.04) 1px, transparent 1px);
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.05), transparent),
+    linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
   background-size: 100% 100%, 40px 40px, 40px 40px;
   color: var(--text);
   font-family: var(--font-space-grotesk), sans-serif;
@@ -44,8 +44,8 @@ body {
 
   .cyber-card:hover {
     transform: translateY(-5px) rotateX(4deg) rotateY(-2deg);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 255, 106, 0.1);
-    border-color: rgba(0, 255, 106, 0.3);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 25px rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
   }
 
   .cyber-card::before {
@@ -55,7 +55,7 @@ body {
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 106, 0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
     pointer-events: none;
   }
 
@@ -71,7 +71,7 @@ body {
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #00FF6A, transparent);
+    background: linear-gradient(90deg, transparent, #3B82F6, transparent);
     animation: scanLine 3s infinite;
     z-index: 10;
   }
@@ -80,7 +80,7 @@ body {
   .holographic {
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(0, 255, 106, 0.3);
+    border: 1px solid rgba(59, 130, 246, 0.3);
   }
 
   .holographic::after {
@@ -90,14 +90,14 @@ body {
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 106, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
     animation: sweep 2s infinite;
   }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px #00FF6A; }
-  50%       { opacity: 0.5; box-shadow: 0 0 3px #00FF6A; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px #3B82F6; }
+  50%       { opacity: 0.5; box-shadow: 0 0 3px #3B82F6; }
 }
 
 @keyframes float {
@@ -143,7 +143,7 @@ body {
   position: fixed;
   width: 2px;
   height: 2px;
-  background: var(--green);
+  background: var(--blue);
   border-radius: 50%;
   pointer-events: none;
   z-index: 100;

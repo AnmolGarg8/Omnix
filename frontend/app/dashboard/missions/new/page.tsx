@@ -48,21 +48,21 @@ export default function NewMissionPage() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 pb-20">
       <div style={{
-        background: '#0D130D',
-        border: '1px solid #1A2E1A',
+        background: '#0D1117',
+        border: '1px solid #1C2A3A',
         borderRadius: '14px',
         padding: '28px',
         maxWidth: '800px',
         position: 'relative',
         overflow: 'hidden'
       }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(0,255,106,0.4), transparent)' }}/>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246,0.4), transparent)' }}/>
         
         <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#E8FFE8', marginBottom: '6px' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#F0F6FF', marginBottom: '6px' }}>
             New Mission
           </h1>
-          <p style={{ fontSize: '13px', color: '#6B9E6B' }}>
+          <p style={{ fontSize: '13px', color: '#6B8EAE' }}>
             Describe your goal in plain English. AgentForIt handles the rest.
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function NewMissionPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '500', color: '#E8FFE8', marginBottom: '8px' }}>Goal</div>
+            <div style={{ fontSize: '13px', fontWeight: '500', color: '#F0F6FF', marginBottom: '8px' }}>Goal</div>
             <textarea
               placeholder="e.g. Monitor Amazon and Flipkart for RTX 5090 price changes daily and alert me on Slack"
               value={goal}
@@ -79,10 +79,10 @@ export default function NewMissionPage() {
                 width: '100%',
                 minHeight: '140px',
                 padding: '14px 16px',
-                background: '#111A11',
-                border: '1px solid #1A2E1A',
+                background: '#111927',
+                border: '1px solid #1C2A3A',
                 borderRadius: '10px',
-                color: '#E8FFE8',
+                color: '#F0F6FF',
                 fontSize: '14px',
                 fontFamily: 'Space Grotesk, sans-serif',
                 resize: 'vertical',
@@ -90,13 +90,13 @@ export default function NewMissionPage() {
                 lineHeight: '1.6',
                 transition: 'border-color 0.2s'
               }}
-              onFocus={e => e.currentTarget.style.borderColor = 'rgba(0,255,106,0.4)'}
-              onBlur={e => e.currentTarget.style.borderColor = '#1A2E1A'}
+              onFocus={e => e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.4)'}
+              onBlur={e => e.currentTarget.style.borderColor = '#1C2A3A'}
             />
           </div>
 
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '500', color: '#E8FFE8', marginBottom: '8px' }}>Mission name (optional)</div>
+            <div style={{ fontSize: '13px', fontWeight: '500', color: '#F0F6FF', marginBottom: '8px' }}>Mission name (optional)</div>
             <input
               placeholder="Auto-generated if left blank"
               value={name}
@@ -104,43 +104,43 @@ export default function NewMissionPage() {
               style={{
                 width: '100%',
                 padding: '10px 14px',
-                background: '#111A11',
-                border: '1px solid #1A2E1A',
+                background: '#111927',
+                border: '1px solid #1C2A3A',
                 borderRadius: '8px',
-                color: '#E8FFE8',
+                color: '#F0F6FF',
                 fontSize: '13px',
                 fontFamily: 'Space Grotesk, sans-serif',
                 outline: 'none',
                 transition: 'border-color 0.2s'
               }}
-              onFocus={e => e.currentTarget.style.borderColor = 'rgba(0,255,106,0.4)'}
-              onBlur={e => e.currentTarget.style.borderColor = '#1A2E1A'}
+              onFocus={e => e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.4)'}
+              onBlur={e => e.currentTarget.style.borderColor = '#1C2A3A'}
             />
           </div>
 
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '500', color: '#E8FFE8', marginBottom: '8px' }}>Schedule</div>
+            <div style={{ fontSize: '13px', fontWeight: '500', color: '#F0F6FF', marginBottom: '8px' }}>Schedule</div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {['Every hour', 'Every 6h', 'Daily 9AM', 'Weekly', 'Custom'].map(opt => (
                 <button key={opt} style={{
                   padding: '7px 16px',
                   borderRadius: '20px',
-                  border: '1px solid #1A2E1A',
-                  background: schedule === opt ? 'rgba(0,255,106,0.1)' : 'transparent',
-                  color: schedule === opt ? '#00FF6A' : '#6B9E6B',
+                  border: '1px solid #1C2A3A',
+                  background: schedule === opt ? 'rgba(59, 130, 246,0.1)' : 'transparent',
+                  color: schedule === opt ? '#3B82F6' : '#6B8EAE',
                   fontSize: '12px',
                   fontWeight: '500',
                   cursor: 'pointer',
                   fontFamily: 'Space Grotesk, sans-serif',
                   transition: 'all 0.2s',
-                  borderColor: schedule === opt ? 'rgba(0,255,106,0.3)' : '#1A2E1A'
+                  borderColor: schedule === opt ? 'rgba(59, 130, 246,0.3)' : '#1C2A3A'
                 }} onClick={() => setSchedule(opt)}>{opt}</button>
               ))}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '12px', fontWeight: '500', color: '#6B9E6B', marginBottom: '10px' }}>
+            <div style={{ fontSize: '12px', fontWeight: '500', color: '#6B8EAE', marginBottom: '10px' }}>
               Example missions — click to fill
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -154,21 +154,21 @@ export default function NewMissionPage() {
                 <span key={pill} onClick={() => setGoal(pill)} style={{
                   padding: '6px 14px',
                   borderRadius: '20px',
-                  background: '#0D130D',
-                  border: '1px solid #1A2E1A',
+                  background: '#0D1117',
+                  border: '1px solid #1C2A3A',
                   fontSize: '11px',
-                  color: '#6B9E6B',
+                  color: '#6B8EAE',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                   fontFamily: 'Space Grotesk, sans-serif'
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(0,255,106,0.3)'
-                  e.currentTarget.style.color = '#00FF6A'
+                  e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.3)'
+                  e.currentTarget.style.color = '#3B82F6'
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = '#1A2E1A'
-                  e.currentTarget.style.color = '#6B9E6B'
+                  e.currentTarget.style.borderColor = '#1C2A3A'
+                  e.currentTarget.style.color = '#6B8EAE'
                 }}>{pill}</span>
               ))}
             </div>
@@ -180,15 +180,15 @@ export default function NewMissionPage() {
               disabled={loading || !goal}
               style={{
                 padding: '12px 32px',
-                background: '#00FF6A',
-                color: '#060A06',
+                background: '#3B82F6',
+                color: '#ffffff',
                 fontWeight: '700',
                 fontSize: '14px',
                 borderRadius: '8px',
                 border: 'none',
                 cursor: (loading || !goal) ? 'not-allowed' : 'pointer',
                 fontFamily: 'Space Grotesk, sans-serif',
-                boxShadow: '0 0 20px rgba(0,255,106,0.3)',
+                boxShadow: '0 0 20px rgba(59, 130, 246,0.3)',
                 transition: 'all 0.2s',
                 opacity: (loading || !goal) ? 0.7 : 1
               }}
