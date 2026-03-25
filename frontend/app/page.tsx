@@ -221,7 +221,6 @@ export default function LandingPage() {
         justifyContent: "space-between",
         padding: "0 40px",
         zIndex: 1000,
-        backdropFilter: "blur(12px)",
         background: scrolled ? "rgba(8, 12, 20, 0.8)" : "rgba(8, 12, 20, 0.7)",
         backdropFilter: "blur(20px)",
         borderBottom: "1px solid rgba(59, 130, 246, 0.12)",
@@ -548,3 +547,4 @@ function FeatureCard({ icon, title, desc }: any) {
     </div>
   );
 }
+
