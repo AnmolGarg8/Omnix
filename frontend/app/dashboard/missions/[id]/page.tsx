@@ -48,8 +48,13 @@ export default function MissionDetailPage() {
   return (
     <div className="space-y-12 pb-20 p-6">
       {/* Mission Header */}
-      <div className="cyber-card flex flex-col md:flex-row items-center justify-between gap-8 p-10 bg-[#0D1117]/80 border-[#1C2A3A] shadow-[0_0_50px_rgba(0,0,0,0.4)] relative">
-        <div className="scan-top absolute top-0 left-0 right-0 h-1"></div>
+      <div className="cyber-card flex flex-col md:flex-row items-center justify-between gap-8 p-10 bg-[rgba(13,17,23,0.8)] border-[rgba(59,130,246,0.12)] backdrop-blur-[20px] shadow-[0_24px_60px_rgba(0,0,0,0.5),0_0_0_1px_rgba(59,130,246,0.2),0_1px_0_rgba(59,130,246,0.15)] relative rounded-[14px]">
+        {/* Inner glow */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, width: '120px', height: '120px',
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 rounded-xl bg-[#111927] border border-[#1C2A3A] flex items-center justify-center text-4xl shadow-inner group">
             <span className="group-hover:scale-110 transition-transform">
@@ -61,10 +66,10 @@ export default function MissionDetailPage() {
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3">
               {mission.name}
-              <Badge className={`uppercase text-[9px] tracking-[2px] font-black border-none px-3 py-1 ml-2 
-                ${isRunning ? "bg-[#3B82F6] text-[#ffffff] animate-pulse" : 
-                  mission.status === "paused" ? "bg-[#F59E0B] text-[#ffffff]" : 
-                  "bg-[#111927] text-[#3B82F6] border border-[#3B82F6]/30"}`}>
+              <Badge className={`uppercase text-[10px] tracking-[2px] font-bold px-3 py-1 ml-2 rounded-full border 
+                ${isRunning ? "bg-[rgba(59,130,246,0.1)] text-[#3B82F6] border-[rgba(59,130,246,0.3)] animate-[badgePulse_1.5s_ease-in-out_infinite]" : 
+                  mission.status === "paused" ? "bg-[rgba(245,158,11,0.1)] text-[#FCD34D] border-[rgba(245,158,11,0.2)]" : 
+                  "bg-[rgba(59,130,246,0.1)] text-[#93C5FD] border-[rgba(59,130,246,0.2)]"}`}>
                 {mission.status}
               </Badge>
             </h2>
@@ -80,8 +85,8 @@ export default function MissionDetailPage() {
              {mission.status === "paused" ? <Play className="w-4 h-4 text-[#3B82F6]" /> : <Pause className="w-4 h-4 text-[#F59E0B]" />} 
              {mission.status === "paused" ? "RESUME" : "PAUSE"}
           </Button>
-          <Button className="h-12 bg-[#3B82F6] text-[#ffffff] hover:bg-[#2563EB] gap-3 px-8 font-black uppercase tracking-widest shadow-[0_0_20px_#3B82F633]">
-            <Play className="w-4 h-4" /> TRIGGER NOW
+          <Button className="h-14 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] text-[#ffffff] hover:opacity-90 gap-3 px-8 font-bold uppercase tracking-widest rounded-[10px] border-none shadow-[0_0_0_1px_rgba(59,130,246,0.3),0_8px_32px_rgba(59,130,246,0.35),0_2px_8px_rgba(0,0,0,0.4)] transition-all hover:-translate-y-[2px] hover:shadow-[0_0_0_1px_rgba(59,130,246,0.5),0_12px_48px_rgba(59,130,246,0.5),0_2px_8px_rgba(0,0,0,0.4)]">
+            <Play className="w-5 h-5 fill-white" /> TRIGGER NOW
           </Button>
           <Button variant="ghost" className="h-12 w-12 text-[#FF4444] hover:bg-[#FF4444]/10 rounded-xl p-0">
             <Trash className="w-5 h-5" />

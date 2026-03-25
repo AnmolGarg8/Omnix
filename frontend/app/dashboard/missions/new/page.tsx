@@ -48,14 +48,26 @@ export default function NewMissionPage() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 pb-20">
       <div style={{
-        background: '#0D1117',
-        border: '1px solid #1C2A3A',
+        background: 'rgba(13, 17, 23, 0.8)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(59, 130, 246, 0.12)',
         borderRadius: '14px',
         padding: '28px',
         maxWidth: '800px',
         position: 'relative',
         overflow: 'hidden'
       }}>
+        {/* Inner glow */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, width: '120px', height: '120px',
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
+        {/* Top shine */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+          background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent)'
+        }} />
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246,0.4), transparent)' }}/>
         
         <div style={{ marginBottom: '32px' }}>
@@ -78,20 +90,26 @@ export default function NewMissionPage() {
               style={{
                 width: '100%',
                 minHeight: '140px',
-                padding: '14px 16px',
-                background: '#111927',
-                border: '1px solid #1C2A3A',
-                borderRadius: '10px',
+                padding: '11px 15px',
+                background: 'rgba(17, 25, 39, 0.8)',
+                border: '1px solid rgba(59, 130, 246, 0.12)',
+                borderRadius: '8px',
                 color: '#F0F6FF',
-                fontSize: '14px',
+                fontSize: '13px',
                 fontFamily: 'Space Grotesk, sans-serif',
                 resize: 'vertical',
                 outline: 'none',
                 lineHeight: '1.6',
-                transition: 'border-color 0.2s'
+                transition: 'border-color 0.2s, box-shadow 0.2s'
               }}
-              onFocus={e => e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.4)'}
-              onBlur={e => e.currentTarget.style.borderColor = '#1C2A3A'}
+              onFocus={e => {
+                e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={e => {
+                e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.12)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
             />
           </div>
 
@@ -103,18 +121,24 @@ export default function NewMissionPage() {
               onChange={(e) => setName(e.target.value)}
               style={{
                 width: '100%',
-                padding: '10px 14px',
-                background: '#111927',
-                border: '1px solid #1C2A3A',
+                padding: '11px 15px',
+                background: 'rgba(17, 25, 39, 0.8)',
+                border: '1px solid rgba(59, 130, 246, 0.12)',
                 borderRadius: '8px',
                 color: '#F0F6FF',
                 fontSize: '13px',
                 fontFamily: 'Space Grotesk, sans-serif',
                 outline: 'none',
-                transition: 'border-color 0.2s'
+                transition: 'border-color 0.2s, box-shadow 0.2s'
               }}
-              onFocus={e => e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.4)'}
-              onBlur={e => e.currentTarget.style.borderColor = '#1C2A3A'}
+              onFocus={e => {
+                e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={e => {
+                e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.12)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
             />
           </div>
 
@@ -179,18 +203,30 @@ export default function NewMissionPage() {
               onClick={handleDeploy}
               disabled={loading || !goal}
               style={{
-                padding: '12px 32px',
-                background: '#3B82F6',
+                padding: '14px 36px',
+                background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
                 color: '#ffffff',
                 fontWeight: '700',
-                fontSize: '14px',
-                borderRadius: '8px',
+                fontSize: '15px',
+                borderRadius: '10px',
                 border: 'none',
                 cursor: (loading || !goal) ? 'not-allowed' : 'pointer',
                 fontFamily: 'Space Grotesk, sans-serif',
-                boxShadow: '0 0 20px rgba(59, 130, 246,0.3)',
-                transition: 'all 0.2s',
+                boxShadow: '0 0 0 1px rgba(59, 130, 246, 0.3), 0 8px 32px rgba(59, 130, 246, 0.35), 0 2px 8px rgba(0,0,0,0.4)',
+                transition: 'all 0.3s ease',
                 opacity: (loading || !goal) ? 0.7 : 1
+              }}
+              onMouseEnter={e => {
+                if (!loading && goal) {
+                  e.currentTarget.style.boxShadow = '0 0 0 1px rgba(59, 130, 246, 0.5), 0 12px 48px rgba(59, 130, 246, 0.5), 0 2px 8px rgba(0,0,0,0.4)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }
+              }}
+              onMouseLeave={e => {
+                if (!loading && goal) {
+                  e.currentTarget.style.boxShadow = '0 0 0 1px rgba(59, 130, 246, 0.3), 0 8px 32px rgba(59, 130, 246, 0.35), 0 2px 8px rgba(0,0,0,0.4)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }
               }}
             >
               {loading ? "Deploying..." : "Launch Mission 🚀"}

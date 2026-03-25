@@ -222,8 +222,10 @@ export default function LandingPage() {
         padding: "0 40px",
         zIndex: 1000,
         backdropFilter: "blur(12px)",
-        background: scrolled ? "rgba(8, 12, 20, 0.9)" : "rgba(8, 12, 20, 0.8)",
-        borderBottom: "1px solid #1C2A3A",
+        background: scrolled ? "rgba(8, 12, 20, 0.8)" : "rgba(8, 12, 20, 0.7)",
+        backdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(59, 130, 246, 0.12)",
+        boxShadow: scrolled ? "0 1px 0 rgba(59, 130, 246, 0.15), 0 4px 24px rgba(0,0,0,0.4)" : "none",
         transition: "all 0.3s ease"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -232,7 +234,7 @@ export default function LandingPage() {
             <circle cx="16" cy="16" r="3" fill="#3B82F6" />
             <path d="M25 11L29 7M16 6L16 1" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" />
           </svg>
-          <span style={{ fontSize: "20px", fontWeight: 800 }}>
+          <span style={{ fontSize: "20px", fontWeight: 700, color: "#F0F6FF" }}>
             Agent<span style={{ color: "#3B82F6" }}>For</span>It
           </span>
         </div>
@@ -289,18 +291,21 @@ export default function LandingPage() {
 
           {/* Headline */}
           <h1 style={{
-            fontSize: "clamp(36px, 6vw, 64px)",
+            fontSize: "clamp(40px, 6vw, 68px)",
             fontWeight: 700,
-            color: "#F0F6FF",
+            background: "linear-gradient(135deg, #F0F6FF 0%, #93C5FD 50%, #3B82F6 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
             letterSpacing: "-2px",
             lineHeight: "1.1",
             maxWidth: "820px",
             marginBottom: "24px",
             fontFamily: "'Space Grotesk', sans-serif",
             opacity: 0,
-            animation: "fadeUp 0.7s ease forwards 0.1s"
+            animation: "fadeUp 0.5s ease forwards 0.1s"
           }}>
-            Deploy AI <span style={{ color: "#3B82F6" }}>Agents</span> That<br />
+            Deploy AI <span style={{ color: "#3B82F6", WebkitTextFillColor: "initial", backgroundClip: "initial" }}>Agents</span> That<br />
             Watch The Web For You.
           </h1>
 
@@ -326,20 +331,26 @@ export default function LandingPage() {
           }}>
             <Link href="/dashboard" style={{ textDecoration: "none" }}>
               <button style={{
-                padding: "13px 32px",
-                background: "#3B82F6",
+                padding: "14px 36px",
+                background: "linear-gradient(135deg, #3B82F6, #2563EB)",
                 color: "#ffffff",
                 fontWeight: 700,
-                fontSize: "14px",
-                borderRadius: "8px",
+                fontSize: "15px",
+                borderRadius: "10px",
                 border: "none",
                 cursor: "pointer",
                 fontFamily: "'Space Grotesk', sans-serif",
                 textDecoration: "none",
-                boxShadow: "0 0 24px rgba(59, 130, 246,0.4)",
-                transition: "all 0.2s"
-              }} onMouseEnter={e => e.currentTarget.style.transform = "scale(1.02)"}
-              onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
+                boxShadow: "0 0 0 1px rgba(59,130,246,0.3), 0 8px 32px rgba(59,130,246,0.35), 0 2px 8px rgba(0,0,0,0.4)",
+                transition: "all 0.3s ease"
+              }} onMouseEnter={e => {
+                e.currentTarget.style.boxShadow = "0 0 0 1px rgba(59,130,246,0.5), 0 12px 48px rgba(59,130,246,0.5), 0 2px 8px rgba(0,0,0,0.4)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.boxShadow = "0 0 0 1px rgba(59,130,246,0.3), 0 8px 32px rgba(59,130,246,0.35), 0 2px 8px rgba(0,0,0,0.4)";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}>
                 Launch AgentForIt →
               </button>
             </Link>
@@ -354,7 +365,13 @@ export default function LandingPage() {
               cursor: "pointer",
               fontFamily: "'Space Grotesk', sans-serif",
               textDecoration: "none",
-              transition: "all 0.2s"
+              transition: "all 0.3s ease"
+            }} onMouseEnter={e => {
+              e.currentTarget.style.background = "rgba(59,130,246,0.08)";
+              e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)";
+            }} onMouseLeave={e => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.borderColor = "#1C2A3A";
             }}>
               See How It Works
             </a>

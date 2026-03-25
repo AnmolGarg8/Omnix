@@ -170,11 +170,23 @@ export default function DashboardPage() {
               { id: 4, p: 'LOW', t: 'Routine sync complete for Nodes 1-4', c: '#6B8EAE' },
             ].map(log => (
               <div key={log.id} style={{
-                background: '#0D1117', border: '1px solid #1C2A3A', borderRadius: '10px',
-                padding: '14px 16px', marginBottom: '10px', borderLeft: `3px solid ${log.c}`,
-                transition: 'transform 0.2s', cursor: 'pointer'
-              }} onMouseEnter={e => e.currentTarget.style.transform = 'translateX(4px)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+                background: 'rgba(13, 17, 23, 0.9)', 
+                border: '1px solid rgba(59, 130, 246, 0.1)',
+                borderRadius: '10px',
+                padding: '16px 18px', 
+                marginBottom: '10px', 
+                borderLeft: `2px solid ${log.c}`,
+                boxShadow: `-2px 0 12px ${log.c}15`,
+                transition: 'all 0.2s ease', 
+                cursor: 'pointer'
+              }} onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateX(3px)';
+                e.currentTarget.style.boxShadow = `-2px 0 20px ${log.c}33`;
+              }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = `-2px 0 12px ${log.c}15`;
+                }}>
                 <div style={{ display: 'flex', justifyContent: 'between', alignItems: 'center', marginBottom: '8px' }}>
                    <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: `${log.c}15`, color: log.c, border: `1px solid ${log.c}25` }}>{log.p}</span>
                    <span style={{ fontSize: '10px', color: '#6B8EAE' }}>12m ago</span>
@@ -193,27 +205,40 @@ export default function DashboardPage() {
 
 const StatCard = ({ label, value, delta, index }: any) => (
   <div className={`float-${index}`} style={{
-    background: '#0D1117',
-    border: '1px solid #1C2A3A',
-    borderRadius: '12px',
-    padding: '20px',
+    background: 'rgba(13, 17, 23, 0.8)',
+    backdropFilter: 'blur(12px)',
+    border: '1px solid rgba(59, 130, 246, 0.12)',
+    borderRadius: '14px',
+    padding: '22px',
     position: 'relative',
     overflow: 'hidden',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
     cursor: 'pointer'
   }} onMouseEnter={e => {
-    e.currentTarget.style.transform = 'translateY(-5px) rotateX(4deg) rotateY(-2deg)'
-    e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,0.6), 0 0 25px rgba(59, 130, 246,0.1)'
-    e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.3)'
+    e.currentTarget.style.transform = 'translateY(-6px) rotateX(3deg) rotateY(-1deg)'
+    e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(59, 130, 246, 0.2), 0 0 40px rgba(59, 130, 246, 0.08)'
+    e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.25)'
   }} onMouseLeave={e => {
     e.currentTarget.style.transform = 'none'
     e.currentTarget.style.boxShadow = 'none'
-    e.currentTarget.style.borderColor = '#1C2A3A'
+    e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.12)'
   }}>
+    {/* Inner glow */}
+    <div style={{
+      position: 'absolute', top: 0, left: 0, width: '120px', height: '120px',
+      background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)',
+      pointerEvents: 'none'
+    }} />
+    {/* Top shine */}
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+      background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent)'
+    }} />
+
     <div style={{ fontSize: '11px', fontWeight: 600, color: '#6B8EAE', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>{label}</div>
-    <div style={{ fontSize: '36px', fontWeight: 700, color: '#F0F6FF', lineHeight: 1 }}>{value}</div>
-    <div style={{ fontSize: '11px', color: '#3B82F6', marginTop: '10px', fontWeight: 700 }}>↑ {delta}</div>
-    <div style={{ marginTop: '16px', height: '3px', background: '#1C2A3A', borderRadius: '2px' }}>
+    <div style={{ fontSize: '36px', fontWeight: 700, color: '#F0F6FF', lineHeight: 1, letterSpacing: '-1px' }}>{value}</div>
+    <div style={{ fontSize: '12px', color: '#3B82F6', marginTop: '10px', fontWeight: 500 }}>↑ {delta}</div>
+    <div style={{ marginTop: '16px', height: '3px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '2px' }}>
       <div style={{ width: '45%', height: '100%', background: '#3B82F6', borderRadius: '2px', boxShadow: '0 0 6px #3B82F6' }}/>
     </div>
   </div>
@@ -222,15 +247,30 @@ const StatCard = ({ label, value, delta, index }: any) => (
 const MissionCard = ({ mission }: { mission: any }) => (
   <Link href={`/dashboard/missions/${mission.mission_id}`} style={{ textDecoration: 'none' }}>
     <div style={{
-      background: '#0D1117', border: '1px solid #1C2A3A', borderRadius: '12px',
-      padding: '20px', transition: 'all 0.3s', cursor: 'pointer'
-    }} onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = '#1C2A3A'; e.currentTarget.style.transform = 'none'; }}>
+      background: 'rgba(13, 17, 23, 0.9)', 
+      border: '1px solid rgba(59, 130, 246, 0.1)', 
+      borderRadius: '14px',
+      padding: '20px', 
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease', 
+      cursor: 'pointer'
+    }} onMouseEnter={e => { 
+      e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.25)'; 
+      e.currentTarget.style.transform = 'translateY(-6px) rotateX(3deg) rotateY(-1deg)';
+      e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(59, 130, 246, 0.2), 0 0 40px rgba(59, 130, 246, 0.08)';
+    }}
+      onMouseLeave={e => { 
+        e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.1)'; 
+        e.currentTarget.style.transform = 'none'; 
+        e.currentTarget.style.boxShadow = 'none';
+      }}>
       <div style={{ display: 'flex', justifyContent: 'between', alignItems: 'start', marginBottom: '16px' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#111927', border: '1px solid #1C2A3A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#111927', border: '1px solid rgba(59, 130, 246, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>
           {mission.category === 'prices' ? '💰' : '🔍'}
         </div>
-        <span style={{ fontSize: '9px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: '#3B82F615', color: '#3B82F6', border: '1px solid #3B82F625' }}>{mission.status}</span>
+        <span style={{ 
+          fontSize: '9px', fontWeight: 700, padding: '3px 9px', borderRadius: '20px', 
+          background: 'rgba(59, 130, 246, 0.1)', color: '#93C5FD', border: '1px solid rgba(59, 130, 246, 0.2)' 
+        }}>{mission.status}</span>
       </div>
       <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#F0F6FF', marginBottom: '4px' }}>{mission.name}</h4>
       <div style={{ fontSize: '11px', color: '#6B8EAE', display: 'flex', alignItems: 'center', gap: '8px' }}>

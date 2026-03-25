@@ -28,8 +28,9 @@ export const Sidebar = () => {
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
-      background: 'linear-gradient(to right, rgba(8, 12, 20, 0.8), transparent)',
-      backdropFilter: 'blur(8px)',
+      background: 'rgba(8, 12, 20, 0.95)',
+      borderRight: '1px solid rgba(59, 130, 246, 0.08)',
+      backdropFilter: 'blur(20px)',
       padding: '40px 20px',
       zIndex: 100
     }}>
@@ -61,8 +62,9 @@ export const Sidebar = () => {
                 borderRadius: '12px',
                 fontSize: '12px',
                 fontWeight: '700',
-                color: isActive ? '#3B82F6' : '#6B8EAE',
-                background: isActive ? 'rgba(59, 130, 246,0.08)' : 'transparent',
+                color: isActive ? '#93C5FD' : '#6B8EAE',
+                background: isActive ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
+                boxShadow: isActive ? 'inset 0 0 0 1px rgba(59, 130, 246, 0.15)' : 'none',
                 cursor: 'pointer',
                 textDecoration: 'none',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -75,11 +77,12 @@ export const Sidebar = () => {
               {isActive && (
                 <div style={{
                   marginLeft: 'auto',
-                  width: '4px',
-                  height: '4px',
+                  width: '6px',
+                  height: '6px',
                   borderRadius: '50%',
                   background: '#3B82F6',
-                  boxShadow: '0 0 10px #3B82F6'
+                  boxShadow: '0 0 8px #3B82F6, 0 0 16px rgba(59, 130, 246, 0.4)',
+                  animation: 'dotPulse 2s ease-in-out infinite'
                 }}/>
               )}
             </Link>
