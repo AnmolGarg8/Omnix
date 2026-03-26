@@ -35,7 +35,8 @@ export default function NewMissionPage() {
     setLoading(true);
     try {
       const token = await getToken();
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions`, {
+      const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+      const res = await fetch(`${BACKEND}/api/missions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

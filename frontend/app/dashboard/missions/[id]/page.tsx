@@ -23,15 +23,17 @@ export default function MissionDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("live");
 
+  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
   useEffect(() => {
     const fetchMission = async () => {
       try {
         const token = await getToken();
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}`, {
+        const res = await fetch(`${BACKEND}/api/missions/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const data = await res.json();
+        if (!res.ok) throw new Error("Mission datalink failure");
+        const data = await res.json().catch(() => null);
         setMission(data);
       } catch (err) {
         console.error(err);
@@ -40,13 +42,13 @@ export default function MissionDetailPage() {
       }
     };
     fetchMission();
-  }, [id, getToken]);
+  }, [id, getToken, BACKEND]);
 
 
   const handleTriggerNow = async () => {
     try {
       const token = await getToken();
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}/run-now`, {
+      await fetch(`${BACKEND}/api/missions/${id}/run-now`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -61,7 +63,7 @@ export default function MissionDetailPage() {
     try {
       const token = await getToken();
       const action = mission.status === "paused" ? "resume" : "pause";
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}/${action}`, {
+      await fetch(`${BACKEND}/api/missions/${id}/${action}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -75,7 +77,7 @@ export default function MissionDetailPage() {
     if (!confirm("Are you sure you want to delete this mission?")) return;
     try {
       const token = await getToken();
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}`, {
+      await fetch(`${BACKEND}/api/missions/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });

@@ -43,15 +43,16 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         const token = await getToken();
-        const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
+        const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
         
         // Fetch missions
         const misRes = await fetch(`${BACKEND}/api/missions`, { headers: { Authorization: `Bearer ${token}` } });
-        const missionsData = await misRes.json();
+        if (!misRes.ok) throw new Error("Missions stream connection failed");
+        const missionsData = await misRes.json().catch(() => []);
         
         // Fetch alerts
         const alRes = await fetch(`${BACKEND}/api/alerts`, { headers: { Authorization: `Bearer ${token}` } });
-        const alertsData = await alRes.json();
+        const alertsData = await alRes.json().catch(() => []);
         
         setMissions(Array.isArray(missionsData) ? missionsData : []);
         setStats({

@@ -21,15 +21,18 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
+  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
 
   useEffect(() => {
     const fetchSettings = async () => {
       try {
         const token = await getToken();
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/settings`, {
+        const res = await fetch(`${BACKEND}/api/settings`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const data = await res.json();
+        if (!res.ok) throw new Error("Settings fetch failed");
+        const data = await res.json().catch(() => null);
         if (data) setSettings(data);
       } catch (err) {
         console.error(err);
@@ -38,14 +41,14 @@ export default function SettingsPage() {
       }
     };
     fetchSettings();
-  }, [getToken]);
+  }, [getToken, BACKEND]);
 
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
       const token = await getToken();
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/settings`, {
+      await fetch(`${BACKEND}/api/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

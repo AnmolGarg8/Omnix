@@ -23,15 +23,17 @@ export default function MissionsPage() {
   const { getToken } = useAuth();
   const [missions, setMissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
   useEffect(() => {
     const load = async () => {
       try {
         const token = await getToken();
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions`, {
+        const res = await fetch(`${BACKEND}/api/missions`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        const data = await res.json();
+        if (!res.ok) throw new Error("Missions stream initialization error");
+        const data = await res.json().catch(() => []);
         setMissions(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error(err);
@@ -40,19 +42,19 @@ export default function MissionsPage() {
       }
     };
     load();
-  }, [getToken]);
+  }, [getToken, BACKEND]);
 
   const handleAction = async (e: React.MouseEvent, id: string, action: string) => {
     e.preventDefault();
     e.stopPropagation();
     try {
       const token = await getToken();
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}/${action}`, {
+      await fetch(`${BACKEND}/api/missions/${id}/${action}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
       // Refresh list
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions`, {
+      const res = await fetch(`${BACKEND}/api/missions`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();

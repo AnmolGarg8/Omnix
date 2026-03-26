@@ -18,22 +18,23 @@ export default function AlertsPage() {
     alert_min_priority: "MEDIUM"
   });
 
+  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
 
   useEffect(() => {
     fetchData();
-  }, [getToken]);
+  }, [getToken, BACKEND]);
 
   const fetchData = async () => {
     try {
       const token = await getToken();
-      const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
       
       const alRes = await fetch(`${BACKEND}/api/alerts`, { headers: { Authorization: `Bearer ${token}` } });
-      const alertsData = await alRes.json();
+      const alertsData = await alRes.json().catch(() => []);
       setAlerts(Array.isArray(alertsData) ? alertsData : []);
 
       const setRes = await fetch(`${BACKEND}/api/settings`, { headers: { Authorization: `Bearer ${token}` } });
-      const settingsData = await setRes.json();
+      const settingsData = await setRes.json().catch(() => null);
       if (settingsData) setSettings(settingsData);
     } catch (err) {
       console.error(err);
@@ -46,7 +47,7 @@ export default function AlertsPage() {
   const handleAcknowledge = async (id: string) => {
     try {
       const token = await getToken();
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/alerts/${id}/acknowledge`, {
+      await fetch(`${BACKEND}/api/alerts/${id}/acknowledge`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -59,7 +60,7 @@ export default function AlertsPage() {
   const handleDelete = async (id: string) => {
     try {
       const token = await getToken();
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/alerts/${id}`, {
+      await fetch(`${BACKEND}/api/alerts/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -72,7 +73,7 @@ export default function AlertsPage() {
   const handleSaveSettings = async () => {
     try {
       const token = await getToken();
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/settings`, {
+      await fetch(`${BACKEND}/api/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
