@@ -2,13 +2,8 @@
   "name": "agentforit-parent",
   "private": true,
   "scripts": {
-    "build": "npm install --prefix frontend && npm run build --prefix frontend",
-    "install": "npm install --prefix frontend",
-    "start": "npm run start --prefix frontend"
-  },
-  "dependencies": {
-    "next": "14.2.23",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "build": "npm.cmd install --prefix frontend && npm.cmd run build --prefix frontend",
+    "install": "npm.cmd install --prefix frontend",
+    "start": "npm.cmd run start --prefix frontend"
   }
 }
