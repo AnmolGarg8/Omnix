@@ -107,3 +107,13 @@ async def resume_mission(mission_id: str, user_id: str = Depends(get_user_id)):
         await db.missions.update_one({"mission_id": mission_id, "user_id": user_id}, {"$set": {"status": "active"}})
         return {"status": "resumed"}
     return {"status": "failed"}
+
+@router.delete("/{mission_id}")
+async def delete_mission(mission_id: str, user_id: str = Depends(get_user_id)):
+    db = get_db()
+    if db is not None:
+        result = await db.missions.delete_one({"mission_id": mission_id, "user_id": user_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Mission not found")
+        return {"status": "deleted"}
+    raise HTTPException(status_code=500, detail="Database connection failed")

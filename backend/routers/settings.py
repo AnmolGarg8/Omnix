@@ -37,7 +37,9 @@ async def update_settings(user_id: str = Depends(get_user_id), payload: dict = B
                 "slack_webhook": payload.get("slack_webhook"),
                 "ntfy_topic": payload.get("ntfy_topic"),
                 "alert_min_priority": payload.get("alert_min_priority", "LOW"),
-                "default_schedule": payload.get("default_schedule", "0 9 * * *")
+                "default_schedule": payload.get("default_schedule", "0 9 * * *"),
+                "openai_key": payload.get("openai_key"),
+                "anthropic_key": payload.get("anthropic_key")
             }}
         )
         return {"status": "updated"}

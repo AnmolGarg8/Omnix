@@ -16,6 +16,7 @@ import {
   Bell, 
   BrainCircuit
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -28,25 +29,36 @@ const EXAMPLES = [
 ];
 
 export default function DashboardPage() {
-  const [missions, setMissions] = useState<any[]>([]);
+  const { getToken } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [missions, setMissions] = useState<any[]>([]);
   const [stats, setStats] = useState({
     activeMissions: 0,
     totalRuns: 0,
-    alertsSent: 0,
-    sitesMonitored: 0
+    sitesMonitored: 0,
+    alertCount: 0
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const missionsData = await getMissions();
-        setMissions(missionsData || []);
+        const token = await getToken();
+        const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
+        
+        // Fetch missions
+        const misRes = await fetch(`${BACKEND}/api/missions`, { headers: { Authorization: `Bearer ${token}` } });
+        const missionsData = await misRes.json();
+        
+        // Fetch alerts
+        const alRes = await fetch(`${BACKEND}/api/alerts`, { headers: { Authorization: `Bearer ${token}` } });
+        const alertsData = await alRes.json();
+        
+        setMissions(Array.isArray(missionsData) ? missionsData : []);
         setStats({
-          activeMissions: missionsData?.filter((m:any) => m.status === 'active')?.length || 0,
-          totalRuns: missionsData?.reduce((acc:any, m:any) => acc + (m.total_runs || 0), 0) || 0,
-          alertsSent: (missionsData?.length || 0) * 2, 
-          sitesMonitored: missionsData?.filter((m:any) => m.status === 'active')?.length || 0
+          activeMissions: missionsData.filter((m: any) => m.status === 'active').length,
+          totalRuns: missionsData.reduce((acc: number, m: any) => acc + (m.total_runs || 0), 0),
+          sitesMonitored: missionsData.reduce((acc: number, m: any) => acc + (m.agent_tasks?.length || 0), 0),
+          alertCount: (alertsData || []).length
         });
       } catch (err) {
         console.error(err);
@@ -55,9 +67,10 @@ export default function DashboardPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [getToken]);
 
   if (isLoading) return <DashboardSkeleton />;
+
 
   return (
     <div style={{ paddingBottom: '80px', maxWidth: '1400px', margin: '0 auto' }}>
@@ -71,9 +84,10 @@ export default function DashboardPage() {
       }}>
         <StatCard index={0} label="Active Missions" value={stats.activeMissions} delta="+12%" />
         <StatCard index={1} label="Total Runs" value={stats.totalRuns} delta="STABLE" />
-        <StatCard index={2} label="Alerts Dispatched" value={stats.alertsSent} delta="URGENT" />
+        <StatCard index={2} label="Alerts Dispatched" value={stats.alertCount} delta="URGENT" />
         <StatCard index={3} label="Nodes Protected" value={stats.sitesMonitored} delta="ACTIVE" />
       </div>
+
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '40px', alignItems: 'start' }}>
         

@@ -21,14 +21,17 @@ export default function MissionDetailPage() {
   const { getToken } = useAuth();
   const [mission, setMission] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("live");
 
 
   useEffect(() => {
     const fetchMission = async () => {
       try {
         const token = await getToken();
-        if (!token) return;
-        const data = await getMission(id as string, token);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
         setMission(data);
       } catch (err) {
         console.error(err);
@@ -43,9 +46,40 @@ export default function MissionDetailPage() {
   const handleTriggerNow = async () => {
     try {
       const token = await getToken();
-      if (!token) return;
-      await runMissionNow(id as string, token);
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}/run-now`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setMission((prev: any) => ({ ...prev, status: "running" }));
+      setActiveTab("live");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePauseToggle = async () => {
+    try {
+      const token = await getToken();
+      const action = mission.status === "paused" ? "resume" : "pause";
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}/${action}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMission((prev: any) => ({ ...prev, status: action === "pause" ? "paused" : "active" }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this mission?")) return;
+    try {
+      const token = await getToken();
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/missions/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      router.push("/dashboard/missions");
     } catch (err) {
       console.error(err);
     }
@@ -76,40 +110,46 @@ export default function MissionDetailPage() {
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3">
+            <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3 text-[#F0F6FF]">
               {mission.name}
               <Badge className={`uppercase text-[10px] tracking-[2px] font-bold px-3 py-1 ml-2 rounded-full border 
-                ${isRunning ? "bg-[rgba(59,130,246,0.1)] text-[#3B82F6] border-[rgba(59,130,246,0.3)] animate-[badgePulse_1.5s_ease-in-out_infinite]" : 
+                ${isRunning ? "bg-[rgba(59,130,246,0.1)] text-[#3B82F6] border-[rgba(59,130,246,0.3)] animate-pulse" : 
                   mission.status === "paused" ? "bg-[rgba(245,158,11,0.1)] text-[#FCD34D] border-[rgba(245,158,11,0.2)]" : 
                   "bg-[rgba(59,130,246,0.1)] text-[#93C5FD] border-[rgba(59,130,246,0.2)]"}`}>
                 {mission.status}
               </Badge>
             </h2>
             <div className="flex items-center gap-6 text-[11px] font-black text-[#6B8EAE] uppercase tracking-widest">
-              <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#3B82F6]" /> LAST SYNC: {mission.last_run || 'NONE'}</span>
+              <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#3B82F6]" /> LAST SYNC: {mission.last_run ? new Date(mission.last_run).toLocaleTimeString() : 'NONE'}</span>
               <span className="flex items-center gap-2 max-w-sm truncate"><Cpu className="w-4 h-4 text-[#3B82F6]" /> GOAL: {mission.goal_nl}</span>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <Button variant="outline" className="h-12 border-[#1C2A3A] gap-3 px-6 bg-transparent hover:bg-[#111118] text-[#F0F6FF] font-bold uppercase tracking-widest text-[10px]">
+          <Button 
+            variant="outline" 
+            onClick={handlePauseToggle}
+            className="h-12 border-[#1C2A3A] gap-3 px-6 bg-transparent hover:bg-[#111118] text-[#F0F6FF] font-bold uppercase tracking-widest text-[10px]">
              {mission.status === "paused" ? <Play className="w-4 h-4 text-[#3B82F6]" /> : <Pause className="w-4 h-4 text-[#F59E0B]" />} 
              {mission.status === "paused" ? "RESUME" : "PAUSE"}
           </Button>
           <Button 
             onClick={handleTriggerNow}
             disabled={isRunning}
-            className="h-14 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] text-[#ffffff] hover:opacity-90 gap-3 px-8 font-bold uppercase tracking-widest rounded-[10px] border-none shadow-[0_0_0_1px_rgba(59,130,246,0.3),0_8px_32px_rgba(59,130,246,0.35),0_2px_8px_rgba(0,0,0,0.4)] transition-all hover:-translate-y-[2px] hover:shadow-[0_0_0_1px_rgba(59,130,246,0.5),0_12px_48px_rgba(59,130,246,0.5),0_2px_8px_rgba(0,0,0,0.4)] disabled:opacity-50">
+            className="h-14 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] text-[#ffffff] hover:opacity-90 gap-3 px-8 font-bold uppercase tracking-widest rounded-[10px] border-none shadow-[0_0_0_1px_rgba(59,130,246,0.3),0_8px_32px_rgba(59,130,246,0.35),0_2px_8px rgba(0,0,0,0.4)] transition-all hover:-translate-y-[2px] disabled:opacity-50">
             <Play className="w-5 h-5 fill-white" /> {isRunning ? "MISSION RUNNING..." : "TRIGGER NOW"}
           </Button>
-          <Button variant="ghost" className="h-12 w-12 text-[#FF4444] hover:bg-[#FF4444]/10 rounded-xl p-0">
+          <Button 
+            variant="ghost" 
+            onClick={handleDelete}
+            className="h-12 w-12 text-[#FF4444] hover:bg-[#FF4444]/10 rounded-xl p-0">
             <Trash className="w-5 h-5" />
           </Button>
         </div>
       </div>
 
-      <Tabs defaultValue="live" className="space-y-10">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-10">
         <TabsList className="bg-[#111927]/50 border border-[#1C2A3A] p-2 h-14 rounded-2xl">
           <TabsTrigger value="live" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#ffffff] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Activity className="w-4 h-4" /> TACTICAL HUB</TabsTrigger>
           <TabsTrigger value="results" className="gap-3 data-[state=active]:bg-[#3B82F6] data-[state=active]:text-[#ffffff] px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-full"><Database className="w-4 h-4" /> SIGNAL BANK</TabsTrigger>
