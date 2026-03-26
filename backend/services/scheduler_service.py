@@ -58,7 +58,16 @@ async def execute_mission_pipeline(mission_id: str):
     # ... Simplified for Phase 3 logic ...
     
     # 4. Run parallel agents
-    raw_results = await run_parallel_agents(mission["agent_tasks"])
+    async def broadcast_event(e: dict):
+        from main import manager
+        await manager.broadcast_mission_event(mission_id, e)
+
+    await broadcast_event({"type": "STARTED", "message": f"Initializing node swarm for {len(mission['agent_tasks'])} endpoints..."})
+    
+    raw_results = await run_parallel_agents(mission["agent_tasks"], on_event=broadcast_event)
+
+    await broadcast_event({"type": "DONE", "message": f"Intelligence extracted from all nodes."})
+
     
     # 5. Fetch previous result
     previous = await db.results.find_one(

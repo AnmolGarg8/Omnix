@@ -8,7 +8,7 @@ load_dotenv()
 
 TINYFISH_API_KEY = os.getenv("TINYFISH_API_KEY")
 
-async def run_agent(url: str, goal: str, stealth: bool = False) -> dict:
+async def run_agent(url: str, goal: str, stealth: bool = False, on_event=None) -> dict:
     client = TinyFish(api_key=TINYFISH_API_KEY)
     profile = BrowserProfile.STEALTH if stealth else BrowserProfile.LITE
     result_data = {
@@ -35,19 +35,29 @@ async def run_agent(url: str, goal: str, stealth: bool = False) -> dict:
                 elif event.type == "COMPLETE":
                     result_data["final_result"] = event.data
                     result_data["status"] = "success"
-                result_data["events"].append({
+                
+                event_obj = {
                     "type": event.type,
                     "data": event.data,
-                    "timestamp": datetime.utcnow().isoformat()
-                })
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "url": url
+                }
+                result_data["events"].append(event_obj)
+                
+                if on_event:
+                    if asyncio.iscoroutinefunction(on_event):
+                        await on_event(event_obj)
+                    else:
+                        on_event(event_obj)
+
     except Exception as e:
         result_data["status"] = "failed"
         result_data["error"] = str(e)
     return result_data
 
-async def run_parallel_agents(agent_tasks: list[dict]) -> list[dict]:
+async def run_parallel_agents(agent_tasks: list[dict], on_event=None) -> list[dict]:
     tasks = [
-        run_agent(t["url"], t["goal"], t.get("stealth", False))
+        run_agent(t["url"], t["goal"], t.get("stealth", False), on_event=on_event)
         for t in agent_tasks
     ]
     results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -56,6 +66,7 @@ async def run_parallel_agents(agent_tasks: list[dict]) -> list[dict]:
         else {"status": "failed", "error": str(r), "final_result": None, "url": agent_tasks[i]["url"]}
         for i, r in enumerate(results)
     ]
+
 
 async def run_agent_with_retry(url: str, goal: str, max_retries: int = 3) -> dict:
     for attempt in range(max_retries):

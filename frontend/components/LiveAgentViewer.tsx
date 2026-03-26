@@ -38,27 +38,43 @@ export const LiveAgentViewer = ({ missionId, tasks }: { missionId: string; tasks
     tasks.forEach(t => initial[t.url] = 'initializing');
     setAgentStatuses(initial);
 
-    // Mock WebSocket for demo if no real one set up
-    const mockEvents = [
-      { type: 'STARTED', message: `Initializing node swarm for ${tasks.length} endpoints...`, timestamp: new Date().toLocaleTimeString() },
-      { type: 'NAV', message: `Decrypting target: ${tasks[0].url}`, timestamp: new Date().toLocaleTimeString(), url: tasks[0].url },
-      { type: 'EXTRACTING', message: `Parsing semantic structure on ${tasks[0].url}`, timestamp: new Date().toLocaleTimeString(), url: tasks[0].url },
-      { type: 'DONE', message: `Intelligence extracted from ${tasks[0].url}`, timestamp: new Date().toLocaleTimeString(), url: tasks[0].url }
-    ];
+    // Real WebSocket Connection
+    const BACKEND_WS_URL = process.env.NEXT_PUBLIC_BACKEND_URL ? 
+      process.env.NEXT_PUBLIC_BACKEND_URL.replace('http', 'ws') : 
+      'ws://localhost:8000';
+    
+    const ws = new WebSocket(`${BACKEND_WS_URL}/ws/missions/${missionId}`);
 
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < mockEvents.length) {
-        setEvents(prev => [...prev, mockEvents[i]]);
-        if (mockEvents[i].url) {
-          setAgentStatuses(prev => ({ ...prev, [mockEvents[i].url as string]: mockEvents[i].type.toLowerCase() }));
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      
+      if (data.type === 'HEARTBEAT') return;
+
+      // Handle specific event types from TinyFish
+      setEvents(prev => [...prev, {
+        type: data.type,
+        message: data.data || data.message || "Event processing...",
+        timestamp: new Date().toLocaleTimeString(),
+        url: data.url
+      }]);
+
+      if (data.url) {
+        setAgentStatuses(prev => ({ ...prev, [data.url]: data.type.toLowerCase() }));
+        if (data.type === 'STREAMING_URL') {
+          setAgentStreamingUrls(prev => ({ ...prev, [data.url]: data.data }));
         }
-        i++;
       }
-    }, 2000);
+    };
 
-    return () => { clearInterval(timer); clearInterval(interval); };
-  }, [tasks, startTime]);
+    ws.onclose = () => console.log("WS Stream Closed");
+    ws.onerror = (err) => console.error("WS Socket Error:", err);
+
+    return () => { 
+      clearInterval(timer); 
+      ws.close();
+    };
+  }, [tasks, startTime, missionId]);
+
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-import { getMission } from "@/lib/api";
+import { getMission, runMissionNow } from "@/lib/api";
 
 import { LiveAgentViewer } from "@/components/LiveAgentViewer";
 import { 
@@ -38,6 +38,18 @@ export default function MissionDetailPage() {
     };
     fetchMission();
   }, [id, getToken]);
+
+
+  const handleTriggerNow = async () => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+      await runMissionNow(id as string, token);
+      setMission((prev: any) => ({ ...prev, status: "running" }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
 
   if (isLoading) return <div className="flex h-screen items-center justify-center font-black animate-pulse uppercase tracking-[10px] text-[#3B82F6]">INITIALIZING DATASTREAM...</div>;
@@ -85,8 +97,11 @@ export default function MissionDetailPage() {
              {mission.status === "paused" ? <Play className="w-4 h-4 text-[#3B82F6]" /> : <Pause className="w-4 h-4 text-[#F59E0B]" />} 
              {mission.status === "paused" ? "RESUME" : "PAUSE"}
           </Button>
-          <Button className="h-14 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] text-[#ffffff] hover:opacity-90 gap-3 px-8 font-bold uppercase tracking-widest rounded-[10px] border-none shadow-[0_0_0_1px_rgba(59,130,246,0.3),0_8px_32px_rgba(59,130,246,0.35),0_2px_8px_rgba(0,0,0,0.4)] transition-all hover:-translate-y-[2px] hover:shadow-[0_0_0_1px_rgba(59,130,246,0.5),0_12px_48px_rgba(59,130,246,0.5),0_2px_8px_rgba(0,0,0,0.4)]">
-            <Play className="w-5 h-5 fill-white" /> TRIGGER NOW
+          <Button 
+            onClick={handleTriggerNow}
+            disabled={isRunning}
+            className="h-14 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] text-[#ffffff] hover:opacity-90 gap-3 px-8 font-bold uppercase tracking-widest rounded-[10px] border-none shadow-[0_0_0_1px_rgba(59,130,246,0.3),0_8px_32px_rgba(59,130,246,0.35),0_2px_8px_rgba(0,0,0,0.4)] transition-all hover:-translate-y-[2px] hover:shadow-[0_0_0_1px_rgba(59,130,246,0.5),0_12px_48px_rgba(59,130,246,0.5),0_2px_8px_rgba(0,0,0,0.4)] disabled:opacity-50">
+            <Play className="w-5 h-5 fill-white" /> {isRunning ? "MISSION RUNNING..." : "TRIGGER NOW"}
           </Button>
           <Button variant="ghost" className="h-12 w-12 text-[#FF4444] hover:bg-[#FF4444]/10 rounded-xl p-0">
             <Trash className="w-5 h-5" />

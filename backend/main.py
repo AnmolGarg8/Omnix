@@ -44,27 +44,49 @@ app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 async def health():
     return {"status": "ok", "service": "agentforit-backend"}
 
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: dict[str, list[WebSocket]] = {}
+
+    async def connect(self, websocket: WebSocket, mission_id: str):
+        await websocket.accept()
+        if mission_id not in self.active_connections:
+            self.active_connections[mission_id] = []
+        self.active_connections[mission_id].append(websocket)
+
+    def disconnect(self, websocket: WebSocket, mission_id: str):
+        if mission_id in self.active_connections:
+            self.active_connections[mission_id].remove(websocket)
+            if not self.active_connections[mission_id]:
+                del self.active_connections[mission_id]
+
+    async def broadcast_mission_event(self, mission_id: str, data: dict):
+        if mission_id in self.active_connections:
+            for connection in self.active_connections[mission_id]:
+                await connection.send_text(json.dumps(data))
+
+manager = ConnectionManager()
+
 @app.websocket("/ws/missions/{mission_id}")
 async def mission_websocket(websocket: WebSocket, mission_id: str):
-    await websocket.accept()
+    await manager.connect(websocket, mission_id)
     print(f"WS Client Connected: {mission_id}")
     
     try:
         while True:
-            # Heartbeat and events channel
-            data = {"type": "HEARTBEAT", "timestamp": datetime.utcnow().isoformat()}
-            await websocket.send_text(json.dumps(data))
-            
+            # Poll for heartbeat or client messages if any
             try:
-                # Poll for incoming client messages if any.
-                await asyncio.wait_for(websocket.receive_text(), timeout=1.0)
+                await asyncio.wait_for(websocket.receive_text(), timeout=15.0)
             except asyncio.TimeoutError:
-                pass
+                # Send heartbeat if no message received
+                await websocket.send_text(json.dumps({"type": "HEARTBEAT", "timestamp": datetime.utcnow().isoformat()}))
+            except Exception:
+                break
                 
-            await asyncio.sleep(15) 
-            
     except WebSocketDisconnect:
+        manager.disconnect(websocket, mission_id)
         print(f"WS Client Disconnected: {mission_id}")
     except Exception as e:
+        manager.disconnect(websocket, mission_id)
         print(f"WS Error: {e}")
-        await websocket.close()
+
