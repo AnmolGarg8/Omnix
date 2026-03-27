@@ -6,10 +6,5 @@
     "build": "npm install --prefix frontend && npm run build --prefix frontend",
     "install": "npm install --prefix frontend",
     "start": "npm run start --prefix frontend"
-  },
-  "dependencies": {
-    "next": "16.2.1",
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
   }
 }
