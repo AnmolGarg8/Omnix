@@ -2,9 +2,10 @@
   "name": "agentforit-parent",
   "private": true,
   "scripts": {
-    "build": "npm.cmd install --prefix frontend && npm.cmd run build --prefix frontend",
-    "install": "npm.cmd install --prefix frontend",
-    "start": "npm.cmd run start --prefix frontend"
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm install --prefix frontend && npm run build --prefix frontend",
+    "install": "npm install --prefix frontend",
+    "start": "npm run start --prefix frontend"
   },
   "dependencies": {
     "next": "16.2.1",
