@@ -2,6 +2,8 @@ import httpx
 import resend
 import os
 import json
+import asyncio
+import uuid
 from datetime import datetime
 from db.mongodb import get_db
 
@@ -172,5 +174,3 @@ async def send_all_alerts(user_id: str, analysis: dict, mission_id: str, mission
         }
         await db.alerts.insert_one(alert_doc)
 
-import asyncio
-import uuid

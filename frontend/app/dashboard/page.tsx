@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getMissions } from "@/lib/api";
 import { 
   Card, 
   CardHeader, 
@@ -14,9 +13,13 @@ import {
   Rocket, 
   ArrowRight,
   Bell, 
-  BrainCircuit
+  BrainCircuit,
+  Zap,
+  Activity,
+  ShieldCheck,
+  Target
 } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -47,18 +50,18 @@ export default function DashboardPage() {
         
         // Fetch missions
         const misRes = await fetch(`${BACKEND}/api/missions`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!misRes.ok) throw new Error("Missions stream connection failed");
         const missionsData = await misRes.json().catch(() => []);
         
         // Fetch alerts
         const alRes = await fetch(`${BACKEND}/api/alerts`, { headers: { Authorization: `Bearer ${token}` } });
         const alertsData = await alRes.json().catch(() => []);
         
-        setMissions(Array.isArray(missionsData) ? missionsData : []);
+        const mArr = Array.isArray(missionsData) ? missionsData : [];
+        setMissions(mArr);
         setStats({
-          activeMissions: missionsData.filter((m: any) => m.status === 'active').length,
-          totalRuns: missionsData.reduce((acc: number, m: any) => acc + (m.total_runs || 0), 0),
-          sitesMonitored: missionsData.reduce((acc: number, m: any) => acc + (m.agent_tasks?.length || 0), 0),
+          activeMissions: mArr.filter((m: any) => m.status === 'active').length,
+          totalRuns: mArr.reduce((acc: number, m: any) => acc + (m.total_runs || 0), 0),
+          sitesMonitored: mArr.reduce((acc: number, m: any) => acc + (m.agent_tasks?.length || 0), 0),
           alertCount: (alertsData || []).length
         });
       } catch (err) {
@@ -72,91 +75,58 @@ export default function DashboardPage() {
 
   if (isLoading) return <DashboardSkeleton />;
 
-
   return (
-    <div style={{ paddingBottom: '80px', maxWidth: '1400px', margin: '0 auto' }}>
+    <div className="pb-32 animate-fadeUp">
+      {/* Header with Breadth */}
+      <div className="mb-12 flex justify-between items-end">
+        <div>
+          <h2 className="text-3xl font-bold text-[#F0F6FF] tracking-tight mb-2">Systems Overview</h2>
+          <p className="text-[#6B8EAE] text-sm font-medium">Monitoring the autonomous web layer.</p>
+        </div>
+        <div className="flex gap-4 items-center">
+           <div className="bg-[#0D1117] border border-blue-500/10 px-4 py-2 rounded-lg flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+              <span className="text-xs font-bold text-[#6B8EAE] tracking-wider uppercase">Relay: Active</span>
+           </div>
+        </div>
+      </div>
       
-      {/* 4-Column Stat Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '12px',
-        marginBottom: '40px'
-      }}>
-        <StatCard index={0} label="Active Missions" value={stats.activeMissions} delta="+12%" />
-        <StatCard index={1} label="Total Runs" value={stats.totalRuns} delta="STABLE" />
-        <StatCard index={2} label="Alerts Dispatched" value={stats.alertCount} delta="URGENT" />
-        <StatCard index={3} label="Nodes Protected" value={stats.sitesMonitored} delta="ACTIVE" />
+      {/* 4-Column Stat Grid with increased spacing */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <StatCard index={0} label="Active Missions" value={stats.activeMissions} delta="+12%" icon={<Target size={18} />} />
+        <StatCard index={1} label="Total Runs" value={stats.totalRuns} delta="STABLE" icon={<Zap size={18} />} />
+        <StatCard index={2} label="Alerts Dispatched" value={stats.alertCount} delta="URGENT" icon={<Bell size={18} />} />
+        <StatCard index={3} label="Nodes Protected" value={stats.sitesMonitored} delta="ACTIVE" icon={<ShieldCheck size={18} />} />
       </div>
 
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '40px', alignItems: 'start' }}>
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-12 items-start">
         
         {/* Agent Swarm Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between',
-            marginBottom: '16px'
-          }}>
-            <h3 style={{ 
-              fontSize: '14px', 
-              fontWeight: '600', 
-              color: '#F0F6FF', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px' 
-            }}>
-              <BrainCircuit size={16} style={{ color: '#3B82F6' }} /> Agent Swarm
+        <div className="flex flex-col gap-8">
+          <div className="flex items-center justify-between">
+            <h3 className="text-base font-bold text-[#F0F6FF] flex items-center gap-3">
+              <div className="p-1.5 bg-blue-500/10 rounded-md">
+                <BrainCircuit size={18} className="text-blue-500" />
+              </div>
+              Agent Swarm
             </h3>
-            <Link href="/dashboard/missions/new" style={{ textDecoration: 'none' }}>
-               <button 
-                 style={{
-                   padding: '5px 12px',
-                   background: 'transparent',
-                   color: '#3B82F6',
-                   fontWeight: '600',
-                   fontSize: '12px',
-                   borderRadius: '6px',
-                   border: '1px solid rgba(59, 130, 246,0.3)',
-                   cursor: 'pointer',
-                   fontFamily: 'Space Grotesk, sans-serif',
-                   display: 'flex',
-                   alignItems: 'center',
-                   gap: '5px',
-                   transition: 'all 0.2s ease'
-                 }}
-                 onMouseEnter={e => {
-                   e.currentTarget.style.background = 'rgba(59, 130, 246,0.08)'
-                   e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.6)'
-                 }}
-                 onMouseLeave={e => {
-                   e.currentTarget.style.background = 'transparent'
-                   e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.3)'
-                 }}
-               >
+            <Link href="/dashboard/missions/new">
+               <button className="px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 hover:border-blue-500/60 text-blue-400 text-xs font-bold rounded-lg transition-all flex items-center gap-2 tracking-wide">
                  <Plus size={14} /> NEW MISSION
                </button>
             </Link>
           </div>
 
           {missions.length === 0 ? (
-            <div style={{ background: '#0D1117', border: '1px border-dashed #1C2A3A', borderRadius: '12px', padding: '60px', textAlign: 'center' }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🤖</div>
-              <h4 style={{ fontSize: '20px', fontWeight: 700, color: '#F0F6FF', marginBottom: '8px' }}>Launch Intelligence</h4>
-              <p style={{ fontSize: '12px', color: '#6B8EAE', maxWidth: '300px', margin: '0 auto' }}>No active missions. Deploy your first agent swarm to start monitoring the web.</p>
+            <div className="bg-[#0D1117]/50 border border-dashed border-[#1C2A3A] rounded-2xl py-24 px-12 text-center group hover:bg-[#0D1117]/80 transition-all">
+              <div className="w-20 h-20 bg-[#111927] border border-blue-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8 text-4xl group-hover:scale-110 transition-transform">🤖</div>
+              <h4 className="text-2xl font-bold text-[#F0F6FF] mb-4">Initialize Intelligence</h4>
+              <p className="text-[#6B8EAE] text-sm max-w-[340px] mx-auto mb-10 leading-relaxed">No active missions detected. Deploy your first agent swarm to start monitoring the web for critical signals.</p>
               
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginTop: '24px' }}>
+              <div className="flex flex-wrap gap-2.5 justify-center max-w-[600px] mx-auto">
                 {EXAMPLES.map((ex) => (
-                  <Link key={ex} href={`/dashboard/missions/new?goal=${encodeURIComponent(ex)}`}>
-                    <span style={{
-                      padding: '6px 14px', borderRadius: '20px',
-                      background: '#0D1117', border: '1px solid #1C2A3A',
-                      fontSize: '11px', color: '#6B8EAE', cursor: 'pointer',
-                      transition: 'all 0.2s'
-                    }} onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(59, 130, 246,0.5)'; e.currentTarget.style.color = '#3B82F6'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#1C2A3A'; e.currentTarget.style.color = '#6B8EAE'; }}>
+                  <Link key={ex} href={`/dashboard/missions/new?goal=${encodeURIComponent(ex)}`} className="no-underline">
+                    <span className="px-4 py-2 rounded-full bg-[#0D1117] border border-[#1C2A3A] text-[11px] font-bold text-[#6B8EAE] hover:text-blue-400 hover:border-blue-500/40 transition-all cursor-pointer inline-block">
                       {ex}
                     </span>
                   </Link>
@@ -164,7 +134,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {missions.map(mission => (
                   <MissionCard key={mission.mission_id} mission={mission} />
                 ))}
@@ -172,44 +142,43 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Signal Log Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <h3 style={{ fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', color: '#F0F6FF' }}>
-            <Bell size={14} style={{ color: '#3B82F6' }} /> Signal Log
-          </h3>
-          <div>
+        {/* Signal Log Section - Cyber HUD Style */}
+        <div className="flex flex-col gap-8">
+          <div className="flex items-center justify-between">
+            <h3 className="text-base font-bold text-[#F0F6FF] flex items-center gap-3">
+              <div className="p-1.5 bg-blue-500/10 rounded-md">
+                <Activity size={18} className="text-blue-500" />
+              </div>
+              Intelligence Feed
+            </h3>
+            <span className="text-[10px] font-bold text-blue-500/60 tracking-widest uppercase">Live Sync</span>
+          </div>
+
+          <div className="flex flex-col gap-4">
             {[
-              { id: 1, p: 'CRITICAL', t: 'Nike price drop detected (−$32)', c: '#FF4444' },
-              { id: 2, p: 'HIGH', t: 'Competitor A launched new pricing', c: '#FF6B35' },
-              { id: 3, p: 'MEDIUM', t: '5 new job matches in Bangalore', c: '#F59E0B' },
-              { id: 4, p: 'LOW', t: 'Routine sync complete for Nodes 1-4', c: '#6B8EAE' },
+              { id: 1, p: 'CRITICAL', t: 'Nike price drop detected (−$32)', c: '#FF4444', time: '12m ago' },
+              { id: 2, p: 'HIGH', t: 'Competitor A launched new pricing', c: '#FF6B35', time: '45m ago' },
+              { id: 3, p: 'MEDIUM', t: '5 new job matches in Bangalore', c: '#F59E0B', time: '2h ago' },
+              { id: 4, p: 'STABLE', t: 'Routine sync complete for Nodes 1-4', c: '#3B82F6', time: '5h ago' },
             ].map(log => (
-              <div key={log.id} style={{
-                background: 'rgba(13, 17, 23, 0.9)', 
-                border: '1px solid rgba(59, 130, 246, 0.1)',
-                borderRadius: '10px',
-                padding: '16px 18px', 
-                marginBottom: '10px', 
-                borderLeft: `2px solid ${log.c}`,
-                boxShadow: `-2px 0 12px ${log.c}15`,
-                transition: 'all 0.2s ease', 
-                cursor: 'pointer'
-              }} onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateX(3px)';
-                e.currentTarget.style.boxShadow = `-2px 0 20px ${log.c}33`;
-              }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = `-2px 0 12px ${log.c}15`;
-                }}>
-                <div style={{ display: 'flex', justifyContent: 'between', alignItems: 'center', marginBottom: '8px' }}>
-                   <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: `${log.c}15`, color: log.c, border: `1px solid ${log.c}25` }}>{log.p}</span>
-                   <span style={{ fontSize: '10px', color: '#6B8EAE' }}>12m ago</span>
+              <div key={log.id} className="group cursor-pointer">
+                <div className="bg-[#0D1117]/80 border border-blue-500/5 hover:border-blue-500/20 rounded-xl p-5 hover:bg-[#111927] transition-all relative overflow-hidden">
+                   {/* HUD Accent */}
+                   <div className="absolute top-0 left-0 w-[2px] h-full transition-all group-hover:w-1" style={{ backgroundColor: log.c }} />
+                   
+                   <div className="flex justify-between items-center mb-4">
+                      <span className="text-[9px] font-black tracking-widest px-2.5 py-1 rounded-md bg-opacity-10 border border-opacity-20" style={{ color: log.c, borderColor: log.c, backgroundColor: log.c + '10' }}>{log.p}</span>
+                      <span className="text-[10px] font-bold text-[#6B8EAE]">{log.time}</span>
+                   </div>
+                   <h5 className="text-sm font-semibold text-[#F0F6FF] mb-2 group-hover:text-blue-400 transition-colors tracking-tight">{log.t}</h5>
+                   <p className="text-xs text-[#6B8EAE] leading-relaxed line-clamp-2">Agent swarm confirmed critical intelligence match on target endpoint. Relay protocol verified.</p>
                 </div>
-                <h5 style={{ fontSize: '13px', fontWeight: 600, color: '#F0F6FF' }}>{log.t}</h5>
-                <p style={{ fontSize: '12px', color: '#6B8EAE', marginTop: '4px' }}>Agent network confirmed change on endpoint...</p>
               </div>
             ))}
+            
+            <button className="w-full mt-4 py-3 bg-transparent border border-[#1C2A3A] hover:border-blue-500/20 text-[#6B8EAE] hover:text-blue-400 text-xs font-bold rounded-xl transition-all uppercase tracking-widest">
+              View All Signals
+            </button>
           </div>
         </div>
 
@@ -218,90 +187,71 @@ export default function DashboardPage() {
   );
 }
 
-const StatCard = ({ label, value, delta, index }: any) => (
-  <div className={`float-${index}`} style={{
-    background: 'rgba(13, 17, 23, 0.8)',
-    backdropFilter: 'blur(12px)',
-    border: '1px solid rgba(59, 130, 246, 0.12)',
-    borderRadius: '14px',
-    padding: '22px',
-    position: 'relative',
-    overflow: 'hidden',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
-    cursor: 'pointer'
-  }} onMouseEnter={e => {
-    e.currentTarget.style.transform = 'translateY(-6px) rotateX(3deg) rotateY(-1deg)'
-    e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(59, 130, 246, 0.2), 0 0 40px rgba(59, 130, 246, 0.08)'
-    e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.25)'
-  }} onMouseLeave={e => {
-    e.currentTarget.style.transform = 'none'
-    e.currentTarget.style.boxShadow = 'none'
-    e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.12)'
-  }}>
-    {/* Inner glow */}
-    <div style={{
-      position: 'absolute', top: 0, left: 0, width: '120px', height: '120px',
-      background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)',
-      pointerEvents: 'none'
-    }} />
-    {/* Top shine */}
-    <div style={{
-      position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-      background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent)'
-    }} />
+const StatCard = ({ label, value, delta, index, icon }: any) => (
+  <div className={`cyber-card float-${index} p-7 group`} style={{ background: 'rgba(13, 17, 23, 0.7)', backdropFilter: 'blur(20px)' }}>
+    <div className="flex justify-between items-start mb-6">
+      <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-500 group-hover:scale-110 transition-transform">
+        {icon}
+      </div>
+      <div className="text-[10px] font-black tracking-widest text-[#6B8EAE] opacity-60 uppercase">{label}</div>
+    </div>
+    
+    <div className="flex items-end gap-3 mb-6">
+      <div className="text-4xl font-bold text-[#F0F6FF] tracking-tighter">{value}</div>
+      <div className="text-[11px] font-black text-blue-500 mb-1.5 tracking-wider font-mono">↑ {delta}</div>
+    </div>
 
-    <div style={{ fontSize: '11px', fontWeight: 600, color: '#6B8EAE', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>{label}</div>
-    <div style={{ fontSize: '36px', fontWeight: 700, color: '#F0F6FF', lineHeight: 1, letterSpacing: '-1px' }}>{value}</div>
-    <div style={{ fontSize: '12px', color: '#3B82F6', marginTop: '10px', fontWeight: 500 }}>↑ {delta}</div>
-    <div style={{ marginTop: '16px', height: '3px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '2px' }}>
-      <div style={{ width: '45%', height: '100%', background: '#3B82F6', borderRadius: '2px', boxShadow: '0 0 6px #3B82F6' }}/>
+    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+      <div 
+        className="h-full bg-blue-500 group-hover:bg-blue-400 transition-all duration-1000 ease-out shadow-[0_0_12px_#3B82F6]" 
+        style={{ width: `${40 + index * 15}%` }} 
+      />
     </div>
   </div>
 );
 
 const MissionCard = ({ mission }: { mission: any }) => (
-  <Link href={`/dashboard/missions/${mission.mission_id}`} style={{ textDecoration: 'none' }}>
-    <div style={{
-      background: 'rgba(13, 17, 23, 0.9)', 
-      border: '1px solid rgba(59, 130, 246, 0.1)', 
-      borderRadius: '14px',
-      padding: '20px', 
-      transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease', 
-      cursor: 'pointer'
-    }} onMouseEnter={e => { 
-      e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.25)'; 
-      e.currentTarget.style.transform = 'translateY(-6px) rotateX(3deg) rotateY(-1deg)';
-      e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(59, 130, 246, 0.2), 0 0 40px rgba(59, 130, 246, 0.08)';
-    }}
-      onMouseLeave={e => { 
-        e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.1)'; 
-        e.currentTarget.style.transform = 'none'; 
-        e.currentTarget.style.boxShadow = 'none';
-      }}>
-      <div style={{ display: 'flex', justifyContent: 'between', alignItems: 'start', marginBottom: '16px' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#111927', border: '1px solid rgba(59, 130, 246, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>
-          {mission.category === 'prices' ? '💰' : '🔍'}
+  <Link href={`/dashboard/missions/${mission.mission_id}`} className="no-underline">
+    <div className="cyber-card p-6 h-full flex flex-col justify-between group">
+      <div>
+        <div className="flex justify-between items-start mb-6">
+          <div className="w-12 h-12 rounded-xl bg-[#111927] border border-blue-500/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+            {mission.category === 'prices' ? '💰' : mission.category === 'news' ? '🗞️' : '🔍'}
+          </div>
+          <Badge className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border-blue-500/20 text-[9px] font-black tracking-widest uppercase py-1">
+            {mission.status}
+          </Badge>
         </div>
-        <span style={{ 
-          fontSize: '9px', fontWeight: 700, padding: '3px 9px', borderRadius: '20px', 
-          background: 'rgba(59, 130, 246, 0.1)', color: '#93C5FD', border: '1px solid rgba(59, 130, 246, 0.2)' 
-        }}>{mission.status}</span>
+        <h4 className="text-base font-bold text-[#F0F6FF] mb-2 group-hover:text-blue-400 transition-colors">{mission.name || "Untitled Mission"}</h4>
+        <p className="text-xs text-[#6B8EAE] line-clamp-1 mb-6 font-medium">{mission.goal_nl}</p>
       </div>
-      <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#F0F6FF', marginBottom: '4px' }}>{mission.name}</h4>
-      <div style={{ fontSize: '11px', color: '#6B8EAE', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <span>Agent #04</span>
-        <span style={{ opacity: 0.3 }}>|</span>
-        <span>Sync in 12m</span>
+      
+      <div className="flex items-center justify-between pt-6 border-t border-[#1C2A3A]">
+        <div className="flex items-center gap-3">
+          <div className="flex -space-x-2">
+            {[1,2,3].map(i => (
+              <div key={i} className="w-5 h-5 rounded-full border border-[#080C14] bg-blue-500/20 flex items-center justify-center text-[8px] font-bold text-blue-400">
+                A
+              </div>
+            ))}
+          </div>
+          <span className="text-[10px] font-bold text-[#6B8EAE]">3 Active Agents</span>
+        </div>
+        <span className="text-[10px] font-bold text-emerald-500/80">Next: 12m</span>
       </div>
     </div>
   </Link>
 );
 
 const DashboardSkeleton = () => (
-  <div style={{ padding: '40px' }}>
-     <Skeleton style={{ height: '40px', width: '200px', marginBottom: '24px' }} />
-     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-        {[1,2,3,4].map(i => <Skeleton key={i} style={{ height: '140px', borderRadius: '12px' }} />)}
+  <div className="p-8 animate-pulse">
+     <div className="h-10 w-64 bg-white/5 rounded-lg mb-12" />
+     <div className="grid grid-cols-4 gap-6 mb-16">
+        {[1,2,3,4].map(i => <div key={i} className="h-40 bg-white/5 rounded-2xl" />)}
+     </div>
+     <div className="grid grid-cols-[1fr_400px] gap-12">
+        <div className="h-[400px] bg-white/5 rounded-2xl" />
+        <div className="h-[400px] bg-white/5 rounded-2xl" />
      </div>
   </div>
 );

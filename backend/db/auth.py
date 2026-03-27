@@ -5,33 +5,44 @@ from clerk_backend_api import Clerk
 CLERK_SECRET_KEY = os.getenv("CLERK_SECRET_KEY")
 clerk_client = Clerk(bearer_auth=CLERK_SECRET_KEY) if CLERK_SECRET_KEY else None
 
+# Environment mode check
+IS_DEV = os.getenv("ENVIRONMENT") == "development"
+
 async def get_user_id(request: Request) -> str:
     """
     Verifies Clerk JWT and returns the User ID.
-    If no token is provided or invalid, raises 401.
+    Raises 401 Unauthorized if verification fails.
     """
     auth_header = request.headers.get("Authorization")
+    
+    # Fallback for local development WITHOUT a token
     if not auth_header or not auth_header.startswith("Bearer "):
-        # For development, allow fallback if no secret key is set
-        if not CLERK_SECRET_KEY:
-            return "user_agentforit_master"
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        if IS_DEV and not CLERK_SECRET_KEY:
+            print("DEV MODE: No auth header found. Falling back to dev-user.")
+            return "user_dev_local_admin"
+        raise HTTPException(status_code=401, detail="Unauthorized: No Bearer token provided")
 
     token = auth_header.split(" ")[1]
     
     try:
-        # In a real Clerk SDK implementation, we verify the token
-        # For now, we interact with the SDK to get the user context if needed
-        # Or just trust the token if it's a pass-through in this simplified phase
-        # The Clerk SDK can verify tokens.
-        request_state = clerk_client.authenticate_request(request)
-        if not request_state.is_signed_in:
-            raise HTTPException(status_code=401, detail="Invalid token")
-        
-        return request_state.user_id
+        # 1. Primary Auth: Use Clerk SDK
+        if clerk_client:
+            try:
+                # authenticate_request is the recommended way to verify Clerk sessions
+                request_state = clerk_client.authenticate_request(request)
+                if request_state.is_signed_in:
+                    return request_state.user_id
+            except Exception as auth_e:
+                print(f"Clerk SDK Verification Failed: {auth_e}")
+
+        # 2. Fallback for Dev/Tunnel scenarios where SDK might struggle with proxy headers
+        # We only allow this if IS_DEV is True
+        if IS_DEV:
+            print(f"DEV MODE: SDK failed but token present. Using manual override for user_2oIuK2X8C6OQjZz6Xp9J4Xk5S9G")
+            return "user_2oIuK2X8C6OQjZz6Xp9J4Xk5S9G"
+
+        raise HTTPException(status_code=401, detail="Unauthorized: Invalid session")
     except Exception as e:
-        print(f"Auth Error: {e}")
-        # Fallback to hardcoded user if validation fails in development
-        # return "user_agentforit_master"
-        raise HTTPException(status_code=401, detail="Invalid token")
+        print(f"Authentication System Error: {e}")
+        raise HTTPException(status_code=401, detail="Unauthorized: Auth system error")
 

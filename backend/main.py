@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from db.mongodb import connect_db, close_db
 from services.scheduler_service import start_scheduler, shutdown_scheduler
+from services.socket_manager import manager  # Prevents circular imports
 from routers import missions, agents, results, alerts, settings
 from datetime import datetime
 import agentops
@@ -29,7 +30,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         os.getenv("FRONTEND_URL", "http://localhost:3000"),
-        "https://omnix-8n72.vercel.app"
+        "https://omnix-8n72.vercel.app",
+        "https://omnix-silk.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -47,28 +49,8 @@ app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 async def health():
     return {"status": "ok", "service": "agentforit-backend"}
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: dict[str, list[WebSocket]] = {}
-
-    async def connect(self, websocket: WebSocket, mission_id: str):
-        await websocket.accept()
-        if mission_id not in self.active_connections:
-            self.active_connections[mission_id] = []
-        self.active_connections[mission_id].append(websocket)
-
-    def disconnect(self, websocket: WebSocket, mission_id: str):
-        if mission_id in self.active_connections:
-            self.active_connections[mission_id].remove(websocket)
-            if not self.active_connections[mission_id]:
-                del self.active_connections[mission_id]
-
-    async def broadcast_mission_event(self, mission_id: str, data: dict):
-        if mission_id in self.active_connections:
-            for connection in self.active_connections[mission_id]:
-                await connection.send_text(json.dumps(data))
-
-manager = ConnectionManager()
+# WebSockets handled via the manager in services/socket_manager.py
+# (We use the 'manager' instance imported at the top)
 
 @app.websocket("/ws/missions/{mission_id}")
 async def mission_websocket(websocket: WebSocket, mission_id: str):

@@ -8,6 +8,7 @@ from datetime import datetime
 from services.tinyfish_service import run_parallel_agents
 from services.llm_service import analyze_results
 from services.embedding_service import generate_embedding
+from services.socket_manager import manager # Resolved circular import
 # from services.alert_service import send_all_alerts # Phase 4
 
 # Placeholder since APScheduler needs a sync client or a separate initialization
@@ -59,7 +60,6 @@ async def execute_mission_pipeline(mission_id: str):
     
     # 4. Run parallel agents
     async def broadcast_event(e: dict):
-        from main import manager
         await manager.broadcast_mission_event(mission_id, e)
 
     await broadcast_event({"type": "STARTED", "message": f"Initializing node swarm for {len(mission['agent_tasks'])} endpoints..."})
