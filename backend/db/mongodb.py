@@ -10,7 +10,12 @@ db = None
 
 async def connect_db():
     global client, db
-    client = AsyncIOMotorClient(MONGODB_URI)
+    client = AsyncIOMotorClient(
+        MONGODB_URI, 
+        tls=True, 
+        tlsAllowInvalidCertificates=True, 
+        serverSelectionTimeoutMS=5000
+    )
     db = client.get_database("agentforit")
     print(f"Connected to MongoDB at {MONGODB_URI}")
 
