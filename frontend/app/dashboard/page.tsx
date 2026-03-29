@@ -46,7 +46,7 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         const token = await getToken();
-        const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "https://agentforit-backend.onrender.com";
+        const BACKEND = "https://agentforit-backend.onrender.com"; // FORCED CLOUD BACKEND
         
         // Fetch missions
         const misRes = await fetch(`${BACKEND}/api/missions`, { headers: { Authorization: `Bearer ${token}` } });

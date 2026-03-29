@@ -1,4 +1,4 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://agentforit-backend.onrender.com";
+const BACKEND_URL = "https://agentforit-backend.onrender.com"; // FORCED CLOUD BACKEND
 
 async function request(path: string, options: any = {}) {
   const token = options.token;
