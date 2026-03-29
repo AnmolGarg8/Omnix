@@ -53,6 +53,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.options("/{rest_of_path:path}")
+async def preflight(rest_of_path: str):
+    return {}
+
 # Authentication and routers
 app.include_router(missions.router, prefix="/api/missions", tags=["missions"])
 app.include_router(agents.router,   prefix="/api/agents",   tags=["agents"])

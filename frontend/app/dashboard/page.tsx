@@ -46,14 +46,14 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         const token = await getToken();
-        const BACKEND = "/api/proxy"; // SECURE TUNNEL
+        const BACKEND_URL = "https://agentforit-backend.onrender.com/api";
         
         // Fetch missions
-        const misRes = await fetch(`${BACKEND}/missions`, { headers: { Authorization: `Bearer ${token}` } });
+        const misRes = await fetch(`${BACKEND_URL}/missions`, { headers: { Authorization: `Bearer ${token}` } });
         const missionsData = await misRes.json().catch(() => []);
         
         // Fetch alerts
-        const alRes = await fetch(`${BACKEND}/alerts`, { headers: { Authorization: `Bearer ${token}` } });
+        const alRes = await fetch(`${BACKEND_URL}/alerts`, { headers: { Authorization: `Bearer ${token}` } });
         const alertsData = await alRes.json().catch(() => []);
         
         const mArr = Array.isArray(missionsData) ? missionsData : [];
