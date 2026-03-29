@@ -35,7 +35,7 @@ export default function NewMissionPage() {
     setLoading(true);
     try {
       const token = await getToken();
-      const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+      const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "https://agentforit-backend.onrender.com";
       const res = await fetch(`${BACKEND}/api/missions`, {
         method: 'POST',
         headers: {
