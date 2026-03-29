@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://agentforit-backend.onrender.com"; // FORCED CLOUD BACKEND
+const BACKEND_URL = "/api/proxy"; // SECURE TUNNEL BEYOND CORS
 
 async function request(path: string, options: any = {}) {
   const token = options.token;

@@ -35,8 +35,8 @@ export default function NewMissionPage() {
     setLoading(true);
     try {
       const token = await getToken();
-      const BACKEND = "https://agentforit-backend.onrender.com"; // FORCED CLOUD BACKEND
-      const res = await fetch(`${BACKEND}/api/missions`, {
+      const BACKEND = "/api/proxy"; // SECURE TUNNEL
+      const res = await fetch(`${BACKEND}/missions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
