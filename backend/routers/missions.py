@@ -4,6 +4,7 @@ from db.auth import get_user_id
 from models.mission import Mission, AgentTask
 from services.llm_service import parse_mission_to_tasks
 from services.scheduler_service import schedule_mission
+from typing import List, Optional
 import uuid
 from datetime import datetime
 
