@@ -1,69 +1,71 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, BackgroundTasks
 from db.mongodb import get_db
 from db.auth import get_user_id
 from models.mission import Mission, AgentTask
 from services.llm_service import parse_mission_to_tasks
 from services.scheduler_service import schedule_mission
-from typing import List, Optional
-from datetime import datetime
 import uuid
+from datetime import datetime
 
 router = APIRouter()
 
+async def process_mission_in_background(mission_id: str, goal_nl: str, user_id: str):
+    print(f"🕵️ Background Processing for Mission {mission_id}...")
+    try:
+        # LLM Parsing
+        parsed_goal = await parse_mission_to_tasks(goal_nl)
+        
+        # Prepare updates
+        updates = {
+            "name": parsed_goal.get("suggested_name", "Mission " + mission_id[:8]),
+            "agent_tasks": [AgentTask(**t).dict() for t in parsed_goal.get("tasks", [])],
+            "category": parsed_goal.get("category", "custom"),
+            "status": "active"
+        }
+        
+        # Save to DB
+        db = get_db()
+        await db.missions.update_one({"mission_id": mission_id}, {"$set": updates})
+        print(f"✅ Mission {mission_id} processed successfully.")
+    except Exception as e:
+        print(f"❌ Background Error for {mission_id}: {e}")
+
 @router.post("")
-async def create_mission(request: Request, payload: dict, user_id: str = Depends(get_user_id)):
+async def create_mission(request: Request, payload: dict, background_tasks: BackgroundTasks, user_id: str = Depends(get_user_id)):
     """
-    POST /api/missions
+    POST /api/missions - INSTANT RESPONSE mode
     """
     try:
         goal_nl = payload.get("goal_nl", "New Mission")
         schedule_expr = payload.get("schedule", "0 9 * * *")
-        user_name = payload.get("name")
         
-        # 1. Parse NL goal (with fallback)
-        try:
-            parsed_goal = await parse_mission_to_tasks(goal_nl)
-        except:
-            parsed_goal = {
-                "tasks": [{"url": "https://google.com", "goal": goal_nl, "stealth": False}],
-                "category": "custom",
-                "suggested_name": "New Mission"
-            }
-        
-        # 2. Create Mission document
+        # Create a "Shell" mission instantly
+        mission_id = str(uuid.uuid4())
         mission_data = Mission(
+            mission_id=mission_id,
             user_id=user_id,
-            name=user_name if user_name else parsed_goal.get("suggested_name", "Mission " + str(datetime.utcnow().timestamp())),
+            name="Launching...",
             goal_nl=goal_nl,
-            agent_tasks=[AgentTask(**t) for t in parsed_goal.get("tasks", [])],
+            agent_tasks=[],
             schedule=schedule_expr,
-            category=parsed_goal.get("category", "custom"),
+            status="pending"
         )
         
-        # 3. Save to MongoDB (with fallback)
+        # Save shell to DB (quick)
         db = get_db()
         try:
             await db.missions.insert_one(mission_data.dict())
-            # Invalidate cache
-            try:
-                from services.redis_service import invalidate_cache
-                invalidate_cache(f"missions:{user_id}")
-            except: pass
-        except Exception as e:
-            print(f"⚠️ Insertion fallback to memory: {e}")
-            
+        except: pass # MockDB fallback
+        
+        # Offload heavy AI thinking to background
+        background_tasks.add_task(process_mission_in_background, mission_id, goal_nl, user_id)
+        
+        # Respond INSTANTLY to keep the UI happy
         return mission_data
         
     except Exception as e:
         print(f"🔥 Critical Mission Bypass: {e}")
-        # Final, ultimate fallback mission
-        return Mission(
-            user_id="anonymous",
-            name="Emergency Mission",
-            goal_nl="Fallback mission due to system spike",
-            agent_tasks=[],
-            category="custom"
-        )
+        return Mission(user_id=user_id, goal_nl=goal_nl, agent_tasks=[], status="pending")
 
 @router.get("", response_model=List[Mission])
 async def list_missions(user_id: str = Depends(get_user_id)):
