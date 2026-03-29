@@ -6,7 +6,7 @@ from typing import List
 
 router = APIRouter()
 
-@router.get("/", response_model=List[Alert])
+@router.get("", response_model=List[Alert])
 async def list_alerts(
     user_id: str = Depends(get_user_id),
     page: int = Query(1, ge=1),

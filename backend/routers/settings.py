@@ -5,7 +5,7 @@ from datetime import datetime
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("")
 async def get_settings(user_id: str = Depends(get_user_id)):
     db = get_db()
     if db is not None:
@@ -26,7 +26,7 @@ async def get_settings(user_id: str = Depends(get_user_id)):
         return user
     return {}
 
-@router.put("/")
+@router.put("")
 async def update_settings(user_id: str = Depends(get_user_id), payload: dict = Body(...)):
     db = get_db()
     if db is not None:

@@ -10,7 +10,7 @@ import uuid
 
 router = APIRouter()
 
-@router.post("/", response_model=Mission)
+@router.post("")
 async def create_mission(request: Request, payload: dict, user_id: str = Depends(get_user_id)):
     """
     POST /api/missions
@@ -56,7 +56,7 @@ async def create_mission(request: Request, payload: dict, user_id: str = Depends
     else:
         raise HTTPException(status_code=500, detail="Database connection failed")
 
-@router.get("/", response_model=List[Mission])
+@router.get("", response_model=List[Mission])
 async def list_missions(user_id: str = Depends(get_user_id)):
     from services.redis_service import get_cache, set_cache
     cache_key = f"missions:{user_id}"
