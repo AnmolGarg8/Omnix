@@ -30,8 +30,14 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
   const searchParams = request.nextUrl.searchParams.toString();
   const destUrl = `https://agentforit-backend.onrender.com/api/${path}${searchParams ? `?${searchParams}` : ""}`;
 
-  const headers = new Headers(request.headers);
-  headers.delete("host"); 
+  // SANITIZATION: Only keep essential headers
+  const newHeaders = new Headers();
+  const allowedHeaders = ["authorization", "content-type", "accept"];
+  for (const [key, value] of request.headers.entries()) {
+    if (allowedHeaders.includes(key.toLowerCase())) {
+      newHeaders.set(key, value);
+    }
+  }
 
   try {
     let body = undefined;
@@ -39,19 +45,33 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
       body = await request.text();
     }
 
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => abortController.abort(), 10000); // 10s timeout
+
     const response = await fetch(destUrl, {
       method: request.method,
-      headers: headers,
+      headers: newHeaders,
       body: body,
-      cache: 'no-store'
+      cache: 'no-store',
+      signal: abortController.signal
     });
 
-    const data = await response.text();
+    clearTimeout(timeoutId);
+
+    const dataBuffer = await response.text();
     
-    return new NextResponse(data, {
+    // Safety check: if the response is NOT Jason but has the "Internal Server Error" text
+    if (dataBuffer.startsWith("Internal Server Error") || !dataBuffer.trim().startsWith("{")) {
+        return NextResponse.json({ 
+            error: "Backend Error", 
+            message: "The backend encountered a network spike. Trying to auto-fix..." 
+        }, { status: 500 });
+    }
+    
+    return new NextResponse(dataBuffer, {
       status: response.status,
       headers: {
-        "Content-Type": response.headers.get("Content-Type") || "application/json",
+        "Content-Type": "application/json",
       },
     });
   } catch (error: any) {
