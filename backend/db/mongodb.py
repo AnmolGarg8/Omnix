@@ -11,7 +11,9 @@ db = None
 class MockCollection:
     async def insert_one(self, data): return type('obj', (object,), {'inserted_id': 'mock_id'})()
     async def find_one(self, query, sort=None): return None
-    async def find(self, query): return type('cursor', (object,), {'to_list': lambda n: []})()
+    def find(self, query, sort=None): 
+        async def to_list(length): return []
+        return type('cursor', (object,), {'to_list': to_list, 'sort': lambda n, d: None, 'skip': lambda n: None})()
     async def update_one(self, query, update): return type('res', (object,), {'modified_count': 1})()
     async def delete_one(self, query): return type('res', (object,), {'deleted_count': 1})()
 
