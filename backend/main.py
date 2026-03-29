@@ -28,14 +28,8 @@ app = FastAPI(title="AgentForIt API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://omnix-silk.vercel.app", 
-        "https://omnix-8n72.vercel.app",
-        "https://omnix-8n72-anmol-gargs-projects-76a116fb.vercel.app",
-        "https://faithful-ringtail-86.accounts.dev"
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
