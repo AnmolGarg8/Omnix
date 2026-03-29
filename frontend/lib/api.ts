@@ -1,4 +1,4 @@
-export const BACKEND_URL = "https://agentforit-backend.onrender.com/api";
+export const BACKEND_URL = "/api/proxy";
  // SECURE TUNNEL BEYOND CORS
 
 async function request(path: string, options: any = {}) {
