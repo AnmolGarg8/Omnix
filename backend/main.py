@@ -16,13 +16,32 @@ load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await connect_db()
-    await start_scheduler()
-    if os.getenv("AGENTOPS_API_KEY"):
-        agentops.init(api_key=os.getenv("AGENTOPS_API_KEY"))
+    print("🚀 Initializing Armor-Plated Backend Lifespan...")
+    try:
+        await connect_db()
+    except Exception as e:
+        print(f"⚠️ connect_db failed: {e}")
+
+    try:
+        await start_scheduler()
+    except Exception as e:
+        print(f"⚠️ start_scheduler failed: {e}")
+
+    try:
+        if os.getenv("AGENTOPS_API_KEY"):
+            agentops.init(api_key=os.getenv("AGENTOPS_API_KEY"))
+    except Exception as e:
+        print(f"⚠️ agentops.init failed: {e}")
+
+    print("✅ Backend Lifespan Ready (Resilient Mode).")
     yield
-    await shutdown_scheduler()
-    await close_db()
+    
+    try:
+        await shutdown_scheduler()
+    except: pass
+    try:
+        await close_db()
+    except: pass
 
 app = FastAPI(title="AgentForIt API", lifespan=lifespan)
 
