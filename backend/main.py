@@ -28,11 +28,7 @@ app = FastAPI(title="AgentForIt API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        os.getenv("FRONTEND_URL", "http://localhost:3000"),
-        "https://omnix-8n72.vercel.app",
-        "https://omnix-silk.vercel.app"
-    ],
+    allow_origins=["*"], # Allow any origin for maximum reach during restoration/demo
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
