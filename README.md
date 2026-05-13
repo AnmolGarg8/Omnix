@@ -1,7 +1,7 @@
 # 🌌 Omnix | Enterprise AI Agent Orchestration
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AnmolGarg8/Omnix/main/assets/banner.png" alt="Omnix Banner" width="100%">
+  <img src="assets/banner.png" alt="Omnix Banner" width="100%">
 </p>
 
 <p align="center">
